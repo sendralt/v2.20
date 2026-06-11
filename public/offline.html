@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0e27">
+    <title>FishSmart Pro - Offline</title>
+    <style>
+        body { margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #0a0e27; color: #00f3ff; font-family: sans-serif; text-align: center; }
+        .container { padding: 2rem; }
+        h1 { font-size: 1.5rem; margin-bottom: 1rem; }
+        p { color: #7dd3fc; }
+        button { margin-top: 1.5rem; padding: 0.75rem 2rem; background: #00f3ff; color: #0a0e27; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container" style="padding-bottom:5rem;">
+        <h1>🎣 You're Offline</h1>
+        <p>FishSmart Pro needs an internet connection for live forecasts.</p>
+        <p style="font-size:0.75rem;margin-top:0.5rem;opacity:0.7;">Previously viewed forecast history may be available — tap History below.</p>
+        <button id="retryBtn">Try Again</button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav style="position:fixed;bottom:0;left:0;right:0;background:rgba(15,23,42,.7);backdrop-filter:blur(20px);border-top:1px solid rgba(6,182,212,.2);padding-bottom:env(safe-area-inset-bottom);z-index:50;">
+        <div style="max-width:32rem;margin-left:auto;margin-right:auto;display:flex;align-items:center;justify-content:space-around;padding-top:.75rem;padding-bottom:.75rem;padding-left:1rem;padding-right:1rem;">
+            <a href="/" style="display:flex;flex-direction:column;align-items:center;gap:.25rem;color:#22d3ee;text-decoration:none;">
+                <div style="width:2.5rem;height:2.5rem;border-radius:.75rem;background-color:rgba(6,182,212,.2);display:flex;align-items:center;justify-content:center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <span style="font-size:10px;font-weight:500;">Home</span>
+            </a>
+            <a href="/privacy.html" style="display:flex;flex-direction:column;align-items:center;gap:.25rem;color:#9ca3af;text-decoration:none;transition:color .15s ease;">
+                <div style="width:2.5rem;height:2.5rem;border-radius:.75rem;display:flex;align-items:center;justify-content:center;transition:background-color .15s ease;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <span style="font-size:10px;font-weight:500;">Privacy</span>
+            </a>
+        </div>
+    </nav>
+<script>
+(function() {
+    var btn = document.getElementById('retryBtn');
+    if (!btn) return;
+    var interval;
+    function tick(count) {
+        if (count > 0) {
+            btn.textContent = 'Retrying in ' + count + 's...';
+            interval = setTimeout(function() { tick(count - 1); }, 1000);
+        } else {
+            interval = null;
+            location.reload();
+        }
+    }
+    btn.addEventListener('click', function() {
+        if (interval) return;
+        btn.disabled = true;
+        tick(30);
+    });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+{
+  "name": "FishSmart Pro:Fishing Forecast",
+  "short_name": "FishSmart",
+  "description": "Advanced AI-powered fishing intelligence platform with real-time environmental analysis and bite predictions",
+  "start_url": "/",
+  "scope": "/",
+  "id": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0a0e27",
+  "theme_color": "#0a0e27",
+  "categories": [
+    "sports",
+    "lifestyle",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "manifest-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "manifest-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+fishsmart",
+      "url": "/?action=%s"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot-1-playstore.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "AI Bite Score - See WHY fish will bite"
+    },
+    {
+      "src": "screenshot-2-playstore.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Live Water Temperature - Real USGS station data"
+    },
+    {
+      "src": "screenshot-3-playstore.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Smart Lure Picks - Species-specific recommendations"
+    },
+    {
+      "src": "screenshot-4-playstore.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "12-Hour Activity Chart - Find your best window"
+    },
+    {
+      "src": "screenshot-5-playstore.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Conditions at a Glance - Pressure, wind, clouds"
+    },
+    {
+      "src": "screenshot-6-playstore.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "20+ Freshwater Species - Bass, walleye, trout and more"
+    },
+    {
+      "src": "screenshot-7-playstore.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "No Social. No Spot Burning. Your spots stay yours."
+    },
+    {
+      "src": "screenshot-8-playstore.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Science-Backed Forecasts - See the reasoning behind every score"
+    }
+  ],
+  "prefer_related_applications": false
+}

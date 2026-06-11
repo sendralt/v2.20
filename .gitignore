@@ -1,0 +1,25 @@
+node_modules
+package-lock.json
+.env
+.a0proj/
+.promptinclude.md
+
+# Android build artifacts
+android-project/.gradle/
+android-project/build/
+android-project/app/build/
+android-project/app-release-unsigned-aligned.apk
+android-project/app-release-signed.apk
+android-project/android.keystore
+android-project/local.properties
+
+# Root-level binary artifacts
+app-release-signed.aab
+
+# Stripe sample code
+stripe-sample-code/
+stripe-sample-code.zip
+
+# Generated debug CSS/source maps
+public/css/tailwind.debug.css
+public/css/tailwind.debug.css.map
