@@ -11,17 +11,55 @@ const FINESSE_THRESHOLD = 0.35;
 const MIN_BITE_PROB = 0.01;
 const MAX_BITE_PROB = 1.0;
 const HPA_TO_INHG = 0.02953;
+const EMA_ALPHA = 0.6;
+const EMA_STALE_MS = 3 * 60 * 60 * 1000; // 3 hours — stale entries are replaced instead of blended
+const EMA_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours — entries older than this are evicted
+const EMA_MAX_ENTRIES = 500; // Max cached locations to prevent unbounded growth
+const emaCache = new Map(); // location → { score, timestamp }
 
 /**
- * Smooth bite score - NO CACHING per user request.
- * Returns raw probability without EMA blending.
+ * Prune stale and expired entries from the EMA cache.
+ * Called on every smoothBiteScore access to ensure bounded memory.
  */
+function pruneEmaCache() {
+    const now = Date.now();
+    const cutoff = now - EMA_CACHE_TTL_MS;
+    for (const [key, entry] of emaCache) {
+        if (entry.timestamp < cutoff) {
+            emaCache.delete(key);
+        }
+    }
+    // LRU-style eviction: if still over max, delete oldest entries first
+    if (emaCache.size > EMA_MAX_ENTRIES) {
+        const entries = [...emaCache.entries()].sort((a, b) => a[1].timestamp - b[1].timestamp);
+        const excess = emaCache.size - EMA_MAX_ENTRIES;
+        for (let i = 0; i < excess; i++) {
+            emaCache.delete(entries[i][0]);
+        }
+    }
+}
+
 function smoothBiteScore(rawProb, location) {
+    const key = location || '__default__';
+    const now = Date.now();
+
+    // Prune on access to keep cache bounded
+    if (emaCache.size > 0) {
+        pruneEmaCache();
+    }
+
+    const prev = emaCache.get(key);
+    if (prev && (now - prev.timestamp) < EMA_STALE_MS) {
+        const blended = EMA_ALPHA * rawProb + (1 - EMA_ALPHA) * prev.score;
+        emaCache.set(key, { score: blended, timestamp: now });
+        return blended;
+    }
+    emaCache.set(key, { score: rawProb, timestamp: now });
     return rawProb;
 }
 
 function clearBiteScoreCache() {
-    // No-op: caching disabled
+    emaCache.clear();
 }
 
 // --- Multiplier Functions ---
