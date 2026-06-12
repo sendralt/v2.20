@@ -267,14 +267,11 @@ async function findNearbyStations(lat, lon, radiusMiles = MAX_STATION_DISTANCE_M
     return [];
 }
 
-// In-memory cache for water temp results (same pattern as pressure-trend cache)
-const _waterTempCache = new Map();
-const WATER_TEMP_CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
-
 /**
  * Get live water temperature from USGS or fall back to estimation.
  * Primary method: USGS monitoring stations within 50 miles
  * Fallback: Hybrid estimation using seasonal baseline + air temperature
+ * NO CACHING - always fetches fresh data
  * 
  * @param {number} lat - Latitude
  * @param {number} lon - Longitude
@@ -284,14 +281,9 @@ const WATER_TEMP_CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
  * @returns {Promise<Object>} Water temperature result with source info
  */
 async function getLiveWaterTemp(lat, lon, airTempF, month, maxDistanceMiles = MAX_STATION_DISTANCE_MILES) {
-    const cacheKey = `${Math.round(lat * 100)},${Math.round(lon * 100)}`;
-    const cached = _waterTempCache.get(cacheKey);
-    if (cached && (Date.now() - cached.ts) < WATER_TEMP_CACHE_TTL_MS) return cached.data;
-    const cache = (data) => { _waterTempCache.set(cacheKey, { data, ts: Date.now() }); return data };
-
     if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
         const estimated = estimateWaterTempHybrid(airTempF, month);
-        return cache({
+        return {
             waterTempF: estimated,
             waterTempC: (estimated - 32) * 5 / 9,
             source: 'estimated',
@@ -300,7 +292,7 @@ async function getLiveWaterTemp(lat, lon, airTempF, month, maxDistanceMiles = MA
             stationDistance: null,
             timestamp: new Date().toISOString(),
             note: 'Invalid coordinates - using estimation'
-        });
+        };
     }
 
     try {
@@ -309,7 +301,7 @@ async function getLiveWaterTemp(lat, lon, airTempF, month, maxDistanceMiles = MA
 
         if (!nearestStation) {
             const estimated = estimateWaterTempHybrid(airTempF, month);
-            return cache({
+            return {
                 waterTempF: estimated,
                 waterTempC: (estimated - 32) * 5 / 9,
                 source: 'estimated',
@@ -318,10 +310,10 @@ async function getLiveWaterTemp(lat, lon, airTempF, month, maxDistanceMiles = MA
                 stationDistance: null,
                 timestamp: new Date().toISOString(),
                 note: `No current USGS water temperature readings within ${maxDistanceMiles} miles`
-            });
+            };
         }
 
-        return cache({
+        return {
             waterTempF: Math.round(nearestStation.fahrenheit),
             waterTempC: Math.round(nearestStation.celsius * 10) / 10,
             source: 'usgs-live',
@@ -330,12 +322,12 @@ async function getLiveWaterTemp(lat, lon, airTempF, month, maxDistanceMiles = MA
             stationDistance: Math.round(nearestStation.distance * 10) / 10,
             stationCode: nearestStation.siteCode,
             timestamp: nearestStation.timestamp
-        });
+        };
 
     } catch (error) {
         console.error('Water temperature service error:', error.message);
         const estimated = estimateWaterTempHybrid(airTempF, month);
-        return cache({
+        return {
             waterTempF: estimated,
             waterTempC: (estimated - 32) * 5 / 9,
             source: 'estimated',
@@ -344,7 +336,7 @@ async function getLiveWaterTemp(lat, lon, airTempF, month, maxDistanceMiles = MA
             stationDistance: null,
             timestamp: new Date().toISOString(),
             note: `USGS service error: ${error.message}`
-        });
+        };
     }
 }
 

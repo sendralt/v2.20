@@ -1,9 +1,5 @@
 'use strict';
 
-const pressureCache = new Map();
-const CACHE_TTL_MS = 3 * 60 * 60 * 1000; // 3 hours
-const MAX_ENTRIES = 20;
-
 /**
  * Shared classification logic for pressure trend rate.
  * @param {number} hpaPerHour - Rate of pressure change in hPa per hour
@@ -32,85 +28,28 @@ function classifyTrend(hpaPerHour) {
 
 /**
  * Record a pressure reading for a location.
+ * NO-OP: Caching disabled per user request.
  * @param {string} location - Location identifier
  * @param {number} pressureHpa - Pressure in hPa
  * @param {number} [timestamp] - Optional timestamp override (for testing)
  */
 function recordPressure(location, pressureHpa, timestamp) {
-    const ts = timestamp || Date.now();
-    if (!pressureCache.has(location)) {
-        pressureCache.set(location, []);
-    }
-    const entries = pressureCache.get(location);
-    entries.push({ pressure: pressureHpa, timestamp: ts });
-
-    // Prune entries older than TTL
-    const cutoff = ts - CACHE_TTL_MS;
-    while (entries.length > 0 && entries[0].timestamp < cutoff) {
-        entries.shift();
-    }
-
-    // Cap total entries per location
-    while (entries.length > MAX_ENTRIES) {
-        entries.shift();
-    }
-
-    // Remove empty location entries
-    if (entries.length === 0) {
-        pressureCache.delete(location);
-    }
+    // No-op: caching disabled
 }
 
 /**
- * Get pressure trend for a location based on cached readings.
+ * Get pressure trend for a location.
+ * NO CACHING: Always returns Unknown since we don't store readings.
+ * Use computeTrendFromHistory() with API-provided data instead.
  * @param {string} location - Location identifier
  * @returns {{ hpaPerHour: number|null, classification: string, label: string }}
  */
 function getPressureTrend(location) {
-    const entries = pressureCache.get(location);
-
-    if (!entries || entries.length < 2) {
-        return {
-            hpaPerHour: null,
-            classification: 'Unknown',
-            label: 'Unknown — insufficient pressure data'
-        };
-    }
-
-    const now = Date.now();
-    const cutoff = now - CACHE_TTL_MS;
-    
-    // Find first and last valid entries without creating new array
-    let firstIdx = -1, lastIdx = -1;
-    for (let i = 0; i < entries.length; i++) {
-        if (entries[i].timestamp >= cutoff) {
-            if (firstIdx === -1) firstIdx = i;
-            lastIdx = i;
-        }
-    }
-
-    if (firstIdx === -1 || lastIdx === -1 || lastIdx <= firstIdx) {
-        return {
-            hpaPerHour: null,
-            classification: 'Unknown',
-            label: 'Unknown — insufficient pressure data'
-        };
-    }
-
-    const oldest = entries[firstIdx];
-    const newest = entries[lastIdx];
-    const hoursElapsed = (newest.timestamp - oldest.timestamp) / (1000 * 60 * 60);
-
-    if (hoursElapsed < 0.5) {
-        return {
-            hpaPerHour: null,
-            classification: 'Unknown',
-            label: 'Unknown — readings too close together'
-        };
-    }
-
-    const hpaPerHour = (newest.pressure - oldest.pressure) / hoursElapsed;
-    return classifyTrend(hpaPerHour);
+    return {
+        hpaPerHour: null,
+        classification: 'Unknown',
+        label: 'Unknown — caching disabled, use API history'
+    };
 }
 
 /**
