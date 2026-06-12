@@ -206,6 +206,19 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
         res.json({ success: true, data: result });
     });
 
+    // POST /api/restore — Google Play restore (client calls this from subscription.js)
+    app.post('/api/restore', express.json(), async (req, res) => {
+        const { deviceId, purchaseToken, productId } = req.body;
+        if (!deviceId || !purchaseToken) return res.status(400).json({ success: false, error: 'Device ID and purchase token required' });
+        try {
+            const result = await subscriptionService.restoreSubscription(deviceId, purchaseToken, productId);
+            res.json({ success: result.success !== false, data: result });
+        } catch (error) {
+            console.error('restore failed', { error: error.message });
+            res.status(500).json({ success: false, error: 'Restore failed' });
+        }
+    });
+
     app.post('/api/google-play/verify', express.json(), async (req, res) => {
         if (!googlePlayBilling) return res.status(503).json({ success: false, error: 'Google Play Billing not configured' });
         const { productId, purchaseToken, deviceId } = req.body;
