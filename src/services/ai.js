@@ -67,9 +67,10 @@ function buildGenerationPrompt(params) {
     const safeLocation = sanitizePromptInput(params.location);
     const safeClarity = sanitizePromptInput(params.clarity);
     const safeTime = sanitizePromptInput(params.currentTime);
+    const safeCounty = params.county ? sanitizePromptInput(params.county) : null;
 
     return `
-You are an Elite Pro Fishing Guide with 30+ years of experience. Generate a highly detailed, actionable strategy for ${safeSpecies} at ${safeLocation}.
+You are an Elite Pro Fishing Guide with 30+ years of experience. Generate a highly detailed, actionable strategy for ${safeSpecies} at ${safeLocation}${safeCounty ? ', ' + safeCounty + ' County' : ''}.
 
 INPUTS:
 - Water Clarity: ${safeClarity}
@@ -78,7 +79,7 @@ INPUTS:
 - Behavior Data: ${params.fishPatterns}
 - Live Weather: ${params.weatherContext}
 - Scientific Guidance: ${params.scientificContext}
-- GPS Coordinates: ${params.lat || 'N/A'}, ${params.lon || 'N/A'}
+- GPS Coordinates: ${params.lat || 'N/A'}, ${params.lon || 'N/A'}${safeCounty ? '\n- County: ' + safeCounty + ' County' : ''}
 
 OUTPUT FORMAT (JSON):
 {
@@ -334,6 +335,7 @@ function createAIService(deps) {
             species, location, clarity, isBoat, currentTime,
             weatherContext, scientificContext,
             lat: weather?.lat, lon: weather?.lon,
+            county: weather?.county,
             fishPatterns: fishPatterns.substring(0, 5000)
         });
 

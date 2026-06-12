@@ -89,7 +89,9 @@ async function geocodeWithNominatim(term) {
     const lat = parseFloat(item.lat);
     const lon = parseFloat(item.lon);
     if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
-    return { lat, lon, displayName: item.display_name || term, source: 'nominatim' };
+    // Extract county for disambiguation in grounding prompts
+    const county = item.address?.county || item.address?.city || item.address?.town || null;
+    return { lat, lon, displayName: item.display_name || term, county, source: 'nominatim' };
 }
 
 async function geocodeWithOpenWeather(term, apiKey) {
@@ -285,6 +287,7 @@ function createWeatherService(config) {
                 if (wx) {
                     wx.locationSource = coords.source || 'geocoder';
                     wx.locationLabel = coords.displayName || location;
+                    wx.county = coords.county || null;
                     const waterTempReading = await fetchUSGSWaterTemp(coords.lat, coords.lon);
                     if (waterTempReading) {
                         wx.waterTemp = waterTempReading.temp;
