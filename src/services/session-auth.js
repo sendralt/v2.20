@@ -119,24 +119,8 @@ function createSessionAuthService(googlePlayBilling, cache = null, db = null) {
             return { valid: false, error: 'Google Play Billing not configured' };
         }
 
-        const cacheKey = `gp:${hashToken(purchaseToken)}`;
-        
-        // Check cache first
-        const cached = verificationCache.get(cacheKey);
-        if (cached && Date.now() - cached.timestamp < SESSION_CONFIG.verificationCacheTtl) {
-            return { ...cached.result, cached: true };
-        }
-
-        // Verify with Google Play Developer API
+        // NO CACHING: Always verify fresh with Google Play Developer API
         const result = await googlePlayBilling.verifySubscription(productId, purchaseToken);
-        
-        if (result.valid) {
-            // Cache successful verification
-            verificationCache.set(cacheKey, {
-                result,
-                timestamp: Date.now()
-            });
-        }
 
         return { ...result, cached: false };
     }
