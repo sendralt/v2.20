@@ -100,7 +100,7 @@ async function queryUSGSStations(lat, lon, delta, timeoutMs) {
 
     const url = `${USGS_BASE_URL}/iv/?format=json&bBox=${bBox}&parameterCd=${WATER_TEMP_PARAM_C}&period=PT2H&siteType=${USGS_SITE_TYPES}`;
     const response = await fetch(url, {
-        headers: { 'Accept': 'application/json' },
+        headers: { 'Accept': 'application/json', 'Accept-Encoding': 'identity' },
         signal: AbortSignal.timeout(timeoutMs)
     });
 
@@ -163,6 +163,7 @@ async function findNearbyCounties(lat, lon) {
     const counties = new Set();
     const promises = offsets.map(([dlat, dlon]) =>
         fetch(`${FCC_AREA_API}?lat=${lat + dlat}&lon=${lon + dlon}&format=json`, {
+            headers: { 'Accept': 'application/json', 'Accept-Encoding': 'identity' },
             signal: AbortSignal.timeout(FCC_TIMEOUT_MS)
         })
             .then(r => r.json())
@@ -188,7 +189,7 @@ async function queryUSGSByCounty(lat, lon, countyCodes) {
 
     const url = `${USGS_BASE_URL}/iv/?format=json&parameterCd=${WATER_TEMP_PARAM_C}&period=PT2H&siteType=${USGS_SITE_TYPES}&countyCd=${countyCodes.join(',')}`;
     const response = await fetch(url, {
-        headers: { 'Accept': 'application/json' },
+        headers: { 'Accept': 'application/json', 'Accept-Encoding': 'identity' },
         signal: AbortSignal.timeout(USGS_REQUEST_TIMEOUT_MS)
     });
 
