@@ -216,6 +216,7 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
                 biteProbability,
                 biteRank: rankBiteProbability(biteProbability),
                 metabolicEfficiency: Math.round(metabolicEfficiency * 100),
+                speciesMetrics: metrics,
                 pressureTrend: pressureTrendData.label,
                 strategyType,
                 recommendedLures: useLureCatalog
@@ -236,6 +237,7 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
                 biteRank: 'Unavailable',
                 biteReasoning: 'Scientific engine error: ' + error.message,
                 metabolicEfficiency: 0,
+                speciesMetrics: null,
                 pressureTrend: 'Error',
                 strategyType: 'Unknown',
                 recommendedLures: [],

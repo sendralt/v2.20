@@ -318,7 +318,9 @@ function createAIService(deps) {
                 pressureTrend: scientificData.pressureTrend || 'Unknown',
                 metabolicEfficiency: (scientificData.metabolicEfficiency || 50) / 100,
                 hourly: weather?.hourly || [],
+                pressureHistory: weather?.pressureHistory || [],
                 waterTemp: scientificData.waterTemp,
+                speciesMetrics: scientificData.speciesMetrics,
                 clarity: clarity || 'Clear'
               })
             : generateDefaultActivity();

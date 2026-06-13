@@ -56,9 +56,22 @@ function computeHourlyBiteProb(hour, pressureHpa, windMph, cloudPercent, waterTe
     const clarityMult = getClarityMultiplier(clarity || 'Clear');
 
     const baseScore = (metabolicEfficiency * pressureFactor) / BITE_DIVISOR;
-    const adjustmentFactor = Math.sqrt(windMult * lightMult * timeMult * clarityMult);
+    // Match bite-score.js: use 4th root (x^0.25) to dampen environmental factors
+    const adjustmentFactor = Math.sqrt(Math.sqrt(windMult * lightMult * timeMult * clarityMult));
 
     return Math.min(MAX_BITE_PROB, Math.max(MIN_BITE_PROB, baseScore * adjustmentFactor));
+}
+
+/**
+ * Apply temporal smoothing (mirrors EMA concept from bite-score.js).
+ * Fish behavior doesn't change instantly — blend each hour with its neighbors.
+ */
+function applyTemporalSmoothing(scores) {
+    return scores.map(function(score, i) {
+        if (i === 0) return (scores[0] * 0.6 + scores[1] * 0.4);
+        if (i === scores.length - 1) return (scores[i] * 0.6 + scores[i - 1] * 0.4);
+        return scores[i - 1] * 0.2 + scores[i] * 0.6 + scores[i + 1] * 0.2;
+    });
 }
 
 /**
@@ -73,19 +86,24 @@ function computeHourlyBiteProb(hour, pressureHpa, windMph, cloudPercent, waterTe
  * @param {string} params.pressureTrend - Trend label (fallback path only)
  * @param {number} params.metabolicEfficiency - 0-1 (fallback path only)
  * @param {Array}  [params.hourly] - Hourly weather objects from Open-Meteo
+ * @param {Array}  [params.pressureHistory] - Past {pressure, timestamp} readings, ascending by time
  * @param {number} [params.waterTemp] - Water temp °F (real-formula path)
  * @param {Object} [params.speciesMetrics] - {opt, dorm} (real-formula path)
- * @returns {number[]} Array of 12 integers (1-10) for next 12 hours
+ * @returns {number[]} Array of 12 numbers on a 1-10 scale for next 12 hours
  */
 function deriveActivityForecast(params) {
-    const { currentHour, pressureTrend, metabolicEfficiency, hourly, waterTemp, speciesMetrics, clarity } = params;
+    const { currentHour, pressureTrend, metabolicEfficiency, hourly, pressureHistory, waterTemp, speciesMetrics, clarity } = params;
 
     // Real-formula path: use forecasted hourly weather data
     if (hourly && hourly.length >= 2 && waterTemp != null) {
         const scores = [];
         for (let i = 0; i < Math.min(12, hourly.length); i++) {
             const h = hourly[i];
-            const prevPressure = i > 0 ? hourly[i - 1].pressure : null;
+            // Seed hour 0's trend from the most recent past reading instead of
+            // forcing "Stable", so the "now" bar reflects the real pressure trend.
+            const prevPressure = i > 0
+                ? hourly[i - 1].pressure
+                : (pressureHistory && pressureHistory.length > 0 ? pressureHistory[pressureHistory.length - 1].pressure : null);
             const prob = computeHourlyBiteProb(
                 h.hour != null ? h.hour : (currentHour + i) % 24,
                 h.pressure,
@@ -100,26 +118,32 @@ function deriveActivityForecast(params) {
         }
         // Pad with last score if fewer than 12 hours available
         while (scores.length < 12) scores.push(scores[scores.length - 1] || 5);
-        return scores;
+
+        const smoothed = applyTemporalSmoothing(scores);
+
+        return smoothed.map(function(v) { return Math.max(1, Math.min(10, Math.round(v * 10) / 10)); });
     }
 
-    // Fallback path: simplified composite (original behavior)
+    // Fallback path: use same baseScore × adjustment structure as main engine
     const trendMult = TREND_MULTIPLIERS[pressureTrend] || 1.0;
+    const absMult = 1.0; // No absolute pressure data in fallback
+    const pressureFactor = trendMult * absMult;
     const meta = metabolicEfficiency || 0.5;
 
-    const raw = [];
+    const scores = [];
     for (let i = 0; i < 12; i++) {
         const hour = (currentHour + i) % 24;
         const timeMult = getTimeMultiplier(hour);
-        raw.push(timeMult * trendMult * meta);
+        // Match main engine formula: baseScore × adjustmentFactor
+        const baseScore = (meta * pressureFactor) / BITE_DIVISOR;
+        const adjustmentFactor = Math.sqrt(Math.sqrt(timeMult)); // Only time factor available
+        const prob = Math.min(MAX_BITE_PROB, Math.max(MIN_BITE_PROB, baseScore * adjustmentFactor));
+        scores.push(prob * 10);
     }
 
-    // Normalize to 1-10 scale using absolute bounds
-    const ABS_MAX = 1.5;
-    return raw.map(function(v) {
-        const normalized = 1 + (v / ABS_MAX) * 9;
-        return Math.max(1, Math.min(10, Math.round(normalized)));
-    });
+    const smoothed = applyTemporalSmoothing(scores);
+
+    return smoothed.map(function(v) { return Math.max(1, Math.min(10, Math.round(v))); });
 }
 
 module.exports = { deriveActivityForecast };

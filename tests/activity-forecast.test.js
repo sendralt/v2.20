@@ -112,4 +112,57 @@ describe('Activity Forecast Engine', function() {
         const secondHalf = result.slice(6).reduce(function(a, b) { return a + b; }, 0);
         assert.ok(secondHalf < firstHalf, 'Rising pressure should push scores down: ' + firstHalf + ' vs ' + secondHalf);
     });
+
+    it('uses species-specific metabolic curve when speciesMetrics is provided', function() {
+        const hourly = [];
+        for (let i = 0; i < 12; i++) {
+            hourly.push({
+                temp: 75,
+                pressure: 1013,
+                wind: { speed: 5 },
+                cloudiness: 40,
+                hour: (6 + i) % 24
+            });
+        }
+        // Water temp of 56F is near-optimal for a cold-water species (opt:55)
+        // but well below dormancy for a warm-water species (dorm:52).
+        const coldWaterSpecies = deriveActivityForecast({
+            currentHour: 6, pressureTrend: 'Stable', metabolicEfficiency: 0.5,
+            hourly: hourly, waterTemp: 56, speciesMetrics: { opt: 55, dorm: 35 }
+        });
+        const warmWaterSpecies = deriveActivityForecast({
+            currentHour: 6, pressureTrend: 'Stable', metabolicEfficiency: 0.5,
+            hourly: hourly, waterTemp: 56, speciesMetrics: { opt: 76, dorm: 52 }
+        });
+        const coldSum = coldWaterSpecies.reduce(function(a, b) { return a + b; }, 0);
+        const warmSum = warmWaterSpecies.reduce(function(a, b) { return a + b; }, 0);
+        assert.ok(coldSum > warmSum, 'Cold-water species near its optimum should score higher: ' + coldSum + ' vs ' + warmSum);
+    });
+
+    it('seeds hour-0 pressure trend from pressureHistory instead of forcing Stable', function() {
+        const hourly = [];
+        for (let i = 0; i < 12; i++) {
+            hourly.push({
+                temp: 75,
+                pressure: 1005, // flat going forward
+                wind: { speed: 5 },
+                cloudiness: 40,
+                hour: (6 + i) % 24
+            });
+        }
+        const base = {
+            currentHour: 6, pressureTrend: 'Stable', metabolicEfficiency: 0.7,
+            hourly: hourly, waterTemp: 70, speciesMetrics: { opt: 70, dorm: 45 }
+        };
+        // A sharp recent drop into the forecast's flat starting pressure should
+        // boost hour 0 via the "Rapidly Falling" trend multiplier.
+        const withFallingHistory = deriveActivityForecast(Object.assign({}, base, {
+            pressureHistory: [{ pressure: 1010, timestamp: Date.now() - 3600000 }]
+        }));
+        const withoutHistory = deriveActivityForecast(Object.assign({}, base, {
+            pressureHistory: []
+        }));
+        assert.ok(withFallingHistory[0] > withoutHistory[0],
+            'Hour 0 should reflect the falling trend from pressureHistory: ' + withFallingHistory[0] + ' vs ' + withoutHistory[0]);
+    });
 });
