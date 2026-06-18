@@ -136,7 +136,7 @@ function deriveActivityForecast(params) {
         const timeMult = getTimeMultiplier(hour);
         // Match main engine formula: baseScore × adjustmentFactor
         const baseScore = (meta * pressureFactor) / BITE_DIVISOR;
-        const adjustmentFactor = Math.sqrt(Math.sqrt(timeMult)); // Only time factor available
+        const adjustmentFactor = Math.sqrt(timeMult); // Only time factor available
         const prob = Math.min(MAX_BITE_PROB, Math.max(MIN_BITE_PROB, baseScore * adjustmentFactor));
         scores.push(prob * 10);
     }

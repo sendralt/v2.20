@@ -18,6 +18,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 const helmet = require('helmet');
 const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 
 // --- Stripe Billing (lazy init - requires DATABASE_URL + STRIPE_SECRET_KEY) ---
 let db = null;
@@ -75,11 +76,11 @@ app.use(validateUris());
 app.post('/api/csp-report', express.json({ type: 'application/csp-report' }), cspReportHandler());
 
 // --- Static Files ---
-app.use(express.static('public', { dotfiles: 'allow' }));
+app.use(express.static(path.join(__dirname, 'public'), { dotfiles: 'allow' }));
 
 // --- Load Data ---
 const { loadAllData } = require('./src/data/loader');
-const { fishingData, lureData, fishPatterns } = loadAllData(__dirname);
+const { fishingData, lureData, fishPatterns } = loadAllData(path.join(__dirname, 'data'));
 
 // --- Initialize Gemini AI ---
 let genAI = null;
