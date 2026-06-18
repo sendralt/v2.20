@@ -1,25 +1,32 @@
+# === PWA / Node.js ===
 node_modules
 package-lock.json
+app/.env
+
+# === Android ===
+android/.gradle/
+android/build/
+android/app/build/
+android/app-release-unsigned-aligned.apk
+android/app-release-signed.apk
+android/android.keystore
+android/local.properties
+
+# === Build Artifacts (root) ===
+*.aab
+*.apk
+
+# === Debug / Generated CSS ===
+app/public/css/tailwind.debug.css
+app/public/css/tailwind.debug.css.map
+
+# === Environment ===
 .env
+
+# === Agent Zero ===
 .a0proj/
 .promptinclude.md
 
-# Android build artifacts
-android-project/.gradle/
-android-project/build/
-android-project/app/build/
-android-project/app-release-unsigned-aligned.apk
-android-project/app-release-signed.apk
-android-project/android.keystore
-android-project/local.properties
-
-# Root-level binary artifacts
-app-release-signed.aab
-
-# Stripe sample code
+# === Stripe Sample Code ===
 stripe-sample-code/
 stripe-sample-code.zip
-
-# Generated debug CSS/source maps
-public/css/tailwind.debug.css
-public/css/tailwind.debug.css.map

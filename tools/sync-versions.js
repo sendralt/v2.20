@@ -4,8 +4,8 @@
  * sync-versions.js
  *
  * Reads the canonical version from package.json and propagates it to:
- *   - android-project/app/build.gradle  (versionCode, versionName)
- *   - android-project/twa-manifest.json (appVersion, appVersionCode, appVersionName)
+ *   - android/app/build.gradle  (versionCode, versionName)
+ *   - android/twa-manifest.json (appVersion, appVersionCode, appVersionName)
  *   - public/sw.js                       (CACHE_NAME)
  *
  * Usage:
@@ -74,7 +74,7 @@ function versionToCode(ver) {
 }
 
 function main() {
-  const pkg = readJSON('package.json');
+  const pkg = readJSON('app/package.json');
   const version = pkg.version;
 
   if (!version) {
@@ -88,13 +88,13 @@ function main() {
   console.log(DRY_RUN ? '=== DRY RUN (no files changed) ===\n' : '=== WRITING ===\n');
 
   // build.gradle
-  patchFile('android-project/app/build.gradle', [
+  patchFile('android/app/build.gradle', [
     ['versionCode -> ' + code, /versionCode\s+\d+/, 'versionCode ' + code],
     ['versionName -> "' + version + '"', /versionName\s+"[^"]+"/, 'versionName "' + version + '"'],
   ]);
 
   // twa-manifest.json
-  const twaPath = 'android-project/twa-manifest.json';
+  const twaPath = 'android/twa-manifest.json';
   const twa = readJSON(twaPath);
 
   if (twa.appVersionName !== version || twa.appVersionCode !== code || twa.appVersion !== version) {
@@ -108,7 +108,7 @@ function main() {
   }
 
   // sw.js (CACHE_NAME)
-  patchFile('public/sw.js', [
+  patchFile('app/public/sw.js', [
     ['CACHE_NAME -> fishsmart-pro-v' + version, /const CACHE_NAME = 'fishsmart-pro-v[^']*';/, "const CACHE_NAME = 'fishsmart-pro-v" + version + "';"],
   ]);
 

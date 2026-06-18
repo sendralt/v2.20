@@ -43,8 +43,9 @@ function loadAllData(rootDir) {
     const fishingData = loadJson(path.join(rootDir, 'fishingData.json'), { species_data: [] });
     const lureData = loadJson(path.join(rootDir, 'lures.json'), { lure_catalog: [] });
     const fishPatterns = loadFirstExistingText([
+        path.join(rootDir, 'fish-behavior-patterns-v2'),
         path.join(rootDir, 'fish-behavior-patterns.md'),
-        path.join(rootDir, 'docs', 'fish-behavior-patterns.md')
+        path.join(rootDir, '..', '..', 'docs', 'fish-behavior-patterns.md')
     ]);
 
     if (fishingData.species_data?.length) console.log('\u2713 Scientific species data loaded');

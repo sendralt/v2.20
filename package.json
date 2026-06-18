@@ -1,42 +1,16 @@
 {
-  "name": "fishsmart-pro",
+  "name": "fishsmart-pro-monorepo",
   "version": "2.19",
-  "description": "Advanced AI-powered fishing intelligence platform with deep ocean tech aesthetic",
-  "main": "server.js",
+  "private": true,
+  "workspaces": ["app"],
   "scripts": {
-    "sync-versions": "node scripts/sync-versions.js --write",
-    "sync-versions:dry": "node scripts/sync-versions.js",
-    "start": "node server.js",
-    "dev": "node --watch server.js",
-    "test": "node --test tests/*.test.js",
-    "build:css": "node ./node_modules/tailwindcss/lib/cli.js -i ./src/input.css -o ./public/css/tailwind.css --minify",
-    "build:css:debug": "node ./scripts/build-css-debug.js",
+    "dev": "npm run dev -w app",
+    "start": "npm run start -w app",
+    "build:css": "npm run build:css -w app",
+    "test": "npm run test -w app",
+    "sync-versions": "node tools/sync-versions.js",
+    "sync-versions:write": "node tools/sync-versions.js --write",
     "predev": "npm run build:css"
-  },
-  "keywords": [
-    "fishing",
-    "ai",
-    "weather",
-    "marine",
-    "intelligence"
-  ],
-  "author": "FishSmart Team",
-  "license": "MIT",
-  "dependencies": {
-    "@google/generative-ai": "^0.24.1",
-    "autoprefixer": "^10.5.0",
-    "cookie-parser": "^1.4.7",
-    "dompurify": "^3.3.3",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "express-rate-limit": "^8.3.2",
-    "googleapis": "^171.4.0",
-    "helmet": "^7.1.0",
-    "jsdom": "^29.1.1",
-    "pg": "^8.20.0",
-    "postcss": "^8.5.10",
-    "stripe": "^22.1.0",
-    "tailwindcss": "^3.4.19"
   },
   "engines": {
     "node": ">=18.0.0"
