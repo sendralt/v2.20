@@ -868,27 +868,20 @@ function initHistoryPanel() {
 }
 
 function initWelcomeScreen() {
-    const hasSeenWelcome = localStorage.getItem('fishsmart_welcome_seen');
     const welcomeScreen = document.getElementById('welcomeScreen');
     const startFishingBtn = document.getElementById('startFishingBtn');
 
     if (welcomeScreen && startFishingBtn) {
-        if (hasSeenWelcome) {
+        welcomeScreen.classList.remove('hidden');
+        welcomeScreen.classList.add('flex');
+        trapFocus(welcomeScreen);
+        startFishingBtn.focus();
+
+        releaseFocus();
+        startFishingBtn.addEventListener('click', function() {
             welcomeScreen.classList.add('hidden');
             welcomeScreen.classList.remove('flex');
-        } else {
-            welcomeScreen.classList.remove('hidden');
-            welcomeScreen.classList.add('flex');
-            trapFocus(welcomeScreen);
-            startFishingBtn.focus();
-
-                releaseFocus();
-            startFishingBtn.addEventListener('click', function() {
-                welcomeScreen.classList.add('hidden');
-                welcomeScreen.classList.remove('flex');
-                localStorage.setItem('fishsmart_welcome_seen', 'true');
-            });
-        }
+        });
     }
 }
 
