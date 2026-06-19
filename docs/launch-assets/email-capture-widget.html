@@ -1,0 +1,260 @@
+<!-- FishSmart Pro — Email Capture Widget -->
+<!-- Matches existing design: dark glass-panel, neon cyan/green, Orbitron stats, Inter body -->
+<!-- Place this below the hero section on index.html OR after forecast results -->
+
+<!-- =============================================================
+<!-- VERSION A: Homepage Inline Email Capture Section
+<!-- ============================================================= -->
+
+<section id="email-capture" class="relative z-10 w-full max-w-lg mx-auto px-4 py-4 mt-8">
+    <div class="glass-panel rounded-2xl p-5 text-center">
+        <h2 class="text-lg font-bold gradient-text mb-2" style="font-family:'Rajdhani',system-ui,sans-serif;letter-spacing:0.03em;">
+            Get Weekly Fishing Intelligence
+        </h2>
+        <p class="text-sm text-gray-300 mb-4 leading-relaxed">
+            Bite score forecasts, lure recommendations, and the science behind why fish bite — delivered every Friday before your weekend trip.
+        </p>
+        <form id="emailCaptureForm" class="flex flex-col gap-2">
+            <input 
+                type="email" 
+                id="emailCaptureInput"
+                class="input-field w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500 custom-select"
+                placeholder="your@email.com"
+                required
+                autocomplete="email">
+            <button 
+                type="submit" 
+                class="btn-primary w-full py-3 rounded-xl text-slate-900 font-bold text-sm tracking-wider uppercase transition-all">
+                Get Fishing Intel
+            </button>
+        </form>
+        <p class="text-xs text-gray-500 mt-2">
+            No spam. Unsubscribe anytime. We never share your spots or your email.
+        </p>
+        <div id="emailCaptureSuccess" class="hidden mt-3">
+            <p class="text-sm text-neon-green font-medium">
+                ✓ You're in! Check your inbox for a welcome forecast.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- =============================================================
+<!-- VERSION B: Exit-Intent Popup
+<!-- ============================================================= -->
+
+<div id="exitIntentPopup" class="fixed inset-0 z-[70] hidden items-center justify-center px-4" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);">
+    <div class="glass-panel rounded-2xl p-6 max-w-md w-full text-center relative">
+        <button 
+            id="exitIntentClose" 
+            class="absolute top-3 right-4 text-gray-400 hover:text-cyan-300 text-xl transition-colors">
+            ×
+        </button>
+        <h2 class="text-2xl font-bold gradient-text mb-2" style="font-family:'Rajdhani',system-ui,sans-serif;">
+            Wait — Free Fishing Forecast
+        </h2>
+        <p class="text-sm text-gray-300 mb-4 leading-relaxed">
+            Get one Pro-level forecast delivered to your inbox every week. Real USGS water temp. Transparent science. Lure picks with reasoning.
+        </p>
+        <form id="exitIntentForm" class="flex flex-col gap-2">
+            <input 
+                type="email" 
+                id="exitIntentEmailInput"
+                class="input-field w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500"
+                placeholder="your@email.com"
+                required
+                autocomplete="email">
+            <button 
+                type="submit" 
+                class="btn-primary w-full py-3 rounded-xl text-slate-900 font-bold text-sm tracking-wider uppercase transition-all">
+                Send My Free Forecast
+            </button>
+        </form>
+        <p class="text-xs text-gray-500 mt-2">
+            100% free. No credit card. No spam.
+        </p>
+    </div>
+</div>
+
+<!-- =============================================================
+<!-- VERSION C: Post-Forecast Capture (inline after results)
+<!-- ============================================================= -->
+
+<section id="postForecastCapture" class="relative z-10 w-full max-w-lg mx-auto px-4 py-4 mt-6 hidden">
+    <div class="glass-panel rounded-2xl p-5 text-center" style="border-color:rgba(57,255,20,0.15);">
+        <h3 class="text-lg font-bold text-neon-green mb-1" style="font-family:'Rajdhani',system-ui,sans-serif;">
+            This forecast was free.
+        </h3>
+        <p class="text-sm text-gray-300 mb-3">
+            Want one every week? Drop your email and I'll send you a fresh forecast every Friday.
+        </p>
+        <form id="postForecastForm" class="flex flex-col gap-2">
+            <input 
+                type="email" 
+                id="postForecastEmailInput"
+                class="input-field w-full px-4 py-3 rounded-xl text-sm text-white placeholder-gray-500"
+                placeholder="your@email.com"
+                required
+                autocomplete="email">
+            <button 
+                type="submit" 
+                class="btn-primary w-full py-3 rounded-xl text-slate-900 font-bold text-sm tracking-wider uppercase transition-all">
+                Send Weekly Forecasts
+            </button>
+        </form>
+    </div>
+</section>
+
+<!-- =============================================================
+<!-- JAVASCRIPT: Handle form submissions + exit intent
+<!-- ============================================================= -->
+
+<script>
+// --- Exit Intent Detection ---
+let exitIntentShown = false;
+document.addEventListener('mouseleave', function(e) {
+    if (e.clientY < 0 && !exitIntentShown) {
+        exitIntentShown = true;
+        const popup = document.getElementById('exitIntentPopup');
+        if (popup) {
+            popup.classList.remove('hidden');
+            popup.classList.add('flex');
+        }
+    }
+});
+
+// Close exit intent popup
+document.getElementById('exitIntentClose')?.addEventListener('click', function() {
+    const popup = document.getElementById('exitIntentPopup');
+    popup.classList.add('hidden');
+    popup.classList.remove('flex');
+});
+
+// --- Email Submit Handler (shared logic) ---
+async function handleEmailSubmit(formId, inputId, formElement) {
+    const email = document.getElementById(inputId).value;
+    const btn = formElement.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    try {
+        const response = await fetch('/api/email-capture', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email, source: formId })
+        });
+
+        if (response.ok) {
+            // Show success
+            if (formId === 'emailCaptureForm') {
+                document.getElementById('emailCaptureSuccess').classList.remove('hidden');
+                formElement.style.display = 'none';
+            } else if (formId === 'exitIntentForm') {
+                const popup = document.getElementById('exitIntentPopup');
+                popup.querySelector('.glass-panel').innerHTML = `
+                    <h2 class="text-2xl font-bold text-neon-green mb-2" style="font-family:'Rajdhani',system-ui,sans-serif;">
+                        You're In!
+                    </h2>
+                    <p class="text-sm text-gray-300 mb-4">Check your inbox for your first forecast.</p>
+                    <button onclick="document.getElementById('exitIntentPopup').classList.add('hidden')" 
+                        class="btn-primary w-full py-3 rounded-xl text-slate-900 font-bold text-sm tracking-wider uppercase">
+                        Close
+                    </button>
+                `;
+            } else if (formId === 'postForecastForm') {
+                document.getElementById('postForecastCapture').innerHTML = `
+                    <div class="glass-panel rounded-2xl p-5 text-center">
+                        <p class="text-sm text-neon-green font-medium">
+                            ✓ You're subscribed! Watch your inbox on Friday.
+                        </p>
+                    </div>
+                `;
+            }
+        } else {
+            throw new Error('Server error');
+        }
+    } catch (err) {
+        // Fallback: mailto link
+        btn.textContent = 'Error — Try Again';
+        btn.disabled = false;
+        setTimeout(() => { btn.textContent = originalText; }, 2000);
+    }
+}
+
+// Attach handlers
+document.getElementById('emailCaptureForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    handleEmailSubmit('emailCaptureForm', 'emailCaptureInput', this);
+});
+
+document.getElementById('exitIntentForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    handleEmailSubmit('exitIntentForm', 'exitIntentEmailInput', this);
+});
+
+document.getElementById('postForecastForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    handleEmailSubmit('postForecastForm', 'postForecastEmailInput', this);
+});
+</script>
+
+<!-- =============================================================
+<!-- BACKEND: Express.js API endpoint (add to routes/api.js)
+<!-- ============================================================= -->
+
+<!--
+// Add this route to app/src/routes/api.js
+
+const express = require('express');
+const router = express.Router();
+
+// Email capture endpoint
+router.post('/email-capture', async (req, res) => {
+    const { email, source } = req.body;
+
+    // Basic validation
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.status(400).json({ error: 'Invalid email' });
+    }
+
+    try {
+        // Option 1: Save to database (if you have an emails table)
+        // await db.query('INSERT INTO email_signups (email, source, created_at) VALUES ($1, $2, NOW()) ON CONFLICT (email) DO NOTHING', [email, source]);
+
+        // Option 2: Forward to ConvertKit / Mailchimp / Resend via their API
+               // Example with Resend:
+        // const response = await fetch('https://api.resend.com/contacts', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Authorization': 'Bearer ' + process.env.RESEND_API_KEY,
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({ email: email, audience_id: 'your-audience-id' })
+        // });
+
+        // Option 3: Simple file append (quick start, upgrade later)
+        const fs = require('fs').promises;
+        const path = require('path');
+        const logPath = path.join(__dirname, '..', '..', 'data', 'email-signups.json');
+        let signups = [];
+        try {
+            const existing = await fs.readFile(logPath, 'utf8');
+            signups = JSON.parse(existing);
+        } catch (e) { /* file doesn't exist yet */ }
+
+        if (!signups.find(s => s.email === email)) {
+            signups.push({ email, source, date: new Date().toISOString() });
+            await fs.writeFile(logPath, JSON.stringify(signups, null, 2));
+        }
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Email capture error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+module.exports = router;
+-->
