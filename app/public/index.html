@@ -201,21 +201,33 @@
                                 Water Clarity
                             </label>
                             <div class="grid grid-cols-2 gap-2">
-                                <button aria-label="Muddy water clarity" aria-pressed="false" class="clarity-btn px-4 py-3 rounded-xl border border-cyan-500/20 bg-slate-800/50 text-sm text-gray-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-all flex items-center justify-center gap-2" data-clarity="Muddy" title="Visibility under 1 foot, typical after heavy rain or wind">
-                                    <i data-lucide="cloud-fog" class="w-4 h-4"></i>
-                                    Muddy
+                                <button aria-label="Muddy water clarity" aria-pressed="false" class="clarity-btn px-4 py-3 rounded-xl border border-cyan-500/20 bg-slate-800/50 text-sm text-gray-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-all flex flex-col items-center justify-center gap-1" data-clarity="Muddy" title="Visibility under 1 foot, typical after heavy rain or wind">
+                                    <span class="flex items-center gap-2">
+                                        <i data-lucide="cloud-fog" class="w-4 h-4"></i>
+                                        Muddy
+                                    </span>
+                                    <span class="text-[10px] text-gray-500 font-normal">under 1 ft</span>
                                 </button>
-                                <button aria-label="Stained water clarity" aria-pressed="false" class="clarity-btn px-4 py-3 rounded-xl border border-cyan-500/20 bg-slate-800/50 text-sm text-gray-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-all flex items-center justify-center gap-2" data-clarity="Stained" title="Visibility 1-3 feet, moderate turbidity">
-                                    <i data-lucide="cloud" class="w-4 h-4"></i>
-                                    Stained
+                                <button aria-label="Stained water clarity" aria-pressed="false" class="clarity-btn px-4 py-3 rounded-xl border border-cyan-500/20 bg-slate-800/50 text-sm text-gray-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-all flex flex-col items-center justify-center gap-1" data-clarity="Stained" title="Visibility 1-3 feet, moderate turbidity">
+                                    <span class="flex items-center gap-2">
+                                        <i data-lucide="cloud" class="w-4 h-4"></i>
+                                        Stained
+                                    </span>
+                                    <span class="text-[10px] text-gray-500 font-normal">1–3 ft</span>
                                 </button>
-                                <button aria-label="Clear water clarity" aria-pressed="false" class="clarity-btn px-4 py-3 rounded-xl border border-cyan-500/20 bg-slate-800/50 text-sm text-gray-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-all flex items-center justify-center gap-2" data-clarity="Clear" title="Visibility 3-8 feet, normal conditions">
-                                    <i data-lucide="droplets" class="w-4 h-4"></i>
-                                    Clear
+                                <button aria-label="Clear water clarity" aria-pressed="false" class="clarity-btn px-4 py-3 rounded-xl border border-cyan-500/20 bg-slate-800/50 text-sm text-gray-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-all flex flex-col items-center justify-center gap-1" data-clarity="Clear" title="Visibility 3-8 feet, normal conditions">
+                                    <span class="flex items-center gap-2">
+                                        <i data-lucide="droplets" class="w-4 h-4"></i>
+                                        Clear
+                                    </span>
+                                    <span class="text-[10px] text-gray-500 font-normal">3–8 ft</span>
                                 </button>
-                                <button aria-label="Gin Clear water clarity" aria-pressed="false" class="clarity-btn px-4 py-3 rounded-xl border border-cyan-500/20 bg-slate-800/50 text-sm text-gray-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-all flex items-center justify-center gap-2" data-clarity="Gin Clear" title="Crystal clear water, 10+ foot visibility">
-                                    <i data-lucide="sparkles" class="w-4 h-4"></i>
-                                    Gin Clear
+                                <button aria-label="Gin Clear water clarity" aria-pressed="false" class="clarity-btn px-4 py-3 rounded-xl border border-cyan-500/20 bg-slate-800/50 text-sm text-gray-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-all flex flex-col items-center justify-center gap-1" data-clarity="Gin Clear" title="Crystal clear water, 10+ foot visibility">
+                                    <span class="flex items-center gap-2">
+                                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                        Gin Clear
+                                    </span>
+                                    <span class="text-[10px] text-gray-500 font-normal">10+ ft</span>
                                 </button>
                             </div>
                         </div>
