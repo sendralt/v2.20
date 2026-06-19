@@ -72,8 +72,8 @@ android {
         applicationId "com.fishsmart.pro"
         minSdkVersion 21
         targetSdkVersion 35
-        versionCode 19
-        versionName "2.19"
+        versionCode 21
+        versionName "2.21"
 
         // The name for the application
         resValue "string", "appName", twaManifest.name
