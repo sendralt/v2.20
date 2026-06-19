@@ -683,6 +683,49 @@ document.body.addEventListener('click', function(e) {
 // FORECAST HISTORY
 // ============================================
 
+function initMenuToggle() {
+    var menuBtn = document.getElementById('menuToggleBtn');
+    var dropdown = document.getElementById('menuDropdown');
+    if (!menuBtn || !dropdown) return;
+
+    function toggleMenu() {
+        var isOpen = !dropdown.classList.contains('hidden');
+        if (isOpen) {
+            dropdown.classList.add('hidden');
+            menuBtn.setAttribute('aria-expanded', 'false');
+        } else {
+            dropdown.classList.remove('hidden');
+            menuBtn.setAttribute('aria-expanded', 'true');
+        }
+    }
+
+    menuBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleMenu();
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!dropdown.contains(e.target) && e.target !== menuBtn) {
+            dropdown.classList.add('hidden');
+            menuBtn.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !dropdown.classList.contains('hidden')) {
+            dropdown.classList.add('hidden');
+            menuBtn.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    dropdown.querySelectorAll('button, a').forEach(function(item) {
+        item.addEventListener('click', function() {
+            dropdown.classList.add('hidden');
+            menuBtn.setAttribute('aria-expanded', 'false');
+        });
+    });
+}
+
 function initHistoryPanel() {
     var panel = document.getElementById('historyPanel');
     var list = document.getElementById('historyList');
