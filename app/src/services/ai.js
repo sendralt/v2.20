@@ -89,7 +89,18 @@ OUTPUT FORMAT (JSON):
         "moon_phase": "Current moon phase based on today's date",
         "assessment": "Brief assessment of how moon phase and weather conditions are currently affecting fish activity"
     },
-    "forecast_note": "2-3 sentence qualitative note about the activity forecast. Reference the engine's hourly projections and add fishing-specific reasoning (e.g., 'The engine projects a strong dawn peak, but with rising pressure expect the bite window to compress. Focus on the first 90 minutes after sunrise.') Do NOT repeat the numbers — add insight the numbers alone don't show."
+    "forecast_note": "2-3 sentence qualitative note about the activity forecast. Reference the engine's hourly projections and add fishing-specific reasoning (e.g., 'The engine projects a strong dawn peak, but with rising pressure expect the bite window to compress. Focus on the first 90 minutes after sunrise.') Do NOT repeat the numbers — add insight the numbers alone don't show.",
+    "ai_lures": [
+        {
+            "name": "Specific lure name (e.g., 'Ned Rig with Finesse Worm Z-Man')",
+            "category": "Lure category (e.g., 'Finesse', 'Reaction', 'Topwater', 'Jig', 'Soft Plastic')",
+            "score": 0.0-1.0 confidence rating for how well this lure matches current conditions,
+            "rank": "Excellent if score>0.85, Very Good if score>0.65, Good otherwise",
+            "cover": "Target cover or structure type",
+            "presentation": "Specific retrieve technique and presentation advice",
+            "reason": "Why this lure fits the current conditions (1-2 sentences)"
+        }
+    ]
 }
 
 STRICT RULES:
@@ -99,6 +110,7 @@ STRICT RULES:
 - Include depth ranges and specific techniques for the conditions
 - Reference specific local features of the water body when you have knowledge of them (bridges, coves, points, creeks, parks, boat ramps, road crossings). If you know the area, name it specifically. If uncertain about a specific feature, describe the TYPE of area instead (e.g., 'the north end near the inlet' rather than guessing a wrong name).
 - NEVER mention a specific bite probability percentage in your strategy, safety, or intel text. The bite probability is calculated by a separate scientific engine — do not guess or state your own number.
+- For ai_lures: suggest 2-3 lures that COMPLEMENT the engine's picks. Do NOT repeat lures already in ENGINE LURE PICKS. Focus on lures the engine catalog may not cover (e.g., Ned rigs, drop shots, swimbaits, umbrella rigs, specific color recommendations). Score each lure 0.0-1.0 based on how well it matches the species, water clarity, temperature, and strategy. Return an empty array if conditions are straightforward and engine picks suffice.
 `;
 }
 
@@ -243,6 +255,70 @@ async function callGeminiDirect(apiKey, model, prompt, isDev, useGrounding = fal
     });
 }
 
+/**
+ * Merge engine and AI lure recommendations into a single ranked list.
+ * Tags each lure with source, normalizes names for dedup,
+ * sorts by score descending, caps at 5 total.
+ * @param {Array} engineLures - Lures from the deterministic lure-scorer
+ * @param {Array} aiLures - Lures from the Gemini AI response
+ * @returns {Array} Merged, deduped, ranked lure list (max 5)
+ */
+function mergeLures(engineLures, aiLures) {
+    const MAX_LURES = 5;
+
+    const normalizeName = (name) =>
+        String(name || '').trim().toLowerCase().replace(/\s+/g, ' ');
+
+    // Tag source and normalize score field
+    const tagged = [];
+
+    if (Array.isArray(engineLures)) {
+        for (const lure of engineLures) {
+            if (!lure || !lure.name) continue;
+            tagged.push({
+                name: lure.name,
+                score: typeof lure.score === 'number' ? lure.score : 0,
+                rank: lure.rank || 'Good',
+                cover: lure.cover || 'Key structure',
+                presentation: lure.presentation || 'Match local forage and structure.',
+                reason: lure.reason || 'Offline lure catalog match.',
+                source: 'engine'
+            });
+        }
+    }
+
+    if (Array.isArray(aiLures)) {
+        for (const lure of aiLures) {
+            if (!lure || !lure.name) continue;
+            tagged.push({
+                name: lure.name,
+                score: typeof lure.score === 'number' ? lure.score : 0,
+                rank: lure.rank || 'Good',
+                cover: lure.cover || 'Key structure',
+                presentation: lure.presentation || 'Match local forage and structure.',
+                reason: lure.reason || 'AI-generated recommendation.',
+                source: 'ai'
+            });
+        }
+    }
+
+    // Sort by score descending
+    tagged.sort((a, b) => b.score - a.score);
+
+    // Dedupe by normalized name (first occurrence wins, already sorted by score)
+    const seen = new Set();
+    const merged = [];
+    for (const lure of tagged) {
+        const norm = normalizeName(lure.name);
+        if (seen.has(norm)) continue;
+        seen.add(norm);
+        merged.push(lure);
+        if (merged.length >= MAX_LURES) break;
+    }
+
+    return merged;
+}
+
 function createAIService(deps) {
     const { genAI, weatherService, biteEngine, fishPatterns, isDev } = deps;
     // Extract API key from genAI instance for direct REST calls
@@ -325,8 +401,11 @@ function createAIService(deps) {
               })
             : generateDefaultActivity();
         const activityContext = `ACTIVITY FORECAST (next 12h, 1-10 scale): [${activity.join(', ')}]`;
+        const engineLureNames = (scientificData?.recommendedLures || [])
+            .map(l => l.name)
+            .join(', ') || 'None';
         const scientificContext = scientificData
-            ? `SCIENTIFIC ENGINE: Bite ${scientificData.biteProbability}% (${scientificData.biteRank}); Metabolic Efficiency ${scientificData.metabolicEfficiency}%; Pressure Trend ${scientificData.pressureTrend}; Recommended Strategy ${scientificData.strategyType}; Water Temp ${scientificData.waterTemp}°F (${scientificData.waterTempSource}); ${activityContext}`
+            ? `SCIENTIFIC ENGINE: Bite ${scientificData.biteProbability}% (${scientificData.biteRank}); Metabolic Efficiency ${scientificData.metabolicEfficiency}%; Pressure Trend ${scientificData.pressureTrend}; Recommended Strategy ${scientificData.strategyType}; Water Temp ${scientificData.waterTemp}°F (${scientificData.waterTempSource}); ENGINE LURE PICKS: ${engineLureNames}; ${activityContext}`
             : 'SCIENTIFIC ENGINE: Unavailable';
 
         if (!geminiApiKey) return buildOfflineStrategy(params, weather, 'AI service unavailable');
@@ -389,8 +468,8 @@ function createAIService(deps) {
                 forecast_note: ensureString(responseJson.forecast_note) || '',
                 activity, weather,
                 scientific_data: scientificData,
-                // H-7: Use lure catalog results from scientific engine instead of empty array
-                recommended_lures: scientificData?.recommendedLures || [],
+                // Merge engine lures with AI-generated lures, score-ranked
+                recommended_lures: mergeLures(scientificData?.recommendedLures, responseJson.ai_lures),
                 solunar: {
                     moon_phase: responseJson.solunar?.moon_phase || 'Unknown',
                     assessment: responseJson.solunar?.assessment || 'No assessment available',
@@ -415,4 +494,4 @@ function createAIService(deps) {
     return { generateFishingStrategy };
 }
 
-module.exports = { createAIService, getTokenUsageReport, recordTokenUsage };
+module.exports = { createAIService, getTokenUsageReport, recordTokenUsage, mergeLures };

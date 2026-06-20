@@ -62,3 +62,84 @@ describe('AI service offline fallback', () => {
         assert.equal(result.water_temp_station_distance, 8.4);
     });
 });
+
+describe('mergeLures', () => {
+    const { mergeLures } = require('../src/services/ai');
+
+    it('merges engine and AI lures sorted by score descending', () => {
+        const engine = [
+            { name: 'Crankbait', score: 0.9, rank: 'Excellent', cover: 'Rocks', presentation: 'Steady', reason: 'Engine' }
+        ];
+        const ai = [
+            { name: 'Ned Rig', score: 0.95, rank: 'Excellent', cover: 'Bottom', presentation: 'Drag', reason: 'AI' }
+        ];
+        const result = mergeLures(engine, ai);
+        assert.equal(result.length, 2);
+        assert.equal(result[0].name, 'Ned Rig');  // higher score wins
+        assert.equal(result[1].name, 'Crankbait');
+    });
+
+    it('tags each lure with source', () => {
+        const engine = [
+            { name: 'Jig', score: 0.8, rank: 'Very Good', cover: 'Rock', presentation: 'Hop', reason: 'E' }
+        ];
+        const ai = [
+            { name: 'Drop Shot', score: 0.7, rank: 'Good', cover: 'Bottom', presentation: 'Slow', reason: 'A' }
+        ];
+        const result = mergeLures(engine, ai);
+        assert.equal(result[0].source, 'engine');
+        assert.equal(result[1].source, 'ai');
+    });
+
+    it('deduplicates by normalized name keeping higher score', () => {
+        const engine = [
+            { name: '  Senko  Worm ', score: 0.85, rank: 'Excellent', cover: 'C', presentation: 'P', reason: 'E' }
+        ];
+        const ai = [
+            { name: 'senko worm', score: 0.6, rank: 'Good', cover: 'C2', presentation: 'P2', reason: 'A' }
+        ];
+        const result = mergeLures(engine, ai);
+        assert.equal(result.length, 1);
+        assert.equal(result[0].name, '  Senko  Worm ');  // first occurrence (higher score) wins
+        assert.equal(result[0].score, 0.85);
+    });
+
+    it('caps total lures at 5', () => {
+        const engine = [
+            { name: 'A', score: 0.9 },
+            { name: 'B', score: 0.85 },
+            { name: 'C', score: 0.8 }
+        ];
+        const ai = [
+            { name: 'D', score: 0.75 },
+            { name: 'E', score: 0.7 },
+            { name: 'F', score: 0.65 }
+        ];
+        const result = mergeLures(engine, ai);
+        assert.equal(result.length, 5);
+        assert.equal(result[4].name, 'E');  // 5th by score
+    });
+
+    it('handles empty engine lures', () => {
+        const result = mergeLures([], [{ name: 'AI Lure', score: 0.8 }]);
+        assert.equal(result.length, 1);
+        assert.equal(result[0].source, 'ai');
+    });
+
+    it('handles empty AI lures', () => {
+        const result = mergeLures([{ name: 'Engine Lure', score: 0.8 }], []);
+        assert.equal(result.length, 1);
+        assert.equal(result[0].source, 'engine');
+    });
+
+    it('handles null/undefined inputs gracefully', () => {
+        const result = mergeLures(null, undefined);
+        assert.deepEqual(result, []);
+    });
+
+    it('handles lures without score (defaults to 0)', () => {
+        const result = mergeLures([{ name: 'No Score Lure' }], []);
+        assert.equal(result.length, 1);
+        assert.equal(result[0].score, 0);
+    });
+});

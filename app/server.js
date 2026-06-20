@@ -1,4 +1,5 @@
 "use strict";
+require("dotenv").config({ path: require("path").join(__dirname, "../.env") });
 
 console.log('\ud83d\ude80 Server initialization started...');
 

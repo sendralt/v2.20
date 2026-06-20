@@ -65,6 +65,7 @@ function createLureScorer(lureData) {
             .slice(0, 3)
             .map(lure => ({
                 name: lure.name,
+                score: lure.finalScore,
                 rank: lure.finalScore * 100 > 85 ? 'Excellent' : lure.finalScore * 100 > 65 ? 'Very Good' : 'Good',
                 cover: Array.isArray(lure.target_cover) && lure.target_cover.length ? lure.target_cover[0] : 'Key structure',
                 presentation: lure.presentation?.retrieve || lure.presentation?.notes || 'Match local forage and structure.',
