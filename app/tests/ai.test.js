@@ -143,3 +143,6 @@ describe('mergeLures', () => {
         assert.equal(result[0].score, 0);
     });
 });
+
+// === Regression: generateSearchVariations must not produce bare state names ===
+const weatherModule = require('../src/services/weather');

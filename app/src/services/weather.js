@@ -43,8 +43,17 @@ function generateSearchVariations(location) {
         const parts = clean.split(',').map(p => p.trim());
         variations.add(parts[0]);
         if (parts.length > 1) {
-            variations.add(parts.slice(1).join(', '));
-            variations.add(parts[1]);
+            // Join remaining parts but DON'T add bare state/region names (e.g. 'Ohio')
+            // — they geocode to state centers and produce wildly wrong results
+            // when the primary location term gets rate-limited by the geocoder.
+            const remainder = parts.slice(1).join(', ');
+            if (remainder.split(' ').length > 1) {
+                variations.add(remainder);
+            }
+            // Only add parts[1] if it contains multiple words (likely a county/region, not a bare state)
+            if (parts[1] && parts[1].split(' ').length > 1) {
+                variations.add(parts[1]);
+            }
         }
     }
     const skip = ['lake', 'river', 'pond', 'reservoir', 'bay', 'creek', 'stream'];
@@ -343,4 +352,4 @@ function createWeatherService(config) {
     return { getWeatherData };
 }
 
-module.exports = { createWeatherService };
+module.exports = { createWeatherService, generateSearchVariations };
