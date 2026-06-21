@@ -1,0 +1,12 @@
+Category,Item,Budget,Percentage,Phase,Expected_Subs_Min,Expected_Sub_Max,Cost_Per_Sub_Min,Cost_Per_Sub_Max,Notes
+Tools & Infrastructure,Canva Pro (annual),50,10%,Pre-launch,0,0,0,0,Ad creatives and social graphics
+Tools & Infrastructure,Custom domain email,12,2.4%,Pre-launch,0,0,0,0,Influencer outreach response rates
+Tools & Infrastructure,Link tracking tool,8,1.6%,Pre-launch,0,0,0,0,Bitly for channel attribution
+Micro-Influencer Seeding,Free Pro accounts (30 influencers),0,0%,Pre-launch + Days 1-15,250,3000,0,0,Highest ROI - free Pro for life + affiliate
+Contest / Giveaway,Fishing gear bundle prize,75,15%,Days 1-15,15,40,1.88,5.0,Bass Pro gift card or reel + tackle
+Meta Ads,Facebook/Instagram ads (15 days),200,40%,Days 1-15,15,60,3.33,13.33,"$20/day, test 4-6 creatives"
+Google Ads,Search ads (15 days),60,12%,Days 1-15,2,12,5.0,30.0,"$4/day, exact+phrase match only"
+Reddit Boosted Posts,Boost top organic post,25,5%,Days 3-10,5,20,1.25,5.0,"Post organically first, boost winner"
+Directory Submissions,Fiverr directory submission,20,4%,Pre-launch,5,25,0.8,4.0,50 directories + Product Hunt (free)
+Reserve / Optimization,Double down on winning channel,50,10%,Day 9+,5,15,3.33,10.0,Deploy after mid-campaign review
+TOTAL,,500,100%,,297,2172,1.68,0.23,
