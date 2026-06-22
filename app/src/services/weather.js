@@ -56,7 +56,7 @@ function generateSearchVariations(location) {
             }
         }
     }
-    const skip = ['lake', 'river', 'pond', 'reservoir', 'bay', 'creek', 'stream'];
+    const skip = ['lake', 'river', 'pond', 'reservoir', 'bay', 'creek', 'stream', 'wetland', 'marsh', 'swamp'];
     const stripped = clean.split(' ').filter(w => !skip.includes(w.toLowerCase().replace(/[^a-z]/g, ''))).join(' ');
     if (stripped && stripped !== clean) variations.add(stripped);
     return Array.from(variations).filter(t => t.length > 0);
@@ -76,7 +76,15 @@ async function fetchFromOpenWeather(term, apiKey) {
     return { current: currentData, forecast: forecastData };
 }
 
+// In-memory geocode cache — avoids hitting Nominatim repeatedly for the same location.
+const geocodeCache = new Map();
+const GEOCODE_CACHE_TTL = 10 * 60 * 1000;
+
 async function geocodeWithNominatim(term) {
+    const cacheKey = `nominatim:${term.toLowerCase()}`;
+    const cached = geocodeCache.get(cacheKey);
+    if (cached && Date.now() - cached.ts < GEOCODE_CACHE_TTL) return cached.value;
+
     const url = new URL('https://nominatim.openstreetmap.org/search');
     url.searchParams.set('q', term);
     url.searchParams.set('format', 'jsonv2');
@@ -84,24 +92,71 @@ async function geocodeWithNominatim(term) {
     url.searchParams.set('addressdetails', '1');
     url.searchParams.set('countrycodes', 'us');
 
-    const response = await fetch(url, {
-        headers: {
-            'Accept': 'application/json',
-            'Accept-Encoding': 'identity',
-            'User-Agent': 'FishSmart-Pro/2.0'
-        },
-        signal: AbortSignal.timeout(5000)
-    });
-    if (!response.ok) throw new Error(`Nominatim returned ${response.status}`);
-    const data = await response.json();
-    const item = Array.isArray(data) ? data[0] : null;
-    if (!item?.lat || !item?.lon) return null;
-    const lat = parseFloat(item.lat);
-    const lon = parseFloat(item.lon);
-    if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
-    // Extract county for disambiguation in grounding prompts
-    const county = item.address?.county || item.address?.city || item.address?.town || null;
-    return { lat, lon, displayName: item.display_name || term, county, source: 'nominatim' };
+    let lastErr;
+    for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+            if (attempt > 0) await new Promise(r => setTimeout(r, 1200 * attempt));
+            const response = await fetch(url, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Accept-Encoding': 'identity',
+                    'User-Agent': 'FishSmart-Pro/2.0'
+                },
+                signal: AbortSignal.timeout(8000)
+            });
+            if (response.status === 429 || response.status === 503) {
+                lastErr = new Error(`Nominatim rate-limited (${response.status})`);
+                continue;
+            }
+            if (!response.ok) throw new Error(`Nominatim returned ${response.status}`);
+            const data = await response.json();
+            const item = Array.isArray(data) ? data[0] : null;
+            if (!item?.lat || !item?.lon) {
+                geocodeCache.set(cacheKey, { ts: Date.now(), value: null });
+                return null;
+            }
+            const lat = parseFloat(item.lat);
+            const lon = parseFloat(item.lon);
+            if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+            const county = item.address?.county || item.address?.city || item.address?.town || null;
+            const result = { lat, lon, displayName: item.display_name || term, county, source: 'nominatim' };
+            geocodeCache.set(cacheKey, { ts: Date.now(), value: result });
+            return result;
+        } catch (err) {
+            lastErr = err;
+        }
+    }
+    throw lastErr || new Error('Nominatim failed after retries');
+}
+
+// Open-Meteo geocoder — free, no API key, no aggressive rate limits.
+async function geocodeWithOpenMeteo(term) {
+    const cacheKey = `openmeteo:${term.toLowerCase()}`;
+    const cached = geocodeCache.get(cacheKey);
+    if (cached && Date.now() - cached.ts < GEOCODE_CACHE_TTL) return cached.value;
+
+    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(term)}&count=1&country=US&format=json`;
+    try {
+        const response = await fetch(url, {
+            headers: { 'Accept': 'application/json', 'User-Agent': 'FishSmart-Pro/2.0' },
+            signal: AbortSignal.timeout(8000)
+        });
+        if (!response.ok) return null;
+        const data = await response.json();
+        const item = data?.results?.[0];
+        if (!item) {
+            geocodeCache.set(cacheKey, { ts: Date.now(), value: null });
+            return null;
+        }
+        const lat = item.latitude;
+        const lon = item.longitude;
+        if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+        const result = { lat, lon, displayName: item.name + (item.admin1 ? ', ' + item.admin1 : '') || term, source: 'open-meteo' };
+        geocodeCache.set(cacheKey, { ts: Date.now(), value: result });
+        return result;
+    } catch {
+        return null;
+    }
 }
 
 async function geocodeWithOpenWeather(term, apiKey) {
@@ -124,6 +179,7 @@ async function resolveLocationToCoordinates(location, apiKey, openWeatherApiKey 
     const terms = generateSearchVariations(location);
     const geocoders = [
         term => geocodeWithNominatim(term),
+        term => geocodeWithOpenMeteo(term),
         term => (openWeatherApiKey ? geocodeWithOpenWeather(term, openWeatherApiKey) : null)
     ];
 
