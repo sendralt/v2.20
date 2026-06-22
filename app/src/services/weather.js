@@ -93,7 +93,7 @@ async function geocodeWithNominatim(term) {
     url.searchParams.set('countrycodes', 'us');
 
     let lastErr;
-    for (let attempt = 0; attempt < 3; attempt++) {
+    for (let attempt = 0; attempt < 2; attempt++) {
         try {
             if (attempt > 0) await new Promise(r => setTimeout(r, 1200 * attempt));
             const response = await fetch(url, {
@@ -319,7 +319,7 @@ async function fetchUSGSWaterTemp(lat, lon) {
     try {
         const response = await fetch(`https://waterservices.usgs.gov/nwis/iv/?${params}`, {
             headers: { 'Accept': 'application/json', 'Accept-Encoding': 'identity' },
-            signal: AbortSignal.timeout(8000)
+            signal: AbortSignal.timeout(4000)
         });
         if (!response.ok) return null;
         const data = await response.json();

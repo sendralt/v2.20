@@ -219,7 +219,7 @@ async function callGeminiDirect(apiKey, model, prompt, isDev, useGrounding = fal
                 res.on('error', reject);
             });
             req.on('error', reject);
-            req.setTimeout(60000, () => {
+            req.setTimeout(45000, () => {
                 req.destroy(new Error('Gemini API request timed out'));
             });
             req.write(body);
