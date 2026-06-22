@@ -1015,12 +1015,14 @@ if (document.readyState === 'loading') {
         initGenerateButton();
         initWelcomeScreen();
         initHistoryPanel();
+        initMenuToggle();
         restoreFormState();
     });
 } else {
     initGenerateButton();
     initWelcomeScreen();
     initHistoryPanel();
+    initMenuToggle();
     restoreFormState();
 }
 
