@@ -219,7 +219,7 @@ async function callGeminiDirect(apiKey, model, prompt, isDev, useGrounding = fal
                 res.on('error', reject);
             });
             req.on('error', reject);
-            req.setTimeout(45000, () => {
+            req.setTimeout(25000, () => {
                 req.destroy(new Error('Gemini API request timed out'));
             });
             req.write(body);
@@ -421,8 +421,16 @@ function createAIService(deps) {
         });
 
         try {
-            // Direct REST API call — bypasses SDK gzip bug on Render
-            const rawBody = await callGeminiDirect(geminiApiKey, model, prompt, isDev, true);
+            // Resilient Gemini call chain: try grounding (two-call) first,
+            // fall back to single-call JSON mode if grounding fails.
+            // Only go offline if BOTH approaches fail.
+            let rawBody;
+            try {
+                rawBody = await callGeminiDirect(geminiApiKey, model, prompt, isDev, true);
+            } catch (groundingErr) {
+                console.warn('Gemini grounding failed, trying single-call JSON:', groundingErr.message);
+                rawBody = await callGeminiDirect(geminiApiKey, model, prompt, isDev, false);
+            }
 
             if (isDev) console.log('\n[Gemini raw response]\n', rawBody.substring(0, 500), '\n');
 
