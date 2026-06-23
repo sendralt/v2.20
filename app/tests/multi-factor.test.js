@@ -133,3 +133,57 @@ describe('Sensitivity Scaler', () => {
         }
     });
 });
+
+// --- Task 17: Wind Direction Windward Shore Bonus ---
+// Windblown shores concentrate baitfish and plankton, increasing feeding activity.
+// When wind direction data is available and angler is on a windward shore,
+// apply a 1.1x bonus to the wind multiplier.
+// [Source: Jones 1993 — The impact of wind on fish distribution and feeding]
+
+describe('Wind Direction — Windward Shore Bonus', () => {
+    it('windward shore applies 1.1x bonus to light breeze', () => {
+        // Base: windMph=5 -> 1.15; windward -> 1.15 * 1.1 = 1.265
+        const base = getWindMultiplier(5);
+        const windward = getWindMultiplier(5, { isWindwardShore: true });
+        assert.ok(windward > base,
+            `Windward (${windward}) should exceed base (${base})`);
+        assert.ok(Math.abs(windward - base * 1.1) < 0.001,
+            `Windward should be ~1.1x base: ${windward} vs ${base * 1.1}`);
+    });
+
+    it('leeward (non-windward) shore does NOT get bonus', () => {
+        const base = getWindMultiplier(5);
+        const leeward = getWindMultiplier(5, { isWindwardShore: false });
+        assert.equal(leeward, base,
+            `Leeward (${leeward}) should equal base (${base})`);
+    });
+
+    it('no options object -> behavior unchanged (backward compat)', () => {
+        assert.equal(getWindMultiplier(5), 1.15);
+        assert.equal(getWindMultiplier(12), 1.05);
+        assert.equal(getWindMultiplier(0), 0.85);
+    });
+
+    it('null options -> behavior unchanged', () => {
+        assert.equal(getWindMultiplier(5, null), 1.15);
+        assert.equal(getWindMultiplier(12, undefined), 1.05);
+    });
+
+    it('windward bonus applies to all wind speed tiers', () => {
+        const speeds = [0, 1, 5, 8, 12, 15, 18, 20, 25];
+        speeds.forEach(mph => {
+            const base = getWindMultiplier(mph);
+            const windward = getWindMultiplier(mph, { isWindwardShore: true });
+            assert.ok(windward > base,
+                `Windward at ${mph}mph (${windward}) should exceed base (${base})`);
+        });
+    });
+
+    it('null wind speed with windward -> still 1.0 default (no crash)', () => {
+        assert.equal(getWindMultiplier(null, { isWindwardShore: true }), 1.0);
+    });
+
+    it('undefined wind speed with windward -> still 1.0 default', () => {
+        assert.equal(getWindMultiplier(undefined, { isWindwardShore: true }), 1.0);
+    });
+});

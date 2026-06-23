@@ -94,13 +94,32 @@ function getSensitivityScaler(sensitivity) {
 
 // --- Multiplier Functions ---
 
-function getWindMultiplier(windMph) {
+/**
+ * Wind speed multiplier with optional windward shore bonus.
+ * Windblown shores concentrate baitfish and plankton, increasing feeding activity.
+ * When the angler is on a windward shore, apply a 1.1x bonus.
+ * [Source: Jones 1993 — The impact of wind on fish distribution and feeding]
+ *
+ * @param {number} windMph - Wind speed in mph
+ * @param {Object} [options] - Optional parameters
+ * @param {boolean} [options.isWindwardShore=false] - Whether the angler is on a windward shore
+ * @returns {number} Multiplier (0.75-1.265)
+ */
+function getWindMultiplier(windMph, options) {
     if (windMph == null) return 1.0;
-    if (windMph <= 1) return 0.85;
-    if (windMph <= 8) return 1.15;
-    if (windMph <= 15) return 1.05;
-    if (windMph <= 20) return 0.90;
-    return 0.75;
+    let multiplier;
+    if (windMph <= 1) multiplier = 0.85;
+    else if (windMph <= 8) multiplier = 1.15;
+    else if (windMph <= 15) multiplier = 1.05;
+    else if (windMph <= 20) multiplier = 0.90;
+    else multiplier = 0.75;
+
+    // Windward shore bonus: wind concentrates baitfish and plankton,
+    // creating prime feeding zones. Apply 1.1x bonus.
+    if (options && options.isWindwardShore === true) {
+        multiplier *= 1.1;
+    }
+    return multiplier;
 }
 
 function getCloudMultiplier(cloudPercent) {
