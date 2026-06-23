@@ -10,7 +10,17 @@
         "nocturnal": false,
         "spawn_temp_start": 65,
         "spawn_temp_peak": 68,
-        "spawn_temp_end": 72
+        "spawn_temp_end": 72,
+        "do_tolerance": 3.0,
+        "preferred_depth": 8,
+        "forage_base": [
+          "shad",
+          "sunfish",
+          "crawfish",
+          "shiners",
+          "frog"
+        ],
+        "turbidity_preference": "Stained"
       }
     },
     {
@@ -23,7 +33,17 @@
         "nocturnal": false,
         "spawn_temp_start": 60,
         "spawn_temp_peak": 63,
-        "spawn_temp_end": 67
+        "spawn_temp_end": 67,
+        "do_tolerance": 3.5,
+        "preferred_depth": 12,
+        "forage_base": [
+          "crawfish",
+          "minnows",
+          "shiners",
+          "sculpin",
+          "hellgrammite"
+        ],
+        "turbidity_preference": "Clear"
       }
     },
     {
@@ -36,7 +56,17 @@
         "nocturnal": true,
         "spawn_temp_start": 44,
         "spawn_temp_peak": 48,
-        "spawn_temp_end": 52
+        "spawn_temp_end": 52,
+        "do_tolerance": 4.0,
+        "preferred_depth": 18,
+        "forage_base": [
+          "yellow perch",
+          "shiners",
+          "minnows",
+          "cisco",
+          "smelt"
+        ],
+        "turbidity_preference": "Stained"
       }
     },
     {
@@ -49,7 +79,17 @@
         "nocturnal": false,
         "spawn_temp_start": 40,
         "spawn_temp_peak": 45,
-        "spawn_temp_end": 50
+        "spawn_temp_end": 50,
+        "do_tolerance": 2.5,
+        "preferred_depth": 10,
+        "forage_base": [
+          "perch",
+          "suckers",
+          "minnows",
+          "shiners",
+          "cisco"
+        ],
+        "turbidity_preference": "Clear to Stained"
       }
     },
     {
@@ -62,7 +102,17 @@
         "nocturnal": false,
         "spawn_temp_start": 44,
         "spawn_temp_peak": 48,
-        "spawn_temp_end": 52
+        "spawn_temp_end": 52,
+        "do_tolerance": 3.0,
+        "preferred_depth": 15,
+        "forage_base": [
+          "minnows",
+          "insects",
+          "amphipods",
+          "small fish",
+          "zooplankton"
+        ],
+        "turbidity_preference": "Clear"
       }
     },
     {
@@ -75,7 +125,16 @@
         "nocturnal": false,
         "spawn_temp_start": 55,
         "spawn_temp_peak": 60,
-        "spawn_temp_end": 65
+        "spawn_temp_end": 65,
+        "do_tolerance": 3.5,
+        "preferred_depth": 14,
+        "forage_base": [
+          "shad",
+          "minnows",
+          "insects",
+          "crayfish"
+        ],
+        "turbidity_preference": "Stained"
       }
     },
     {
@@ -88,7 +147,17 @@
         "nocturnal": false,
         "spawn_temp_start": 60,
         "spawn_temp_peak": 65,
-        "spawn_temp_end": 70
+        "spawn_temp_end": 70,
+        "do_tolerance": 4.0,
+        "preferred_depth": 20,
+        "forage_base": [
+          "shad",
+          "herring",
+          "alewife",
+          "eels",
+          "silversides"
+        ],
+        "turbidity_preference": "Clear"
       }
     },
     {
@@ -101,7 +170,17 @@
         "nocturnal": false,
         "spawn_temp_start": 50,
         "spawn_temp_peak": 55,
-        "spawn_temp_end": 60
+        "spawn_temp_end": 60,
+        "do_tolerance": 3.0,
+        "preferred_depth": 12,
+        "forage_base": [
+          "suckers",
+          "perch",
+          "minnows",
+          "cisco",
+          "catfish"
+        ],
+        "turbidity_preference": "Clear"
       }
     },
     {
@@ -114,7 +193,16 @@
         "nocturnal": false,
         "spawn_temp_start": 58,
         "spawn_temp_peak": 62,
-        "spawn_temp_end": 66
+        "spawn_temp_end": 66,
+        "do_tolerance": 3.0,
+        "preferred_depth": 10,
+        "forage_base": [
+          "minnows",
+          "shad",
+          "insects",
+          "crustaceans"
+        ],
+        "turbidity_preference": "Stained"
       }
     },
     {
@@ -127,7 +215,17 @@
         "nocturnal": false,
         "spawn_temp_start": 67,
         "spawn_temp_peak": 72,
-        "spawn_temp_end": 77
+        "spawn_temp_end": 77,
+        "do_tolerance": 2.5,
+        "preferred_depth": 5,
+        "forage_base": [
+          "insects",
+          "zooplankton",
+          "small minnows",
+          "snails",
+          "algae"
+        ],
+        "turbidity_preference": "Clear to Stained"
       }
     },
     {
@@ -140,7 +238,17 @@
         "nocturnal": true,
         "spawn_temp_start": 70,
         "spawn_temp_peak": 75,
-        "spawn_temp_end": 80
+        "spawn_temp_end": 80,
+        "do_tolerance": 2.0,
+        "preferred_depth": 16,
+        "forage_base": [
+          "fish",
+          "crawfish",
+          "insects",
+          "mollusks",
+          "detritus"
+        ],
+        "turbidity_preference": "Stained to Muddy"
       }
     },
     {
@@ -153,7 +261,17 @@
         "nocturnal": true,
         "spawn_temp_start": 70,
         "spawn_temp_peak": 75,
-        "spawn_temp_end": 80
+        "spawn_temp_end": 80,
+        "do_tolerance": 2.0,
+        "preferred_depth": 16,
+        "forage_base": [
+          "fish",
+          "crawfish",
+          "insects",
+          "clams",
+          "dead bait"
+        ],
+        "turbidity_preference": "Stained to Muddy"
       }
     },
     {
@@ -166,7 +284,17 @@
         "nocturnal": true,
         "spawn_temp_start": 68,
         "spawn_temp_peak": 72,
-        "spawn_temp_end": 76
+        "spawn_temp_end": 76,
+        "do_tolerance": 1.5,
+        "preferred_depth": 8,
+        "forage_base": [
+          "insects",
+          "mollusks",
+          "fish",
+          "detritus",
+          "worms"
+        ],
+        "turbidity_preference": "Muddy"
       }
     },
     {
@@ -179,7 +307,17 @@
         "nocturnal": false,
         "spawn_temp_start": 44,
         "spawn_temp_peak": 50,
-        "spawn_temp_end": 56
+        "spawn_temp_end": 56,
+        "do_tolerance": 5.0,
+        "preferred_depth": 8,
+        "forage_base": [
+          "insects",
+          "minnows",
+          "crustaceans",
+          "fish eggs",
+          "zooplankton"
+        ],
+        "turbidity_preference": "Clear"
       }
     },
     {
@@ -192,7 +330,17 @@
         "nocturnal": true,
         "spawn_temp_start": 44,
         "spawn_temp_peak": 50,
-        "spawn_temp_end": 56
+        "spawn_temp_end": 56,
+        "do_tolerance": 5.0,
+        "preferred_depth": 8,
+        "forage_base": [
+          "insects",
+          "minnows",
+          "crayfish",
+          "baitfish",
+          "terrestrials"
+        ],
+        "turbidity_preference": "Clear"
       }
     },
     {
@@ -205,7 +353,17 @@
         "nocturnal": false,
         "spawn_temp_start": 40,
         "spawn_temp_peak": 46,
-        "spawn_temp_end": 52
+        "spawn_temp_end": 52,
+        "do_tolerance": 5.0,
+        "preferred_depth": 8,
+        "forage_base": [
+          "insects",
+          "salmon eggs",
+          "baitfish",
+          "crustaceans",
+          "amphipods"
+        ],
+        "turbidity_preference": "Clear"
       }
     },
     {
@@ -218,7 +376,17 @@
         "nocturnal": false,
         "spawn_temp_start": 44,
         "spawn_temp_peak": 50,
-        "spawn_temp_end": 56
+        "spawn_temp_end": 56,
+        "do_tolerance": 5.0,
+        "preferred_depth": 18,
+        "forage_base": [
+          "alewife",
+          "smelt",
+          "herring",
+          "krill",
+          "baitfish"
+        ],
+        "turbidity_preference": "Clear"
       }
     },
     {
@@ -231,7 +399,17 @@
         "nocturnal": false,
         "spawn_temp_start": 44,
         "spawn_temp_peak": 48,
-        "spawn_temp_end": 52
+        "spawn_temp_end": 52,
+        "do_tolerance": 3.5,
+        "preferred_depth": 16,
+        "forage_base": [
+          "minnows",
+          "shad",
+          "crawfish",
+          "insects",
+          "perch"
+        ],
+        "turbidity_preference": "Stained"
       }
     },
     {
@@ -244,7 +422,17 @@
         "nocturnal": false,
         "spawn_temp_start": 44,
         "spawn_temp_peak": 50,
-        "spawn_temp_end": 56
+        "spawn_temp_end": 56,
+        "do_tolerance": 5.0,
+        "preferred_depth": 5,
+        "forage_base": [
+          "insects",
+          "minnows",
+          "crustaceans",
+          "worms",
+          "terrestrials"
+        ],
+        "turbidity_preference": "Clear"
       }
     },
     {
@@ -257,7 +445,130 @@
         "nocturnal": false,
         "spawn_temp_start": 44,
         "spawn_temp_peak": 50,
-        "spawn_temp_end": 56
+        "spawn_temp_end": 56,
+        "do_tolerance": 5.0,
+        "preferred_depth": 6,
+        "forage_base": [
+          "insects",
+          "minnows",
+          "salmon eggs",
+          "crustaceans",
+          "zooplankton"
+        ],
+        "turbidity_preference": "Clear"
+      }
+    },
+    {
+      "name": "Common Carp",
+      "scientific_metrics": {
+        "opt": 72,
+        "dorm": 38,
+        "sensitivity": "Low",
+        "feeding_cease_temp": 88,
+        "nocturnal": true,
+        "spawn_temp_start": 64,
+        "spawn_temp_peak": 70,
+        "spawn_temp_end": 75,
+        "do_tolerance": 1.5,
+        "preferred_depth": 8,
+        "forage_base": [
+          "insects",
+          "mollusks",
+          "crustaceans",
+          "detritus",
+          "worms"
+        ],
+        "turbidity_preference": "Muddy"
+      }
+    },
+    {
+      "name": "Longnose Gar",
+      "scientific_metrics": {
+        "opt": 75,
+        "dorm": 45,
+        "sensitivity": "Low",
+        "feeding_cease_temp": 90,
+        "nocturnal": true,
+        "spawn_temp_start": 68,
+        "spawn_temp_peak": 75,
+        "spawn_temp_end": 80,
+        "do_tolerance": 1.5,
+        "preferred_depth": 6,
+        "forage_base": [
+          "minnows",
+          "shad",
+          "sunfish",
+          "small fish"
+        ],
+        "turbidity_preference": "Stained to Muddy"
+      }
+    },
+    {
+      "name": "Bowfin",
+      "scientific_metrics": {
+        "opt": 73,
+        "dorm": 40,
+        "sensitivity": "Low",
+        "feeding_cease_temp": 88,
+        "nocturnal": true,
+        "spawn_temp_start": 60,
+        "spawn_temp_peak": 66,
+        "spawn_temp_end": 72,
+        "do_tolerance": 1.0,
+        "preferred_depth": 5,
+        "forage_base": [
+          "fish",
+          "crawfish",
+          "insects",
+          "frogs",
+          "minnows"
+        ],
+        "turbidity_preference": "Stained to Muddy"
+      }
+    },
+    {
+      "name": "Lake Sturgeon",
+      "scientific_metrics": {
+        "opt": 58,
+        "dorm": 35,
+        "sensitivity": "Medium",
+        "feeding_cease_temp": 75,
+        "nocturnal": true,
+        "spawn_temp_start": 53,
+        "spawn_temp_peak": 58,
+        "spawn_temp_end": 64,
+        "do_tolerance": 3.0,
+        "preferred_depth": 25,
+        "forage_base": [
+          "insects",
+          "mollusks",
+          "crustaceans",
+          "worms",
+          "small fish"
+        ],
+        "turbidity_preference": "Stained"
+      }
+    },
+    {
+      "name": "Redear Sunfish",
+      "scientific_metrics": {
+        "opt": 75,
+        "dorm": 50,
+        "sensitivity": "Medium",
+        "feeding_cease_temp": 88,
+        "nocturnal": false,
+        "spawn_temp_start": 68,
+        "spawn_temp_peak": 73,
+        "spawn_temp_end": 80,
+        "do_tolerance": 2.5,
+        "preferred_depth": 8,
+        "forage_base": [
+          "snails",
+          "mollusks",
+          "insects",
+          "crustaceans"
+        ],
+        "turbidity_preference": "Clear to Stained"
       }
     }
   ]
