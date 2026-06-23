@@ -7,7 +7,10 @@
         "dorm": 45,
         "sensitivity": "Medium",
         "feeding_cease_temp": 87,
-        "nocturnal": false
+        "nocturnal": false,
+        "spawn_temp_start": 65,
+        "spawn_temp_peak": 68,
+        "spawn_temp_end": 72
       }
     },
     {
@@ -17,7 +20,10 @@
         "dorm": 42,
         "sensitivity": "Medium",
         "feeding_cease_temp": 82,
-        "nocturnal": false
+        "nocturnal": false,
+        "spawn_temp_start": 60,
+        "spawn_temp_peak": 63,
+        "spawn_temp_end": 67
       }
     },
     {
@@ -27,7 +33,10 @@
         "dorm": 38,
         "sensitivity": "High",
         "feeding_cease_temp": 80,
-        "nocturnal": true
+        "nocturnal": true,
+        "spawn_temp_start": 44,
+        "spawn_temp_peak": 48,
+        "spawn_temp_end": 52
       }
     },
     {
@@ -37,7 +46,10 @@
         "dorm": 35,
         "sensitivity": "Low",
         "feeding_cease_temp": 78,
-        "nocturnal": false
+        "nocturnal": false,
+        "spawn_temp_start": 40,
+        "spawn_temp_peak": 45,
+        "spawn_temp_end": 50
       }
     },
     {
@@ -47,7 +59,10 @@
         "dorm": 36,
         "sensitivity": "Medium",
         "feeding_cease_temp": 79,
-        "nocturnal": false
+        "nocturnal": false,
+        "spawn_temp_start": 44,
+        "spawn_temp_peak": 48,
+        "spawn_temp_end": 52
       }
     },
     {
@@ -57,7 +72,10 @@
         "dorm": 42,
         "sensitivity": "Medium",
         "feeding_cease_temp": 84,
-        "nocturnal": false
+        "nocturnal": false,
+        "spawn_temp_start": 55,
+        "spawn_temp_peak": 60,
+        "spawn_temp_end": 65
       }
     },
     {
@@ -67,7 +85,10 @@
         "dorm": 44,
         "sensitivity": "Medium",
         "feeding_cease_temp": 82,
-        "nocturnal": false
+        "nocturnal": false,
+        "spawn_temp_start": 60,
+        "spawn_temp_peak": 65,
+        "spawn_temp_end": 70
       }
     },
     {
@@ -77,7 +98,10 @@
         "dorm": 40,
         "sensitivity": "Low",
         "feeding_cease_temp": 80,
-        "nocturnal": false
+        "nocturnal": false,
+        "spawn_temp_start": 50,
+        "spawn_temp_peak": 55,
+        "spawn_temp_end": 60
       }
     },
     {
@@ -87,7 +111,10 @@
         "dorm": 44,
         "sensitivity": "High",
         "feeding_cease_temp": 82,
-        "nocturnal": false
+        "nocturnal": false,
+        "spawn_temp_start": 58,
+        "spawn_temp_peak": 62,
+        "spawn_temp_end": 66
       }
     },
     {
@@ -97,7 +124,10 @@
         "dorm": 48,
         "sensitivity": "Medium",
         "feeding_cease_temp": 88,
-        "nocturnal": false
+        "nocturnal": false,
+        "spawn_temp_start": 67,
+        "spawn_temp_peak": 72,
+        "spawn_temp_end": 77
       }
     },
     {
@@ -107,7 +137,10 @@
         "dorm": 50,
         "sensitivity": "Low",
         "feeding_cease_temp": 90,
-        "nocturnal": true
+        "nocturnal": true,
+        "spawn_temp_start": 70,
+        "spawn_temp_peak": 75,
+        "spawn_temp_end": 80
       }
     },
     {
@@ -117,7 +150,10 @@
         "dorm": 52,
         "sensitivity": "Low",
         "feeding_cease_temp": 90,
-        "nocturnal": true
+        "nocturnal": true,
+        "spawn_temp_start": 70,
+        "spawn_temp_peak": 75,
+        "spawn_temp_end": 80
       }
     },
     {
@@ -127,7 +163,10 @@
         "dorm": 48,
         "sensitivity": "Low",
         "feeding_cease_temp": 89,
-        "nocturnal": true
+        "nocturnal": true,
+        "spawn_temp_start": 68,
+        "spawn_temp_peak": 72,
+        "spawn_temp_end": 76
       }
     },
     {
@@ -137,7 +176,10 @@
         "dorm": 33,
         "sensitivity": "High",
         "feeding_cease_temp": 72,
-        "nocturnal": false
+        "nocturnal": false,
+        "spawn_temp_start": 44,
+        "spawn_temp_peak": 50,
+        "spawn_temp_end": 56
       }
     },
     {
@@ -147,7 +189,10 @@
         "dorm": 35,
         "sensitivity": "High",
         "feeding_cease_temp": 75,
-        "nocturnal": true
+        "nocturnal": true,
+        "spawn_temp_start": 44,
+        "spawn_temp_peak": 50,
+        "spawn_temp_end": 56
       }
     },
     {
@@ -157,7 +202,10 @@
         "dorm": 34,
         "sensitivity": "High",
         "feeding_cease_temp": 70,
-        "nocturnal": false
+        "nocturnal": false,
+        "spawn_temp_start": 40,
+        "spawn_temp_peak": 46,
+        "spawn_temp_end": 52
       }
     },
     {
@@ -167,7 +215,10 @@
         "dorm": 34,
         "sensitivity": "High",
         "feeding_cease_temp": 68,
-        "nocturnal": false
+        "nocturnal": false,
+        "spawn_temp_start": 44,
+        "spawn_temp_peak": 50,
+        "spawn_temp_end": 56
       }
     },
     {
@@ -177,7 +228,10 @@
         "dorm": 39,
         "sensitivity": "High",
         "feeding_cease_temp": 81,
-        "nocturnal": false
+        "nocturnal": false,
+        "spawn_temp_start": 44,
+        "spawn_temp_peak": 48,
+        "spawn_temp_end": 52
       }
     },
     {
@@ -187,7 +241,10 @@
         "dorm": 31,
         "sensitivity": "High",
         "feeding_cease_temp": 70,
-        "nocturnal": false
+        "nocturnal": false,
+        "spawn_temp_start": 44,
+        "spawn_temp_peak": 50,
+        "spawn_temp_end": 56
       }
     },
     {
@@ -197,7 +254,10 @@
         "dorm": 34,
         "sensitivity": "High",
         "feeding_cease_temp": 72,
-        "nocturnal": false
+        "nocturnal": false,
+        "spawn_temp_start": 44,
+        "spawn_temp_peak": 50,
+        "spawn_temp_end": 56
       }
     }
   ]
