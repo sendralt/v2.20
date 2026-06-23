@@ -59,7 +59,7 @@
 
 > **[Show the bite score number animating in: e.g., 78/100]**
 >
-> Boom. 78 out of 100. That's a solid bite. But here's where FishSmart Pro is different — let me show you WHY it's 78.
+> Boom. 82 out of 100. That's a solid bite. But here's where FishSmart Pro is different — let me show you WHY it's 82.
 >
 > **[Scroll down slowly through the factor breakdown cards]**
 >

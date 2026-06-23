@@ -8,7 +8,7 @@ Implement all 18 recommendations from the Science Review Report across 4 phases:
 
 - **Sensitivity scaling as a multiplier modifier:** The existing `sensitivity` field (High/Medium/Low) scales the pressure-trend multiplier rather than creating a new model. High sensitivity = wider multiplier spread, Low = narrower.
 - **4th-root replaced with square root:** `Math.sqrt(Math.sqrt(x))` becomes `Math.sqrt(x)` — restores meaningful environmental impact while keeping some dampening.
-- **T_max from species-specific UILT:** Each species gets an explicit `uilt` field (upper incipient lethal temperature) replacing the `T_opt + 0.5 x range` formula.
+- **T_max = feeding cessation temperature (NOT UILT/CTMax):** Each species gets a `feeding_cease_temp` field representing the upper boundary of active feeding (~85-90°F for LMB), NOT the lethal limit (~99°F). T_opt values also re-evaluated per species against preferred feeding temperatures. Metabolic curve replaces cubic decay with a plateau model.
 - **New modules are pure functions:** DO, spawning, thermocline, lunar, and photoperiod are stateless pure functions returning a multiplier (0.0-1.5) that slots into the adjustment factor.
 - **Dynamic research extraction:** `fish-data-enhancer.js` extracts the relevant species section from the research doc by header matching, instead of hard-truncating.
 - **Confidence bands from multiplier spread:** Band width is computed from how extreme the environmental multipliers are (wide spread = wider band).
@@ -23,19 +23,28 @@ Implement all 18 recommendations from the Science Review Report across 4 phases:
 
 ### Task 1: Fix T_max calculation in metabolic.js
 
-**Description:** Replace the `T_max = T_opt + (T_opt - T_dorm) * 0.5` formula with species-specific upper incipient lethal temperature (UILT) values from fisheries literature. Add a `uilt` field to each species in `fishingData.json`.
+### Task 1: Overhaul metabolic curve — plateau model, T_max, and T_opt
+
+**Description:** Three interconnected fixes to the metabolic efficiency model:
+(1) Replace cubic decay `(1-x)³` with a **plateau model** that maintains ~95-100% efficiency from T_opt through a broad peak zone (T_opt + ~8°F), then decays gradually — matching real fish thermal performance curves and the project's own feeding activity table.
+(2) Redefine T_max as **species-specific feeding cessation temperature** (~85-90°F for LMB), NOT UILT/CTMax (~99°F lethal limit). This is a feeding prediction engine, not a survival model.
+(3) **Re-evaluate T_opt per species** — current values may be too low (e.g., LMB T_opt=72°F but 75-85°F is peak feeding per project data; likely needs ~78-80°F).
 
 **Acceptance criteria:**
-- [ ] Each species in `fishingData.json` has an `uilt` field with a cited value
-- [ ] `calculateMetabolicEfficiency()` uses `metrics.uilt` instead of the 0.5x range formula
-- [ ] Fallback default `uilt` provided when field is missing
-- [ ] JSDoc citation added for the T_max change
+- [ ] Cubic decay `(1-x)³` replaced with plateau model: efficiency holds at ~95-100% from T_opt to T_opt+8°F, then decays gradually to feeding cessation
+- [ ] `calculateMetabolicEfficiency()` uses `metrics.feeding_cease_temp` (NOT `uilt`/CTMax) as upper boundary
+- [ ] Each species in `fishingData.json` has `feeding_cease_temp` and `T_opt` fields with cited values from behavioral fisheries literature (Carlander 1977, state DNR feeding tables)
+- [ ] T_opt re-evaluated per species against preferred feeding temperatures (not lab metabolic optima)
+- [ ] Fallback defaults provided when fields are missing
+- [ ] JSDoc citations added: T_max rationale (feeding cessation vs lethal), plateau model (Fry 1971, Brett 1971), T_opt sources
+- [ ] Verify: LMB at 78°F outputs >80% efficiency (not 17%), LMB at 85°F outputs ~20-30% (not ~0%)
 - [ ] Existing metabolic tests updated with new expected values and justification comments
 - [ ] All tests pass
 
 **Verification:**
 - `npm test -- --grep "metabolic"`
-- `node tests/benchmark-bite-score.js` — verify scores shift in expected direction (higher in warm water)
+- `node tests/benchmark-bite-score.js` — verify warm-water scores (75-85°F range) are now elevated, not suppressed
+- Manual: plot efficiency curve for LMB from 45-90°F and verify broad plateau + gradual decline
 
 **Dependencies:** None
 
@@ -44,7 +53,7 @@ Implement all 18 recommendations from the Science Review Report across 4 phases:
 - `app/data/fishingData.json`
 - `app/tests/metabolic.test.js`
 
-**Scope:** Small (3 files)
+**Scope:** Medium (3 files)
 
 ---
 
@@ -391,7 +400,7 @@ Implement all 18 recommendations from the Science Review Report across 4 phases:
 
 ### Task 14: Expand species data schema in fishingData.json
 
-**Description:** Expand each species entry from 3 fields (opt, dorm, sensitivity) to include: `uilt`, `nocturnal`, `spawn_temp_start`, `spawn_temp_peak`, `spawn_temp_end`, `do_tolerance`, `preferred_depth`, `forage_base`, `turbidity_preference`. Add citations.
+**Description:** Expand each species entry from 3 fields (opt, dorm, sensitivity) to include: `feeding_cease_temp`, `opt` (re-evaluated to preferred feeding temp), `nocturnal`, `spawn_temp_start`, `spawn_temp_peak`, `spawn_temp_end`, `do_tolerance`, `preferred_depth`, `forage_base`, `turbidity_preference`. Add citations.
 
 **Acceptance criteria:**
 - [ ] All 20 existing species have expanded fields with cited values
@@ -403,7 +412,7 @@ Implement all 18 recommendations from the Science Review Report across 4 phases:
 
 **Verification:**
 - `npm test -- --grep "species"`
-- `node -e "const d = require('./data/fishingData.json'); d.species_data.forEach(s => { if (!s.uilt || !s.spawn_temp_start) console.log('MISSING:', s.name) })"`
+- `node -e "const d = require('./data/fishingData.json'); d.species_data.forEach(s => { if (!s.feeding_cease_temp || !s.spawn_temp_start) console.log('MISSING:', s.name) })"`
 
 **Dependencies:** Tasks 1, 4, 7 (fields must exist before data is added)
 
@@ -445,7 +454,7 @@ Implement all 18 recommendations from the Science Review Report across 4 phases:
 
 ### Task 16: Latitude-adjusted seasonal water temp baselines
 
-**Description:** Replace the hardcoded temperate North America `SEASONAL_BASE_TEMPS` in `water-temp.js` with a latitude-based model that adjusts baselines for subtropical and tropical zones.
+**Description:** Replace the hardcoded temperate North America `SEASONAL_BASE_TEMPS` in `water-temp.js` with a latitude-based model that adjusts baselines for subtropical and tropical zones. Note: This only affects the **fallback estimation path** — USGS live monitoring data remains the primary water temperature source and is unaffected. Mohseni et al. (1998) regression is NOT adopted (would be redundant with USGS sensor data).
 
 **Acceptance criteria:**
 - [ ] `estimateWaterTempHybrid()` accepts latitude and adjusts the seasonal baseline
@@ -592,7 +601,7 @@ Implement all 18 recommendations from the Science Review Report across 4 phases:
 
 ```
 Phase 1 (P0):
-  Task 1 (T_max fix) ─────────────────┐
+  Task 1 (metabolic curve overhaul) ──┐
   Task 2 (sensitivity) ──────────────┤
   Task 3 (4th-root fix) ─────────────┤── Task 11 (wire modules)
   Task 4 (nocturnal time) ───────────┤
@@ -642,7 +651,7 @@ Phase 4 (P3):
 | Risk | Impact | Mitigation |
 |------|--------|------------|
 | Changing 4th-root to sqrt shifts all scores significantly | High | Run benchmarks before/after; calibrate BITE_DIVISOR if needed |
-| T_max fix makes warm-water scores jump | Medium | Compare against known catch data for warm-water species |
+| Metabolic curve overhaul shifts scores significantly | Medium | Run benchmarks before/after; verify plateau zone produces elevated warm-water scores (75-85°F); calibrate BITE_DIVISOR if needed |
 | New modules slow down response time | Medium | All new modules are pure functions with O(1) complexity; benchmark after integration |
 | Species data expansion takes long | Low | Use existing fisheries literature; cite sources; can be parallelized |
 | Lure catalog expansion is time-consuming | Low | Pure data addition; no engine changes; test with existing scorer |
@@ -662,10 +671,14 @@ Phase 4 (P3):
 
 6. **Confidence band method:** **Dynamic band** based on multiplier spread (5-12%). Narrow when conditions agree, wide when conditions are extreme. More scientifically honest than fixed ±8%.
 7. **Photoperiod integration:** **Supplement (layered).** Photoperiod is a bonus multiplier on top of existing hardcoded time windows. Lower risk, keeps tests green. Example: December 5:30 AM gets bonus 0.92 (still dark), June 5:30 AM gets bonus 1.0 (dawn confirmed).
+ 8. **T_max = feeding cessation temperature, NOT UILT/CTMax:** Scientific review incorrectly recommended using Upper Incipient Lethal Temperature (UILT) / Critical Thermal Maximum (CTMax, ~99°F for LMB). This is a **feeding prediction engine**, not a survival model. Fish cease active feeding at ~85-90°F, well below lethal limits. T_max must represent the **upper boundary of active feeding**, not death. Use species-specific feeding cessation temperatures from behavioral fisheries literature.
+ 9. **Metabolic curve shape — plateau model, not cubic decay:** The current cubic decay function `(1-x)³` causes efficiency to crash catastrophically between T_opt and T_max (e.g., 78°F = 17% efficiency for LMB, despite being peak feeding temperature). Replace with a **plateau model**: efficiency stays at ~95-100% from T_opt to T_opt+8°F (broad peak zone), then decays gradually to T_max. This matches real fish thermal performance curves (Fry 1971, Brett 1971).
+10. **T_opt re-evaluation per species:** Current T_opt values may be too low. For Largemouth Bass, T_opt=72°F produces a mismatch — 75-85°F is described as peak feeding. LMB likely needs T_opt closer to 78-80°F. All T_opt changes require benchmark runs per the boundaries section.
+11. **Water temperature model — USGS primary, hybrid is fallback only:** Scientific review incorrectly recommended replacing the 70/30 hybrid model with Mohseni et al. (1998) regression. The engine uses **USGS live monitoring station data** as the primary method (actual measured water temp). The 70/30 hybrid thermal lag is a last-resort fallback only. No regression model can outperform real sensor data. Mohseni regression is an optional future improvement for the fallback path only.
 
 ## All Open Questions Resolved
 
-All 7 decisions are now baked into the spec and plan. Ready for implementation.
+All 11 decisions are now baked into the spec and plan. Ready for implementation.
 
 ---
 
