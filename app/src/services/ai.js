@@ -347,6 +347,9 @@ function createAIService(deps) {
         }
     }
 
+    /** METHODOLOGY_NOTE: Concise disclaimer about the heuristic nature of the bite probability model. */
+    const METHODOLOGY_NOTE = 'Bite probability is a heuristic estimate combining metabolic efficiency, barometric pressure trends, water temperature, dissolved oxygen, lunar phase, and seasonal spawning cycles. It does not account for local baitfish abundance, recent fishing pressure, water depth variations, or real-time fish sonar data. Treat predictions as an approximation, not a guarantee — local knowledge and on-water observation remain essential.';
+
     async function buildOfflineStrategy(params, weather, reason) {
         const { location, species, clarity, currentTime } = params;
         const currentHour = parseHour(currentTime);
@@ -391,6 +394,7 @@ function createAIService(deps) {
             bite_reasoning: scientificData?.biteReasoning || 'Offline scientific fallback applied.',
             pressure_forecast: weather?.pressureForecast || [],
             offline_mode: true,
+            methodology_note: METHODOLOGY_NOTE,
             water_temp: scientificData?.waterTemp || null,
             water_temp_source: scientificData?.waterTempSource || 'offline',
             water_temp_note: buildWaterTempNote(scientificData?.waterTempSource || 'offline'),
@@ -531,6 +535,7 @@ function createAIService(deps) {
                 bite_rank: biteMetrics.rank,
                 bite_reasoning: biteMetrics.reasoning,
                 pressure_forecast: weather?.pressureForecast || [],
+                methodology_note: METHODOLOGY_NOTE,
                 water_temp: scientificData?.waterTemp || null,
                 water_temp_source: scientificData?.waterTempSource || 'offline',
                 water_temp_note: buildWaterTempNote(scientificData?.waterTempSource || 'offline'),

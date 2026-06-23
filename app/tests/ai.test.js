@@ -260,6 +260,51 @@ describe('AI service offline fallback', () => {
             'water_temp_source must never be null');
         assert.equal(result.water_temp_source, 'offline');
     });
+
+    // === Task 20: Methodology disclaimer ===
+    it('includes methodology_note with key phrases (offline)', async () => {
+        const weatherService = {
+            async getWeatherData() {
+                return {
+                    temp: 70, wind: { speed: 7 }, pressure: 1014,
+                    cloudiness: 30, lat: 41.8781, lon: -87.6298,
+                    pressureForecast: []
+                };
+            }
+        };
+
+        const biteEngine = {
+            async calculateScientificStrategy() {
+                return {
+                    biteProbability: 50, biteRank: 'Good',
+                    biteReasoning: 'Test', recommendedLures: [],
+                    waterTemp: 68, waterTempSource: 'estimated',
+                    waterTempStation: null, waterTempStationDistance: null
+                };
+            }
+        };
+
+        const aiService = createAIService({
+            genAI: null, weatherService, biteEngine,
+            fishPatterns: '', isDev: false
+        });
+
+        const result = await aiService.generateFishingStrategy({
+            location: 'Chicago, IL', species: 'Largemouth Bass',
+            clarity: 'Clear', isBoat: false, currentTime: '7:00 am'
+        });
+
+        assert.ok(result.methodology_note, 'methodology_note must be present');
+        assert.ok(typeof result.methodology_note === 'string');
+        // Key phrases: heuristic model, factors included, estimation note
+        const note = result.methodology_note.toLowerCase();
+        assert.ok(note.includes('heuristic'),
+            'Should mention heuristic model');
+        assert.ok(note.includes('metabolic') || note.includes('pressure') || note.includes('temperature'),
+            'Should mention included factors');
+        assert.ok(note.includes('estimate') || note.includes('approximation') || note.includes('not a guarantee'),
+            'Should acknowledge estimation/approximation');
+    });
 });
 
 describe('AI service deterministic moon phase', () => {
