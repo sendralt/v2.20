@@ -135,7 +135,16 @@ function doLevelToMultiplier(doLevel, tolerance) {
  * @returns {number} Feeding multiplier (0.5–1.0)
  */
 function getDOMultiplier(waterTempF, month, windMph, speciesMetrics) {
-    const tolerance = (speciesMetrics && speciesMetrics.do_tolerance) || DEFAULT_DO_TOLERANCE;
+    const rawTolerance = (speciesMetrics && speciesMetrics.do_tolerance) || DEFAULT_DO_TOLERANCE;
+    // Map string tolerance levels to mg/L thresholds.
+    // High = coldwater species (trout, walleye) need >=5 mg/L;
+    // Moderate = coolwater/warmwater gamefish (bass, crappie) need >=4 mg/L;
+    // Low = tolerant species (catfish, bullhead) can handle >=3 mg/L.
+    // [Source: EPA 1986 — DO criteria by species class]
+    const TOLERANCE_MAP = { 'High': 5.0, 'Moderate': 4.0, 'Low': 3.0 };
+    const tolerance = typeof rawTolerance === 'string'
+        ? (TOLERANCE_MAP[rawTolerance] || DEFAULT_DO_TOLERANCE)
+        : (typeof rawTolerance === 'number' ? rawTolerance : DEFAULT_DO_TOLERANCE);
 
     const doSaturation = estimateDOSaturation(waterTempF);
     const stagnationDeficit = getStagnationDeficit(windMph);

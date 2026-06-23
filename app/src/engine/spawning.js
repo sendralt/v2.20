@@ -76,14 +76,17 @@ const PRE_SPAWN_WINDOW = 10;
 function getSpeciesSpawnData(speciesName, fishingData) {
     if (!fishingData || !Array.isArray(fishingData.species_data)) return null;
     const species = fishingData.species_data.find(s => s.name === speciesName);
-    if (!species || !species.scientific_metrics) return null;
-    const m = species.scientific_metrics;
-    if (m.spawn_temp_start == null || m.spawn_temp_end == null) return null;
-    return {
-        spawn_temp_start: m.spawn_temp_start,
-        spawn_temp_peak: m.spawn_temp_peak || m.spawn_temp_start,
-        spawn_temp_end: m.spawn_temp_end
-    };
+    if (!species) return null;
+
+    // Spawn temps may be at top level OR inside scientific_metrics.
+    // Task 7 added them at top level of fishingData.json species entries.
+    const m = species.scientific_metrics || {};
+    const start = species.spawn_temp_start ?? m.spawn_temp_start ?? null;
+    const peak = species.spawn_temp_peak ?? m.spawn_temp_peak ?? start;
+    const end = species.spawn_temp_end ?? m.spawn_temp_end ?? null;
+
+    if (start == null || end == null) return null;
+    return { spawn_temp_start: start, spawn_temp_peak: peak, spawn_temp_end: end };
 }
 
 /**

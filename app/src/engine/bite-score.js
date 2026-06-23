@@ -3,6 +3,11 @@
 const { calculateMetabolicEfficiency } = require('./metabolic');
 const { getLiveWaterTemp } = require('./water-temp');
 const { recordPressure, getPressureTrend, computeTrendFromHistory } = require('./pressure-trend');
+const { getDOMultiplier } = require('./dissolved-oxygen');
+const { getSpawningMultiplier } = require('./spawning');
+const { getThermoclineDepth, getEffectiveTemp } = require('./thermocline');
+const { getMoonPhase } = require('./lunar');
+const { getCivilDawn, getCivilDusk } = require('./photoperiod');
 
 // --- Named Constants ---
 const BITE_DIVISOR = 1.2;
@@ -164,16 +169,31 @@ function getAbsolutePressureModifier(pressureHpa) {
 function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
     const { waterTempProvider = getLiveWaterTemp } = deps;
 
-    // Cache species lookup for O(1) access
+    // Cache species lookup for O(1) access — stores both metrics and spawn data
     const speciesCache = new Map();
     if (fishingData?.species_data) {
         for (const entry of fishingData.species_data) {
-            speciesCache.set(entry.name, entry.scientific_metrics || null);
+            speciesCache.set(entry.name, {
+                metrics: entry.scientific_metrics || null,
+                spawn: {
+                    spawn_temp_start: entry.spawn_temp_start || null,
+                    spawn_temp_peak: entry.spawn_temp_peak || null,
+                    spawn_temp_end: entry.spawn_temp_end || null
+                }
+            });
         }
     }
 
     function getSpeciesMetrics(speciesName) {
-        return speciesCache.get(speciesName) || { opt: 65, dorm: 45, sensitivity: 'Medium' };
+        const cached = speciesCache.get(speciesName);
+        if (!cached) return { opt: 65, dorm: 45, sensitivity: 'Medium' };
+        return cached.metrics || { opt: 65, dorm: 45, sensitivity: 'Medium' };
+    }
+
+    function getSpeciesSpawnData(speciesName) {
+        const cached = speciesCache.get(speciesName);
+        if (!cached) return null;
+        return cached.spawn || null;
     }
 
     function rankBiteProbability(score) {
@@ -239,19 +259,57 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
             const absMult = getAbsolutePressureModifier(currentPressureHpa);
             const pressureFactor = trendMult * absMult;
 
-            // Metabolic efficiency uses WATER temperature
-            const metabolicEfficiency = calculateMetabolicEfficiency(waterTemp, metrics) / 100;
+            // --- Phase 2 Science Module Integration ---
 
-            // Multi-factor adjustment (wind, light, time, clarity)
+            // Thermocline depth estimation — adjust effective water temp for deep species.
+            // During summer stratification, deep-dwelling species (walleye, trout) experience
+            // cooler water than surface temp indicates.
+            const speciesDepth = metrics.preferred_depth || 10;
+            const thermoclineDepth = getThermoclineDepth(latitude || 45, currentMonth, waterTemp, windMph);
+            const effectiveWaterTemp = getEffectiveTemp(waterTemp, thermoclineDepth, speciesDepth);
+
+            // Metabolic efficiency uses EFFECTIVE water temperature (thermocline-adjusted)
+            const metabolicEfficiency = calculateMetabolicEfficiency(effectiveWaterTemp, metrics) / 100;
+
+            // Dissolved oxygen multiplier — warm water + low wind = DO stress.
+            // Species-specific tolerance via metrics.do_tolerance.
+            const doMult = getDOMultiplier(effectiveWaterTemp, currentMonth, windMph, metrics);
+
+            // Lunar feeding multiplier — solunar peaks at New/Full Moon (1.1x).
+            // [Source: Knight 1936 — solunar theory]
+            const lunarDate = options.date || new Date(now);
+            const lunarPhase = getMoonPhase(lunarDate);
+            const lunarMult = lunarPhase.feedingMultiplier;
+
+            // Photoperiod refinement — use actual civil dawn/dusk for the crepuscular window.
+            // Standard timeMult uses fixed hour windows; photoperiod adjusts boundaries
+            // based on latitude and season for more accurate dawn/dusk timing.
+            // [Source: NOAA solar calculator; Helfman 1986 — diel activity patterns]
+            let timeMult = getTimeMultiplier(currentHour, metrics.nocturnal);
+            if (!metrics.nocturnal && latitude != null) {
+                const civilDawn = getCivilDawn(latitude, lunarDate);
+                const civilDusk = getCivilDusk(latitude, lunarDate);
+                // Boost if current hour is within ±1h of true dawn or dusk
+                if (Math.abs(currentHour - civilDawn) <= 1 || Math.abs(currentHour - civilDusk) <= 1) {
+                    timeMult = 1.20;
+                }
+            }
+
+            // Spawning multiplier applied to base score (not adjustment).
+            // Active spawn suppresses feeding (0.4x); pre-spawn boosts aggression (1.2x).
+            // [Source: Carlander 1977; McInerny & Cross 2000]
+            const spawningMult = getSpawningMultiplier(effectiveWaterTemp, speciesName, fishingData);
+
+            // Multi-factor adjustment (wind, light, time, clarity, DO, lunar)
             const windMult = getWindMultiplier(windMph);
             const lightMult = getCloudMultiplier(cloudPercent);
-            const timeMult = getTimeMultiplier(currentHour, metrics.nocturnal);
             const clarityMult = getClarityMultiplier(waterColor || 'Clear');
 
-            const baseScore = (metabolicEfficiency * pressureFactor) / BITE_DIVISOR;
+            const baseScore = (metabolicEfficiency * pressureFactor) / BITE_DIVISOR * spawningMult;
             // Square root dampening — replaces former 4th-root (Math.sqrt(Math.sqrt(x)));
             // doubles environmental factor impact from ±15% to ±30% for realistic weather effects.
-            const adjustmentFactor = Math.sqrt(windMult * lightMult * timeMult * clarityMult);
+            // Now includes DO and lunar multipliers in the product.
+            const adjustmentFactor = Math.sqrt(windMult * lightMult * timeMult * clarityMult * doMult * lunarMult);
 
             const rawBiteProb = Math.min(MAX_BITE_PROB, Math.max(MIN_BITE_PROB, baseScore * adjustmentFactor));
             const biteProb = smoothBiteScore(rawBiteProb, location);
