@@ -102,6 +102,47 @@ describe('AI service offline fallback', () => {
         assert.ok(result.solunar.moon_illumination != null,
             'Should include illumination percentage');
     });
+
+    // === Task 18: Confidence band passthrough ===
+    it('includes bite_probability_confidence from scientific engine (offline)', async () => {
+        const weatherService = {
+            async getWeatherData() {
+                return {
+                    temp: 70, wind: { speed: 7 }, pressure: 1014,
+                    cloudiness: 30, lat: 41.8781, lon: -87.6298,
+                    pressureForecast: []
+                };
+            }
+        };
+
+        const biteEngine = {
+            async calculateScientificStrategy() {
+                return {
+                    biteProbability: 55, biteRank: 'Good',
+                    biteProbabilityConfidence: { low: 48, high: 62, band: 7 },
+                    biteReasoning: 'Test', recommendedLures: [],
+                    waterTemp: 68, waterTempSource: 'mock',
+                    waterTempStation: null, waterTempStationDistance: null
+                };
+            }
+        };
+
+        const aiService = createAIService({
+            genAI: null, weatherService, biteEngine,
+            fishPatterns: '', isDev: false
+        });
+
+        const result = await aiService.generateFishingStrategy({
+            location: 'Chicago, IL', species: 'Largemouth Bass',
+            clarity: 'Clear', isBoat: false, currentTime: '7:00 am'
+        });
+
+        assert.ok(result.bite_probability_confidence,
+            'Should include bite_probability_confidence');
+        assert.equal(result.bite_probability_confidence.low, 48);
+        assert.equal(result.bite_probability_confidence.high, 62);
+        assert.equal(result.bite_probability_confidence.band, 7);
+    });
 });
 
 describe('AI service deterministic moon phase', () => {

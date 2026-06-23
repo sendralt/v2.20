@@ -92,6 +92,50 @@ function getSensitivityScaler(sensitivity) {
     return SENSITIVITY_SCALERS[sensitivity] || 1.0;
 }
 
+// --- Confidence Bands ---
+//
+// Band width is derived from the spread of environmental multipliers — how far
+// they deviate from 1.0. When conditions are extreme or volatile (large
+// deviations), the model has more uncertainty, so the band widens.
+// When conditions are moderate and in agreement (small deviations), the band
+// narrows. This is more scientifically honest than a fixed ±8%.
+// [Source: Spec resolved decision #6 — dynamic band from multiplier spread]
+
+/** MIN_CONFIDENCE_BAND: Narrowest band for ideal conditions. [Source: heuristic] */
+const MIN_CONFIDENCE_BAND = 5;
+/** MAX_CONFIDENCE_BAND: Widest band for extreme conditions. [Source: heuristic] */
+const MAX_CONFIDENCE_BAND = 12;
+/** DEVIATION_CEILING: Average multiplier deviation that maps to max band (0.25 = ±25% from 1.0). [Source: heuristic] */
+const DEVIATION_CEILING = 0.25;
+
+/**
+ * Compute a confidence band for bite probability based on multiplier spread.
+ * Extreme conditions (wide spread) produce wider bands; ideal conditions produce
+ * narrower bands.
+ * @param {number} biteProbability - Point estimate (0-100)
+ * @param {number[]} multipliers - Array of environmental multipliers (e.g. wind, cloud, DO)
+ * @returns {{ low: number, high: number, band: number }} Confidence band object
+ */
+function computeConfidenceBand(biteProbability, multipliers) {
+    // Compute mean absolute deviation from 1.0
+    let avgDeviation = 0;
+    if (Array.isArray(multipliers) && multipliers.length > 0) {
+        const totalDeviation = multipliers.reduce((sum, m) => sum + Math.abs(m - 1.0), 0);
+        avgDeviation = totalDeviation / multipliers.length;
+    }
+
+    // Map deviation to band width: 0 deviation -> 5%, 0.25+ deviation -> 12%
+    const ratio = Math.min(avgDeviation / DEVIATION_CEILING, 1.0);
+    const bandPercent = MIN_CONFIDENCE_BAND + ratio * (MAX_CONFIDENCE_BAND - MIN_CONFIDENCE_BAND);
+    const band = Math.round(bandPercent);
+
+    // Compute symmetric low/high, clamped to [0, 100]
+    const low = Math.max(0, Math.round(biteProbability - band));
+    const high = Math.min(100, Math.round(biteProbability + band));
+
+    return { low, high, band };
+}
+
 // --- Multiplier Functions ---
 
 /**
@@ -337,8 +381,16 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
                                  biteProb < FINESSE_THRESHOLD ? 'Finesse' : 'Balanced';
 
             const biteProbability = Math.round(biteProb * 100);
+
+            // --- Task 18: Confidence band from multiplier spread ---
+            // Extreme conditions (wide multiplier spread) widen the band;
+            // ideal conditions (multipliers near 1.0) narrow it.
+            const confidenceMultipliers = [windMult, lightMult, timeMult, clarityMult, doMult, lunarMult, spawningMult];
+            const biteProbabilityConfidence = computeConfidenceBand(biteProbability, confidenceMultipliers);
+
             const result = {
                 biteProbability,
+                biteProbabilityConfidence,
                 biteRank: rankBiteProbability(biteProbability),
                 metabolicEfficiency: Math.round(metabolicEfficiency * 100),
                 speciesMetrics: metrics,
@@ -359,6 +411,7 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
             console.error('Scientific engine error:', error.message);
             return {
                 biteProbability: 0,
+                biteProbabilityConfidence: { low: 0, high: 0, band: MAX_CONFIDENCE_BAND },
                 biteRank: 'Unavailable',
                 biteReasoning: 'Scientific engine error: ' + error.message,
                 metabolicEfficiency: 0,
@@ -392,4 +445,4 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
     return { calculateScientificStrategy, calculateQuickBite };
 }
 
-module.exports = { createBiteScoreEngine, getWindMultiplier, getCloudMultiplier, getTimeMultiplier, getClarityMultiplier, getAbsolutePressureModifier, getSensitivityScaler, clearBiteScoreCache };
+module.exports = { createBiteScoreEngine, getWindMultiplier, getCloudMultiplier, getTimeMultiplier, getClarityMultiplier, getAbsolutePressureModifier, getSensitivityScaler, computeConfidenceBand, clearBiteScoreCache };

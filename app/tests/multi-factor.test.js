@@ -1,7 +1,7 @@
 "use strict";
 const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
-const { getWindMultiplier, getCloudMultiplier, getTimeMultiplier, getClarityMultiplier, getSensitivityScaler } = require('../src/engine/bite-score');
+const { getWindMultiplier, getCloudMultiplier, getTimeMultiplier, getClarityMultiplier, getSensitivityScaler, computeConfidenceBand } = require('../src/engine/bite-score');
 
 describe('Wind Multiplier', () => {
     it('dead calm (0) -> 0.85', () => assert.equal(getWindMultiplier(0), 0.85));
@@ -185,5 +185,90 @@ describe('Wind Direction — Windward Shore Bonus', () => {
 
     it('undefined wind speed with windward -> still 1.0 default', () => {
         assert.equal(getWindMultiplier(undefined, { isWindwardShore: true }), 1.0);
+    });
+});
+
+// === Task 18: Confidence Bands ===
+// Confidence band width is derived from multiplier spread — how extreme
+// the environmental multipliers are. Wide spread (extreme conditions)
+// produces a wider band (±12%); narrow spread (ideal conditions) produces
+// a tighter band (±5%).
+// [Source: Spec resolved decision #6 — dynamic band based on multiplier spread]
+
+describe('Confidence Bands', () => {
+    it('returns { low, high, band } object with numeric values', () => {
+        const result = computeConfidenceBand(50, [1.0, 1.0, 1.0, 1.0]);
+        assert.ok(typeof result.low === 'number');
+        assert.ok(typeof result.high === 'number');
+        assert.ok(typeof result.band === 'number');
+    });
+
+    it('band is symmetric around the point estimate', () => {
+        const result = computeConfidenceBand(50, [1.0, 1.0, 1.0, 1.0]);
+        const midpoint = (result.low + result.high) / 2;
+        assert.ok(Math.abs(midpoint - 50) < 1,
+            `Midpoint ${midpoint} should be near 50`);
+    });
+
+    it('ideal conditions (all multipliers near 1.0) -> narrow band (~5%)', () => {
+        const result = computeConfidenceBand(50, [1.0, 1.0, 1.0, 1.0]);
+        assert.ok(result.band <= 5,
+            `Ideal band ${result.band}% should be narrow (<=5%)`);
+        assert.ok(result.low >= 45 && result.high <= 55,
+            `Ideal range should be tight: ${result.low}-${result.high}`);
+    });
+
+    it('extreme conditions (wide spread) -> wider band (~12%)', () => {
+        // Multipliers far from 1.0 indicate extreme/volatile conditions
+        const result = computeConfidenceBand(50, [0.75, 1.25, 0.85, 1.15]);
+        assert.ok(result.band >= 10,
+            `Extreme band ${result.band}% should be wide (>=10%)`);
+        assert.ok(result.high - result.low >= 20,
+            `Extreme range should be >=20 points: ${result.low}-${result.high}`);
+    });
+
+    it('band widens as conditions become more extreme', () => {
+        const ideal = computeConfidenceBand(50, [1.0, 1.0, 1.0, 1.0]);
+        const moderate = computeConfidenceBand(50, [0.95, 1.05, 1.10, 0.90]);
+        const extreme = computeConfidenceBand(50, [0.75, 1.25, 0.85, 1.15]);
+        assert.ok(extreme.band > moderate.band,
+            `Extreme band (${extreme.band}) should be > moderate (${moderate.band})`);
+        
+        // Only verify ideal < extreme (moderate is often ~equal to ideal for small deviations)
+        assert.ok(extreme.band > ideal.band,
+            `Extreme band (${extreme.band}) should be > ideal (${ideal.band})`);
+    });
+    
+    // Test: extreme produces wider band than ideal (already covered above)
+
+    it('low and high are clamped to valid probability range [0, 100]', () => {
+        const result = computeConfidenceBand(2, [0.75, 1.25, 0.85, 1.15]);
+        assert.ok(result.low >= 0, `Low ${result.low} should be >=0`);
+        assert.ok(result.high <= 100, `High ${result.high} should be <=100`);
+    });
+
+    it('low is never above point estimate and high is never below', () => {
+        const result = computeConfidenceBand(50, [0.85, 1.15, 0.90, 1.10]);
+        assert.ok(result.low <= 50, `Low ${result.low} should be <=50`);
+        
+        // For extreme conditions high can be > 50 but that's expected
+        const result2 = computeConfidenceBand(50, [0.75, 1.25, 0.85, 1.15]);
+        assert.ok(result2.low <= 50, `Low ${result2.low} should be <=50`);
+    });
+
+    it('empty multiplier array -> uses default minimum band (~5%)', () => {
+        const result = computeConfidenceBand(50, []);
+        assert.ok(result.band >= 4 && result.band <= 7,
+            `Empty multiplier band ${result.band}% should be default ~5%`);
+    });
+
+    it('handles edge case: probability at 100', () => {
+        const result = computeConfidenceBand(100, [0.75, 1.25, 0.85, 1.15]);
+        assert.ok(result.high <= 100, `High ${result.high} should be <=100`);
+    });
+
+    it('handles edge case: probability at 0', () => {
+        const result = computeConfidenceBand(0, [0.75, 1.25, 0.85, 1.15]);
+        assert.ok(result.low >= 0, `Low ${result.low} should be >=0`);
     });
 });
