@@ -2,84 +2,83 @@
   "species_data": [
     {
       "name": "Largemouth Bass",
-      "scientific_metrics": { "opt": 72, "dorm": 45, "sensitivity": "Medium" }
+      "scientific_metrics": { "opt": 72, "dorm": 45, "sensitivity": "Medium", "feeding_cease_temp": 87 }
     },
     {
       "name": "Smallmouth Bass",
-      "scientific_metrics": { "opt": 67, "dorm": 42, "sensitivity": "Medium" }
+      "scientific_metrics": { "opt": 67, "dorm": 42, "sensitivity": "Medium", "feeding_cease_temp": 82 }
     },
     {
       "name": "Walleye",
-      "scientific_metrics": { "opt": 62, "dorm": 38, "sensitivity": "High" }
+      "scientific_metrics": { "opt": 62, "dorm": 38, "sensitivity": "High", "feeding_cease_temp": 80 }
     },
     {
       "name": "Northern Pike",
-      "scientific_metrics": { "opt": 58, "dorm": 35, "sensitivity": "Low" }
+      "scientific_metrics": { "opt": 58, "dorm": 35, "sensitivity": "Low", "feeding_cease_temp": 78 }
     },
     {
       "name": "Yellow Perch",
-      "scientific_metrics": { "opt": 60, "dorm": 36, "sensitivity": "Medium" }
+      "scientific_metrics": { "opt": 60, "dorm": 36, "sensitivity": "Medium", "feeding_cease_temp": 79 }
     },
     {
       "name": "White Bass",
-      "scientific_metrics": { "opt": 68, "dorm": 42, "sensitivity": "Medium" }
+      "scientific_metrics": { "opt": 68, "dorm": 42, "sensitivity": "Medium", "feeding_cease_temp": 84 }
     },
     {
       "name": "Striped Bass",
-      "scientific_metrics": { "opt": 66, "dorm": 44, "sensitivity": "Medium" }
+      "scientific_metrics": { "opt": 66, "dorm": 44, "sensitivity": "Medium", "feeding_cease_temp": 82 }
     },
     {
       "name": "Muskie",
-      "scientific_metrics": { "opt": 65, "dorm": 40, "sensitivity": "Low" }
+      "scientific_metrics": { "opt": 65, "dorm": 40, "sensitivity": "Low", "feeding_cease_temp": 80 }
     },
     {
       "name": "Crappie",
-      "scientific_metrics": { "opt": 68, "dorm": 44, "sensitivity": "High" }
+      "scientific_metrics": { "opt": 68, "dorm": 44, "sensitivity": "High", "feeding_cease_temp": 82 }
     },
     {
       "name": "Bluegill",
-      "scientific_metrics": { "opt": 70, "dorm": 48, "sensitivity": "Medium" }
+      "scientific_metrics": { "opt": 70, "dorm": 48, "sensitivity": "Medium", "feeding_cease_temp": 88 }
     },
     {
       "name": "Catfish",
-      "scientific_metrics": { "opt": 75, "dorm": 50, "sensitivity": "Low" }
+      "scientific_metrics": { "opt": 75, "dorm": 50, "sensitivity": "Low", "feeding_cease_temp": 90 }
     },
     {
       "name": "Channel Catfish",
-      "scientific_metrics": { "opt": 76, "dorm": 52, "sensitivity": "Low" }
+      "scientific_metrics": { "opt": 76, "dorm": 52, "sensitivity": "Low", "feeding_cease_temp": 90 }
     },
     {
       "name": "Bullhead",
-      "scientific_metrics": { "opt": 73, "dorm": 48, "sensitivity": "Low" }
+      "scientific_metrics": { "opt": 73, "dorm": 48, "sensitivity": "Low", "feeding_cease_temp": 89 }
     },
     {
       "name": "Trout",
-      "scientific_metrics": { "opt": 55, "dorm": 33, "sensitivity": "High" }
+      "scientific_metrics": { "opt": 55, "dorm": 33, "sensitivity": "High", "feeding_cease_temp": 72 }
     },
     {
       "name": "Brown Trout",
-      "scientific_metrics": { "opt": 57, "dorm": 35, "sensitivity": "High" }
+      "scientific_metrics": { "opt": 57, "dorm": 35, "sensitivity": "High", "feeding_cease_temp": 75 }
     },
     {
       "name": "Steelhead",
-      "scientific_metrics": { "opt": 54, "dorm": 34, "sensitivity": "High" }
+      "scientific_metrics": { "opt": 54, "dorm": 34, "sensitivity": "High", "feeding_cease_temp": 70 }
     },
     {
       "name": "Salmon",
-      "scientific_metrics": { "opt": 52, "dorm": 34, "sensitivity": "High" }
+      "scientific_metrics": { "opt": 52, "dorm": 34, "sensitivity": "High", "feeding_cease_temp": 68 }
     },
     {
       "name": "Saugeye",
-      "scientific_metrics": { "opt": 63, "dorm": 39, "sensitivity": "High" }
+      "scientific_metrics": { "opt": 63, "dorm": 39, "sensitivity": "High", "feeding_cease_temp": 81 }
     },
     {
       "name": "Brook Trout",
-      "scientific_metrics": { "opt": 50, "dorm": 31, "sensitivity": "High" }
+      "scientific_metrics": { "opt": 50, "dorm": 31, "sensitivity": "High", "feeding_cease_temp": 70 }
     },
     {
       "name": "Rainbow Trout",
-      "scientific_metrics": { "opt": 56, "dorm": 34, "sensitivity": "High" }
+      "scientific_metrics": { "opt": 56, "dorm": 34, "sensitivity": "High", "feeding_cease_temp": 72 }
     }
   ]
 }
-
