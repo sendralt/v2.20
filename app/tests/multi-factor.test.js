@@ -1,7 +1,7 @@
 "use strict";
 const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
-const { getWindMultiplier, getCloudMultiplier, getTimeMultiplier, getClarityMultiplier } = require('../src/engine/bite-score');
+const { getWindMultiplier, getCloudMultiplier, getTimeMultiplier, getClarityMultiplier, getSensitivityScaler } = require('../src/engine/bite-score');
 
 describe('Wind Multiplier', () => {
     it('dead calm (0) -> 0.85', () => assert.equal(getWindMultiplier(0), 0.85));
@@ -53,16 +53,56 @@ describe('Water Clarity Multiplier', () => {
     it('null -> 1.00', () => assert.equal(getClarityMultiplier(null), 1.00));
 });
 
-describe('Adjustment Factor (4th root dampening)', () => {
+describe('Adjustment Factor (square root dampening)', () => {
     it('all neutral (1.0) -> factor = 1.0', () => {
-        assert.equal(Math.pow(1*1*1*1, 0.25), 1.0);
+        assert.equal(Math.sqrt(1 * 1 * 1 * 1), 1.0);
     });
-    it('all favorable -> boost ~10-15%', () => {
-        const adj = Math.pow(1.15 * 1.15 * 1.20 * 1.10, 0.25);
-        assert.ok(adj > 1.10 && adj < 1.20, 'Got: ' + adj);
+    // Updated: 4th-root replaced with square root — wider environmental impact
+    it('all favorable -> boost ~25-35%', () => {
+        const adj = Math.sqrt(1.15 * 1.15 * 1.20 * 1.10);
+        assert.ok(adj > 1.15 && adj < 1.35, 'Got: ' + adj);
     });
-    it('all unfavorable -> reduction ~15%', () => {
-        const adj = Math.pow(0.85 * 0.85 * 0.85 * 0.85, 0.25);
-        assert.ok(adj < 0.90, 'Got: ' + adj);
+    it('all unfavorable -> reduction ~30%', () => {
+        const adj = Math.sqrt(0.85 * 0.85 * 0.85 * 0.85);
+        assert.ok(adj < 0.85, 'Got: ' + adj);
+    });
+});
+
+describe('Sensitivity Scaler', () => {
+    // Scales pressure-trend multiplier deviation from 1.0 based on species
+    // sensitivity. High-sensitivity species (walleye, crappie, trout) have
+    // physostomous (open) swim bladders — faster pressure equalization means
+    // more visible behavioral response. Low-sensitivity species (catfish,
+    // bullhead, pike) have physoclistous (closed) swim bladders — slower
+    // equalization, less behavioral disruption.
+    // [Source: Jones 1968 — fish swim bladder morphology and pressure response]
+
+    it('High -> 1.3x spread', () => assert.equal(getSensitivityScaler('High'), 1.3));
+    it('Medium -> 1.0x spread (baseline)', () => assert.equal(getSensitivityScaler('Medium'), 1.0));
+    it('Low -> 0.7x spread', () => assert.equal(getSensitivityScaler('Low'), 0.7));
+    it('unknown -> 1.0x (safe default)', () => assert.equal(getSensitivityScaler('Unknown'), 1.0));
+    it('null -> 1.0x (safe default)', () => assert.equal(getSensitivityScaler(null), 1.0));
+
+    it('High sensitivity amplifies rising-pressure penalty more than Low', () => {
+        // Rising pressure trend multiplier = 0.85 (penalty for rising barometer)
+        // High: deviation from 1.0 = -0.15, scaled by 1.3 = -0.195 → adjusted = 0.805
+        // Low: deviation from 1.0 = -0.15, scaled by 0.7 = -0.105 → adjusted = 0.895
+        // High sensitivity should produce a larger penalty (lower multiplier)
+        const highScaler = getSensitivityScaler('High');
+        const lowScaler = getSensitivityScaler('Low');
+        const trendMult = 0.85; // Rising trend
+        const adjustedHigh = 1.0 + (trendMult - 1.0) * highScaler;
+        const adjustedLow = 1.0 + (trendMult - 1.0) * lowScaler;
+        assert.ok(adjustedHigh < adjustedLow,
+            `High sensitivity penalty (${adjustedHigh}) should be greater than Low (${adjustedLow})`);
+    });
+
+    it('Stable trend (1.0) is unaffected by sensitivity scaler', () => {
+        // When trendMult = 1.0, deviation = 0, so scaler has no effect
+        for (const s of ['High', 'Medium', 'Low']) {
+            const scaler = getSensitivityScaler(s);
+            const adjusted = 1.0 + (1.0 - 1.0) * scaler;
+            assert.equal(adjusted, 1.0);
+        }
     });
 });

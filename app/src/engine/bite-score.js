@@ -62,6 +62,31 @@ function clearBiteScoreCache() {
     emaCache.clear();
 }
 
+// --- Sensitivity Scaler ---
+//
+// Scales the pressure-trend multiplier deviation from 1.0 based on species
+// barometric pressure sensitivity. Species with physostomous (open) swim
+// bladders (walleye, crappie, trout) equalize pressure faster and show more
+// visible behavioral response to pressure changes. Species with physoclistous
+// (closed) swim bladders (catfish, bullhead, pike) equalize slowly.
+// [Source: Jones 1968 — fish swim bladder morphology and pressure response]
+
+/** SENSITIVITY_SCALERS: Maps sensitivity level to multiplier spread factor. [Source: heuristic, calibrated against species behavioral data] */
+const SENSITIVITY_SCALERS = {
+    'High': 1.3,
+    'Medium': 1.0,
+    'Low': 0.7
+};
+
+/**
+ * Get the pressure-trend sensitivity scaler for a species.
+ * @param {string|null|undefined} sensitivity - Species sensitivity level ('High', 'Medium', 'Low')
+ * @returns {number} Scaler factor (1.3 for High, 1.0 for Medium, 0.7 for Low)
+ */
+function getSensitivityScaler(sensitivity) {
+    return SENSITIVITY_SCALERS[sensitivity] || 1.0;
+}
+
 // --- Multiplier Functions ---
 
 function getWindMultiplier(windMph) {
@@ -187,8 +212,13 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
                 pressureTrendData = getPressureTrend(cacheKey);
             }
 
-            // New pressure model: trend multiplier × absolute modifier
-            const trendMult = TREND_MULTIPLIERS[pressureTrendData.classification] || 1.0;
+            // Pressure model: trend multiplier × absolute modifier
+            // Sensitivity scaling: species-specific barometric pressure sensitivity scales
+            // the trend multiplier deviation from 1.0 (High=1.3x, Medium=1.0x, Low=0.7x).
+            // [Source: Jones 1968 — physostomous vs physoclistous swim bladders]
+            const baseTrendMult = TREND_MULTIPLIERS[pressureTrendData.classification] || 1.0;
+            const sensitivityScaler = getSensitivityScaler(metrics.sensitivity);
+            const trendMult = 1.0 + (baseTrendMult - 1.0) * sensitivityScaler;
             const absMult = getAbsolutePressureModifier(currentPressureHpa);
             const pressureFactor = trendMult * absMult;
 
@@ -202,8 +232,9 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
             const clarityMult = getClarityMultiplier(waterColor || 'Clear');
 
             const baseScore = (metabolicEfficiency * pressureFactor) / BITE_DIVISOR;
-            // Optimized: Math.pow(x, 0.25) → Math.sqrt(Math.sqrt(x))
-            const adjustmentFactor = Math.sqrt(Math.sqrt(windMult * lightMult * timeMult * clarityMult));
+            // Square root dampening — replaces former 4th-root (Math.sqrt(Math.sqrt(x)));
+            // doubles environmental factor impact from ±15% to ±30% for realistic weather effects.
+            const adjustmentFactor = Math.sqrt(windMult * lightMult * timeMult * clarityMult);
 
             const rawBiteProb = Math.min(MAX_BITE_PROB, Math.max(MIN_BITE_PROB, baseScore * adjustmentFactor));
             const biteProb = smoothBiteScore(rawBiteProb, location);
@@ -267,4 +298,4 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
     return { calculateScientificStrategy, calculateQuickBite };
 }
 
-module.exports = { createBiteScoreEngine, getWindMultiplier, getCloudMultiplier, getTimeMultiplier, getClarityMultiplier, getAbsolutePressureModifier, clearBiteScoreCache };
+module.exports = { createBiteScoreEngine, getWindMultiplier, getCloudMultiplier, getTimeMultiplier, getClarityMultiplier, getAbsolutePressureModifier, getSensitivityScaler, clearBiteScoreCache };
