@@ -4,6 +4,7 @@ const https = require('https');
 
 // Token usage tracking
 const { deriveActivityForecast } = require('../engine/activity-forecast');
+const { extractSpeciesSection } = require('./fish-data-enhancer');
 const tokenUsageStore = [];
 const MAX_STORED_REQUESTS = 1000;
 const GEMINI_PRICING = {
@@ -417,7 +418,7 @@ function createAIService(deps) {
             weatherContext, scientificContext,
             lat: weather?.lat, lon: weather?.lon,
             county: weather?.county,
-            fishPatterns: fishPatterns.substring(0, 5000)
+            fishPatterns: extractSpeciesSection(fishPatterns, species)
         });
 
         try {
