@@ -53,6 +53,33 @@ describe('Water Clarity Multiplier', () => {
     it('null -> 1.00', () => assert.equal(getClarityMultiplier(null), 1.00));
 });
 
+describe('Time of Day Multiplier — Nocturnal Species', () => {
+    // Nocturnal species (walleye, catfish, brown trout, bullhead) are more
+    // active at night. They get night multiplier of 1.20 instead of 0.85,
+    // and reduced dawn/dusk multiplier of 1.00 instead of 1.20.
+    // [Source: Helfman 1986 — Fish behaviour and diel activity patterns]
+
+    it('nocturnal night (22) -> 1.20', () => assert.equal(getTimeMultiplier(22, true), 1.20));
+    it('nocturnal late night (3) -> 1.20', () => assert.equal(getTimeMultiplier(3, true), 1.20));
+    it('nocturnal night boundary 21 -> 1.20', () => assert.equal(getTimeMultiplier(21, true), 1.20));
+    it('nocturnal night boundary 4 -> 1.20', () => assert.equal(getTimeMultiplier(4, true), 1.20));
+    it('nocturnal dawn (6) -> 1.00 (reduced from 1.20)', () => assert.equal(getTimeMultiplier(6, true), 1.00));
+    it('nocturnal dusk (18) -> 1.00 (reduced from 1.20)', () => assert.equal(getTimeMultiplier(18, true), 1.00));
+    it('nocturnal midday (12) -> 0.85 (unchanged)', () => assert.equal(getTimeMultiplier(12, true), 0.85));
+
+    it('non-nocturnal night (22) -> 0.85 (unchanged)', () => assert.equal(getTimeMultiplier(22, false), 0.85));
+    it('non-nocturnal dawn (6) -> 1.20 (unchanged)', () => assert.equal(getTimeMultiplier(6, false), 1.20));
+    it('null nocturnal -> uses non-nocturnal values', () => assert.equal(getTimeMultiplier(22), 0.85));
+
+    it('walleye at 2 AM scores higher than bass at 2 AM', () => {
+        // Walleye is nocturnal, bass is not
+        const walleyeMult = getTimeMultiplier(2, true);
+        const bassMult = getTimeMultiplier(2, false);
+        assert.ok(walleyeMult > bassMult,
+            `Walleye night mult (${walleyeMult}) should be > bass night mult (${bassMult})`);
+    });
+});
+
 describe('Adjustment Factor (square root dampening)', () => {
     it('all neutral (1.0) -> factor = 1.0', () => {
         assert.equal(Math.sqrt(1 * 1 * 1 * 1), 1.0);

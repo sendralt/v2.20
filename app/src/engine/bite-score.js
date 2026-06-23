@@ -106,8 +106,25 @@ function getCloudMultiplier(cloudPercent) {
     return 1.15;
 }
 
-function getTimeMultiplier(hour) {
+/**
+ * Time-of-day multiplier.
+ * Non-nocturnal species: dawn/dusk boost (crepuscular feeding peaks).
+ * Nocturnal species: night boost instead (walleye, catfish, brown trout, bullhead).
+ * [Source: Helfman 1986 — Fish behaviour and diel activity patterns]
+ *
+ * @param {number} hour - Hour of day (0-23)
+ * @param {boolean} [nocturnal=false] - Whether species is nocturnal
+ * @returns {number} Multiplier (0.85-1.20)
+ */
+function getTimeMultiplier(hour, nocturnal) {
     if (hour == null) return 1.0;
+    if (nocturnal) {
+        // Nocturnal species: active at night (21-4), reduced crepuscular activity
+        if (hour >= 21 || hour <= 4) return 1.20;
+        if ((hour >= 5 && hour <= 8) || (hour >= 17 && hour <= 20)) return 1.00;
+        return 0.85;
+    }
+    // Non-nocturnal species: crepuscular feeding peaks at dawn/dusk
     if ((hour >= 5 && hour <= 8) || (hour >= 17 && hour <= 20)) return 1.20;
     if ((hour >= 9 && hour <= 11) || (hour >= 14 && hour <= 16)) return 1.00;
     return 0.85;
@@ -228,7 +245,7 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
             // Multi-factor adjustment (wind, light, time, clarity)
             const windMult = getWindMultiplier(windMph);
             const lightMult = getCloudMultiplier(cloudPercent);
-            const timeMult = getTimeMultiplier(currentHour);
+            const timeMult = getTimeMultiplier(currentHour, metrics.nocturnal);
             const clarityMult = getClarityMultiplier(waterColor || 'Clear');
 
             const baseScore = (metabolicEfficiency * pressureFactor) / BITE_DIVISOR;
