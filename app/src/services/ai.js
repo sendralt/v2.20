@@ -326,6 +326,27 @@ function createAIService(deps) {
     // Extract API key from genAI instance for direct REST calls
     const geminiApiKey = genAI ? genAI.apiKey : null;
 
+    /**
+     * Build a user-facing note explaining water temperature estimation.
+     * Only shown when the source is NOT live USGS sensor data.
+     * @param {string} source - water_temp_source value
+     * @returns {string|null} Explanation note, or null for live data
+     */
+    function buildWaterTempNote(source) {
+        if (source === 'usgs-live') return null;
+        switch (source) {
+            case 'estimated':
+            case 'hybrid-thermal-lag':
+                return 'Water temperature estimated from air temp and seasonal baselines — no nearby USGS monitoring station available.';
+            case 'offline':
+                return 'Water temperature unavailable — using seasonal estimation model.';
+            case 'error':
+                return 'Water temperature sensor data error — using estimation model.';
+            default:
+                return 'Water temperature source unknown — treat estimate with caution.';
+        }
+    }
+
     async function buildOfflineStrategy(params, weather, reason) {
         const { location, species, clarity, currentTime } = params;
         const currentHour = parseHour(currentTime);
@@ -372,6 +393,7 @@ function createAIService(deps) {
             offline_mode: true,
             water_temp: scientificData?.waterTemp || null,
             water_temp_source: scientificData?.waterTempSource || 'offline',
+            water_temp_note: buildWaterTempNote(scientificData?.waterTempSource || 'offline'),
             water_temp_station: scientificData?.waterTempStation || null,
             water_temp_station_distance: scientificData?.waterTempStationDistance || null
         };
@@ -510,7 +532,8 @@ function createAIService(deps) {
                 bite_reasoning: biteMetrics.reasoning,
                 pressure_forecast: weather?.pressureForecast || [],
                 water_temp: scientificData?.waterTemp || null,
-                water_temp_source: scientificData?.waterTempSource || null,
+                water_temp_source: scientificData?.waterTempSource || 'offline',
+                water_temp_note: buildWaterTempNote(scientificData?.waterTempSource || 'offline'),
                 water_temp_station: scientificData?.waterTempStation || null,
                 water_temp_station_distance: scientificData?.waterTempStationDistance || null
             };

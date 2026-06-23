@@ -143,6 +143,123 @@ describe('AI service offline fallback', () => {
         assert.equal(result.bite_probability_confidence.high, 62);
         assert.equal(result.bite_probability_confidence.band, 7);
     });
+
+    // === Task 19: Water temp source always present ===
+    it('water_temp_source is always present (offline, estimated source)', async () => {
+        const weatherService = {
+            async getWeatherData() {
+                return {
+                    temp: 70, wind: { speed: 7 }, pressure: 1014,
+                    cloudiness: 30, lat: 41.8781, lon: -87.6298,
+                    pressureForecast: []
+                };
+            }
+        };
+
+        const biteEngine = {
+            async calculateScientificStrategy() {
+                return {
+                    biteProbability: 50, biteRank: 'Good',
+                    biteReasoning: 'Test', recommendedLures: [],
+                    waterTemp: 65, waterTempSource: 'estimated',
+                    waterTempStation: null, waterTempStationDistance: null
+                };
+            }
+        };
+
+        const aiService = createAIService({
+            genAI: null, weatherService, biteEngine,
+            fishPatterns: '', isDev: false
+        });
+
+        const result = await aiService.generateFishingStrategy({
+            location: 'Chicago, IL', species: 'Largemouth Bass',
+            clarity: 'Clear', isBoat: false, currentTime: '7:00 am'
+        });
+
+        assert.ok(result.water_temp_source != null,
+            'water_temp_source must always be present');
+        assert.equal(result.water_temp_source, 'estimated');
+        // When estimated, should include water_temp_note explaining estimation
+        assert.ok(result.water_temp_note,
+            'water_temp_note should be present when source is estimated');
+        assert.ok(typeof result.water_temp_note === 'string');
+    });
+
+    it('water_temp_note NOT present when source is usgs-live', async () => {
+        const weatherService = {
+            async getWeatherData() {
+                return {
+                    temp: 58, wind: { speed: 7 }, pressure: 1014,
+                    cloudiness: 30, lat: 41.8781, lon: -87.6298,
+                    pressureForecast: []
+                };
+            }
+        };
+
+        const biteEngine = {
+            async calculateScientificStrategy() {
+                return {
+                    biteProbability: 45, biteRank: 'Fair',
+                    biteReasoning: 'Test', recommendedLures: [],
+                    waterTemp: 54, waterTempSource: 'usgs-live',
+                    waterTempStation: 'Nearby Station', waterTempStationDistance: 3.2
+                };
+            }
+        };
+
+        const aiService = createAIService({
+            genAI: null, weatherService, biteEngine,
+            fishPatterns: '', isDev: false
+        });
+
+        const result = await aiService.generateFishingStrategy({
+            location: 'Chicago, IL', species: 'Largemouth Bass',
+            clarity: 'Clear', isBoat: false, currentTime: '7:00 am'
+        });
+
+        assert.equal(result.water_temp_source, 'usgs-live');
+        // USGS live data doesn't need estimation note
+        assert.ok(!result.water_temp_note || result.water_temp_note === null,
+            'water_temp_note should not be present for usgs-live source');
+    });
+
+    it('water_temp_source defaults to offline when scientific data missing', async () => {
+        const weatherService = {
+            async getWeatherData() {
+                return {
+                    temp: 70, wind: { speed: 7 }, pressure: 1014,
+                    cloudiness: 30, lat: null, lon: null,
+                    pressureForecast: []
+                };
+            }
+        };
+
+        const biteEngine = {
+            async calculateScientificStrategy() {
+                return {
+                    biteProbability: 0, biteRank: 'Unavailable',
+                    biteReasoning: 'Engine error', recommendedLures: [],
+                    waterTemp: null, waterTempSource: null,
+                    waterTempStation: null, waterTempStationDistance: null
+                };
+            }
+        };
+
+        const aiService = createAIService({
+            genAI: null, weatherService, biteEngine,
+            fishPatterns: '', isDev: false
+        });
+
+        const result = await aiService.generateFishingStrategy({
+            location: 'Chicago, IL', species: 'Largemouth Bass',
+            clarity: 'Clear', isBoat: false, currentTime: '7:00 am'
+        });
+
+        assert.ok(result.water_temp_source != null,
+            'water_temp_source must never be null');
+        assert.equal(result.water_temp_source, 'offline');
+    });
 });
 
 describe('AI service deterministic moon phase', () => {
