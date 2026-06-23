@@ -61,6 +61,88 @@ describe('AI service offline fallback', () => {
         assert.equal(result.water_temp_station, 'CHICAGO S & S CANAL AT WESTERN AVE AT CHICAGO, IL');
         assert.equal(result.water_temp_station_distance, 8.4);
     });
+
+    it('returns deterministic moon phase in offline mode (not Unknown)', async () => {
+        const weatherService = {
+            async getWeatherData() {
+                return {
+                    temp: 70, wind: { speed: 7 }, pressure: 1014,
+                    cloudiness: 30, lat: 41.8781, lon: -87.6298,
+                    pressureForecast: []
+                };
+            }
+        };
+
+        const biteEngine = {
+            async calculateScientificStrategy() {
+                return {
+                    biteProbability: 50, biteRank: 'Good',
+                    biteReasoning: 'Test', recommendedLures: [],
+                    waterTemp: 68, waterTempSource: 'mock',
+                    waterTempStation: null, waterTempStationDistance: null
+                };
+            }
+        };
+
+        const aiService = createAIService({
+            genAI: null, weatherService, biteEngine,
+            fishPatterns: '', isDev: false
+        });
+
+        const result = await aiService.generateFishingStrategy({
+            location: 'Chicago, IL', species: 'Largemouth Bass',
+            clarity: 'Clear', isBoat: false, currentTime: '7:00 am'
+        });
+
+        // Moon phase should be deterministic, not 'Unknown'
+        assert.ok(result.solunar, 'Result should have solunar object');
+        assert.notEqual(result.solunar.moon_phase, 'Unknown',
+            'Moon phase should be computed, not Unknown');
+        assert.ok(typeof result.solunar.moon_phase === 'string');
+        assert.ok(result.solunar.moon_illumination != null,
+            'Should include illumination percentage');
+    });
+});
+
+describe('AI service deterministic moon phase', () => {
+    it('moon_phase is computed from lunar.js, not AI guessed', async () => {
+        const { getMoonPhase } = require('../src/engine/lunar');
+        const computedPhase = getMoonPhase(new Date());
+
+        const weatherService = {
+            async getWeatherData() {
+                return {
+                    temp: 70, wind: { speed: 7 }, pressure: 1014,
+                    cloudiness: 30, lat: 41.8781, lon: -87.6298,
+                    pressureForecast: []
+                };
+            }
+        };
+
+        const biteEngine = {
+            async calculateScientificStrategy() {
+                return {
+                    biteProbability: 50, biteRank: 'Good',
+                    biteReasoning: 'Test', recommendedLures: [],
+                    waterTemp: 68, waterTempSource: 'mock',
+                    waterTempStation: null, waterTempStationDistance: null
+                };
+            }
+        };
+
+        const aiService = createAIService({
+            genAI: null, weatherService, biteEngine,
+            fishPatterns: '', isDev: false
+        });
+
+        const result = await aiService.generateFishingStrategy({
+            location: 'Chicago, IL', species: 'Largemouth Bass',
+            clarity: 'Clear', isBoat: false, currentTime: '7:00 am'
+        });
+
+        assert.equal(result.solunar.moon_phase, computedPhase.label,
+            `Moon phase should be '${computedPhase.label}' from lunar.js`);
+    });
 });
 
 describe('mergeLures', () => {

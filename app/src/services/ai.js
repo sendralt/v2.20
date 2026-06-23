@@ -5,6 +5,7 @@ const https = require('https');
 // Token usage tracking
 const { deriveActivityForecast } = require('../engine/activity-forecast');
 const { extractSpeciesSection } = require('./fish-data-enhancer');
+const { getMoonPhase } = require('../engine/lunar');
 const tokenUsageStore = [];
 const MAX_STORED_REQUESTS = 1000;
 const GEMINI_PRICING = {
@@ -88,8 +89,7 @@ OUTPUT FORMAT (JSON):
     "safety": "Brief safety advisory specific to current conditions (2-3 sentences covering weather risks, water safety, gear recommendations). Do NOT mention bite probability.",
     "intel": "Detailed localized fishing intelligence. Explain why the fish are where they are based on the inputs (weather, clarity, species behavior). Use 3-5 sentences.",
     "solunar": {
-        "moon_phase": "Current moon phase based on today's date",
-        "assessment": "Brief assessment of how moon phase and weather conditions are currently affecting fish activity"
+        "assessment": "Brief assessment of how the PROVIDED moon phase and weather conditions are currently affecting fish activity. Do NOT guess the moon phase — use the computed value given above."
     },
     "forecast_note": "2-3 sentence qualitative note about the activity forecast. Reference the engine's hourly projections and add fishing-specific reasoning (e.g., 'The engine projects a strong dawn peak, but with rising pressure expect the bite window to compress. Focus on the first 90 minutes after sunrise.') Do NOT repeat the numbers — add insight the numbers alone don't show.",
     "ai_lures": [
@@ -354,7 +354,15 @@ function createAIService(deps) {
             intel, activity: generateDefaultActivity(), weather,
             scientific_data: scientificData,
             recommended_lures: scientificData?.recommendedLures || [],
-            solunar: { moon_phase: 'Unknown', assessment: 'Offline mode does not include live solunar data.' },
+            solunar: (() => {
+                const moon = getMoonPhase(new Date());
+                return {
+                    moon_phase: moon.label,
+                    moon_illumination: Math.round(moon.illumination * 100),
+                    assessment: `Offline mode: ${moon.label} (${Math.round(moon.illumination * 100)}% illuminated). ` +
+                        (moon.feedingMultiplier > 1.0 ? 'Solunar peak — expect enhanced feeding activity.' : 'No solunar peak currently.')
+                };
+            })(),
             map_url: `https://www.google.com/maps/search/${encodeURIComponent(location)}`,
             bite_probability: scientificData?.biteProbability || 0,
             bite_rank: scientificData?.biteRank || 'Unavailable',
@@ -409,6 +417,10 @@ function createAIService(deps) {
         const scientificContext = scientificData
             ? `SCIENTIFIC ENGINE: Bite ${scientificData.biteProbability}% (${scientificData.biteRank}); Metabolic Efficiency ${scientificData.metabolicEfficiency}%; Pressure Trend ${scientificData.pressureTrend}; Recommended Strategy ${scientificData.strategyType}; Water Temp ${scientificData.waterTemp}°F (${scientificData.waterTempSource}); ENGINE LURE PICKS: ${engineLureNames}; ${activityContext}`
             : 'SCIENTIFIC ENGINE: Unavailable';
+
+        // Compute deterministic moon phase — do NOT ask AI to guess it.
+        const moonData = getMoonPhase(new Date());
+        const lunarContext = `MOON PHASE (computed — use this, do NOT guess): ${moonData.label}, ${Math.round(moonData.illumination * 100)}% illuminated, feeding multiplier ${moonData.feedingMultiplier.toFixed(1)}x.`;
 
         if (!geminiApiKey) return buildOfflineStrategy(params, weather, 'AI service unavailable');
 
@@ -481,11 +493,15 @@ function createAIService(deps) {
                 scientific_data: scientificData,
                 // Merge engine lures with AI-generated lures, score-ranked
                 recommended_lures: mergeLures(scientificData?.recommendedLures, responseJson.ai_lures),
-                solunar: {
-                    moon_phase: responseJson.solunar?.moon_phase || 'Unknown',
-                    assessment: responseJson.solunar?.assessment || 'No assessment available',
-                    note: 'Supplementary — not used in bite score calculation'
-                },
+                solunar: (() => {
+                    const moon = getMoonPhase(new Date());
+                    return {
+                        moon_phase: moon.label,
+                        moon_illumination: Math.round(moon.illumination * 100),
+                        assessment: ensureString(responseJson.solunar?.assessment) || 'No assessment available',
+                        note: 'Moon phase computed deterministically — not AI-guessed'
+                    };
+                })(),
                 map_url: `https://www.google.com/maps/search/${encodeURIComponent(location)}`,
                 bite_probability: biteMetrics.score,
                 bite_rank: biteMetrics.rank,
