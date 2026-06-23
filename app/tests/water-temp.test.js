@@ -1,7 +1,7 @@
 "use strict";
 const { afterEach, describe, it } = require('node:test');
 const assert = require('node:assert/strict');
-const { estimateWaterTemp, findNearbyStations, getLiveWaterTemp, SEASONAL_RATES } = require('../src/engine/water-temp');
+const { estimateWaterTemp, estimateWaterTempHybrid, getSeasonalBaseTemp, findNearbyStations, getLiveWaterTemp, SEASONAL_RATES } = require('../src/engine/water-temp');
 
 const originalFetch = global.fetch;
 
@@ -10,6 +10,82 @@ afterEach(() => {
 });
 
 describe('Water Temperature Estimation', () => {
+    // === Task 16: Latitude-adjusted seasonal water temp baselines ===
+    // The hybrid estimation fallback path adjusts seasonal baselines by latitude band.
+    // USGS live data remains primary — latitude model only affects estimation path.
+    // [Source: EPA water quality monitoring regional data; USGS regional summaries]
+
+    describe('Latitude-adjusted seasonal baselines', () => {
+        it('temperate latitude (>45N) Jan baseline stays cold (~34F)', () => {
+            // Minnesota latitude ~47N — water near freezing
+            const temp = estimateWaterTempHybrid(20, 1, 47);
+            assert.ok(temp >= 32 && temp <= 38,
+                `Minnesota Jan water temp ${temp} should be ~32-38F`);
+        });
+
+        it('subtropical latitude (30-45N) Jan baseline is milder (~48F)', () => {
+            // Georgia latitude ~34N
+            const temp = estimateWaterTempHybrid(50, 1, 34);
+            assert.ok(temp >= 42 && temp <= 54,
+                `Subtropical Jan water temp ${temp} should be ~42-54F`);
+        });
+
+        it('tropical latitude (<30N) Jan baseline is warm (~60F)', () => {
+            // Florida latitude ~28N — water stays warm in winter
+            const temp = estimateWaterTempHybrid(75, 1, 28);
+            assert.ok(temp >= 60 && temp <= 70,
+                `Florida Jan water temp ${temp} should be ~60-70F, not near 34F`);
+        });
+
+        it('Florida Jan 75F air -> water temp 60-70F (not 46F)', () => {
+            const temp = estimateWaterTempHybrid(75, 1, 28);
+            assert.ok(temp >= 60,
+                `Florida Jan with 75F air should be >=60F, got ${temp}`);
+        });
+
+        it('Minnesota Jan stays ~34F', () => {
+            const temp = estimateWaterTempHybrid(20, 1, 47);
+            assert.ok(temp <= 38,
+                `Minnesota Jan should stay cold (<=38F), got ${temp}`);
+        });
+
+        it('without latitude param, defaults to temperate (backward compat)', () => {
+            // No latitude arg should behave same as temperate zone
+            const tempNoLat = estimateWaterTempHybrid(65, 7);
+            const tempTemperate = estimateWaterTempHybrid(65, 7, 47);
+            assert.equal(tempNoLat, tempTemperate,
+                'Default (no lat) should equal temperate zone');
+        });
+
+        it('getSeasonalBaseTemp returns different values for different lat bands', () => {
+            const temperateJan = getSeasonalBaseTemp(1, 47);
+            const tropicalJan = getSeasonalBaseTemp(1, 25);
+            assert.ok(tropicalJan > temperateJan + 15,
+                `Tropical Jan (${tropicalJan}) should be much warmer than temperate (${temperateJan})`);
+        });
+
+        it('summer baselines converge across latitudes', () => {
+            // Summer water temps are more similar across latitudes than winter
+            const temperateJul = getSeasonalBaseTemp(7, 47);
+            const tropicalJul = getSeasonalBaseTemp(7, 25);
+            const diff = Math.abs(temperateJul - tropicalJul);
+            assert.ok(diff <= 15,
+                `Summer temp difference ${diff}F should be moderate (<=15F) across latitudes`);
+        });
+
+        it('water temp never below 32F even in extreme cold', () => {
+            const temp = estimateWaterTempHybrid(-10, 1, 47);
+            assert.ok(temp >= 32, `Water temp ${temp} should be >=32F`);
+        });
+
+        it('negative latitude (Southern Hemisphere) uses tropical band', () => {
+            // Negative latitude should map by absolute value for band selection
+            const temp = estimateWaterTempHybrid(75, 1, -10);
+            assert.ok(temp >= 60,
+                `Tropical (negative lat) Jan should be warm, got ${temp}`);
+        });
+    });
+
     it('spring returns water temp BELOW air temp', () => {
         const waterTemp = estimateWaterTemp(70, 4);
         assert.ok(waterTemp < 70, `Water ${waterTemp} should be below air 70 in spring`);

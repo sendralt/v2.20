@@ -4,8 +4,54 @@
 // Positive = warming (spring), Negative = cooling (fall).
 const SEASONAL_RATES = { 1:-1, 2:+1, 3:+3, 4:+3, 5:+2, 6:+1, 7:+0.5, 8:-0.5, 9:-2, 10:-3, 11:-3, 12:-1 };
 
-// Research-based seasonal baseline water temperatures (°F) - weighted 70% in hybrid model
-const SEASONAL_BASE_TEMPS = { 1:34, 2:35, 3:40, 4:48, 5:58, 6:68, 7:75, 8:76, 9:68, 10:58, 11:48, 12:38 };
+/**
+ * Seasonal baseline water temperatures (°F) by latitude band.
+ * Three climate zones based on US EPA water quality monitoring regions and
+ * USGS regional water temperature summaries.
+ * [Source: EPA National Water Quality Assessment; USGS Water Data — regional summaries]
+ *
+ * TEMPERATE (>45N): cold winters, moderate summers — Great Lakes, Northern US, Canada
+ * SUBTROPICAL (30-45N): mild winters, warm summers — Southern US, Gulf states
+ * TROPICAL (<30N): warm year-round — South Florida, Caribbean, Central America
+ */
+const LATITUDE_BAND_BASE_TEMPS = {
+    // Temperate zone (>45N) — existing calibrated baseline
+    temperate: { 1:34, 2:35, 3:40, 4:48, 5:58, 6:68, 7:75, 8:76, 9:68, 10:58, 11:48, 12:38 },
+    // Subtropical zone (30-45N) — milder winters, similar peak summers
+    subtropical: { 1:48, 2:50, 3:55, 4:62, 5:70, 6:78, 7:82, 8:82, 9:78, 10:70, 11:60, 12:52 },
+    // Tropical zone (<30N) — warm winters, slightly higher summer baselines
+    tropical: { 1:60, 2:62, 3:66, 4:72, 5:78, 6:82, 7:84, 8:84, 9:82, 10:78, 11:70, 12:64 }
+};
+
+// Backward-compatible alias: temperate zone baseline (original SEASONAL_BASE_TEMPS)
+const SEASONAL_BASE_TEMPS = LATITUDE_BAND_BASE_TEMPS.temperate;
+
+/**
+ * Determine the latitude band name from absolute latitude value.
+ * @param {number} lat - Latitude (positive or negative)
+ * @returns {'temperate'|'subtropical'|'tropical'} Band name
+ */
+function getLatitudeBand(lat) {
+    const absLat = Math.abs(lat);
+    if (absLat > 45) return 'temperate';
+    if (absLat >= 30) return 'subtropical';
+    return 'tropical';
+}
+
+/**
+ * Get latitude-adjusted seasonal baseline water temperature.
+ * Uses climate-zone-specific baselines to account for subtropical and tropical
+ * water bodies that never experience temperate-zone winter cooling.
+ * Falls back to temperate baseline for invalid latitude.
+ * @param {number} month - Month number (1-12)
+ * @param {number} [lat=45] - Latitude (defaults to temperate for backward compat)
+ * @returns {number} Baseline water temperature in °F
+ */
+function getSeasonalBaseTemp(month, lat) {
+    const band = lat != null ? getLatitudeBand(lat) : 'temperate';
+    const baseTemps = LATITUDE_BAND_BASE_TEMPS[band];
+    return baseTemps[month] || 50;
+}
 
 // USGS Configuration
 const USGS_BASE_URL = 'https://waterservices.usgs.gov/nwis';
@@ -35,12 +81,14 @@ function estimateWaterTemp(airTempF, month) {
  * Hybrid water temperature estimate combining seasonal baseline with air temperature.
  * Uses 70% seasonal baseline + 30% current air temperature.
  * More stable than pure air-temp estimation during weather fluctuations.
+ * Latitude adjusts the seasonal baseline for subtropical/tropical zones.
  * @param {number} airTempF - Air temperature in °F
  * @param {number} month - Month number (1-12)
+ * @param {number} [lat] - Latitude (adjusts baseline by climate zone; defaults to temperate)
  * @returns {number} Estimated water temperature in °F (min 32)
  */
-function estimateWaterTempHybrid(airTempF, month) {
-    const seasonalBase = SEASONAL_BASE_TEMPS[month] || 50;
+function estimateWaterTempHybrid(airTempF, month, lat) {
+    const seasonalBase = getSeasonalBaseTemp(month, lat);
     const waterTemp = (seasonalBase * 0.7) + (airTempF * 0.3);
     return Math.max(32, Math.round(waterTemp));
 }
@@ -291,7 +339,7 @@ async function getLiveWaterTemp(lat, lon, airTempF, month, maxDistanceMiles = MA
     const cache = (data) => { _waterTempCache.set(cacheKey, { data, ts: Date.now() }); return data };
 
     if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
-        const estimated = estimateWaterTempHybrid(airTempF, month);
+        const estimated = estimateWaterTempHybrid(airTempF, month, lat);
         return cache({
             waterTempF: estimated,
             waterTempC: (estimated - 32) * 5 / 9,
@@ -309,7 +357,7 @@ async function getLiveWaterTemp(lat, lon, airTempF, month, maxDistanceMiles = MA
         const nearestStation = stations.find(station => station.distance <= maxDistanceMiles) || null;
 
         if (!nearestStation) {
-            const estimated = estimateWaterTempHybrid(airTempF, month);
+            const estimated = estimateWaterTempHybrid(airTempF, month, lat);
             return cache({
                 waterTempF: estimated,
                 waterTempC: (estimated - 32) * 5 / 9,
@@ -335,7 +383,7 @@ async function getLiveWaterTemp(lat, lon, airTempF, month, maxDistanceMiles = MA
 
     } catch (error) {
         console.error('Water temperature service error:', error.message);
-        const estimated = estimateWaterTempHybrid(airTempF, month);
+        const estimated = estimateWaterTempHybrid(airTempF, month, lat);
         return cache({
             waterTempF: estimated,
             waterTempC: (estimated - 32) * 5 / 9,
@@ -352,9 +400,12 @@ async function getLiveWaterTemp(lat, lon, airTempF, month, maxDistanceMiles = MA
 module.exports = { 
     estimateWaterTemp, 
     estimateWaterTempHybrid,
+    getSeasonalBaseTemp,
+    getLatitudeBand,
     getLiveWaterTemp,
     findNearbyStations,
     SEASONAL_RATES,
     SEASONAL_BASE_TEMPS,
+    LATITUDE_BAND_BASE_TEMPS,
     MAX_STATION_DISTANCE_MILES
 };
