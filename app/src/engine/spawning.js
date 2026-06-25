@@ -34,17 +34,22 @@
 const PRE_SPAWN_MULTIPLIER = 1.2;
 
 /**
- * ACTIVE_SPAWN_MULTIPLIER: Fish on nests, minimal feeding. Bass and sunfish
- * guard nests but strike lures from aggression, not hunger.
- * [Source: Heidinger 1976 — reproductive behavior of black bass]
+ * ACTIVE_SPAWN_MULTIPLIER: Fish on nests — for a BITE/catchability model, spawning
+ * fish are HIGHLY catchable. Bass, bluegill, and crappie aggressively strike lures
+ * from nest-defense aggression, not hunger. Tournament catch data confirms peak
+ * catch rates during spawn. The former 0.4x was appropriate for a feeding-rate model,
+ * not a bite probability model.
+ * [Source: Heidinger 1976 — reproductive behavior of black bass;
+ *          Carlander 1977 — catch rates during spawning season]
  */
-const ACTIVE_SPAWN_MULTIPLIER = 0.4;
+const ACTIVE_SPAWN_MULTIPLIER = 1.1;
 
 /**
  * POST_SPAWN_MULTIPLIER: Recovery period. Fish resume feeding gradually.
+ * Slightly reduced catchability from exhaustion, but still actively foraging.
  * [Source: Carlander 1977]
  */
-const POST_SPAWN_MULTIPLIER = 0.7;
+const POST_SPAWN_MULTIPLIER = 0.85;
 
 /**
  * OUTSIDE_SPAWN_MULTIPLIER: Normal feeding behavior outside spawn window.

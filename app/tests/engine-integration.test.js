@@ -116,18 +116,11 @@ describe('Engine Integration — Phase 2 Science Modules', () => {
     });
 
     describe('Spawning multiplier affects score', () => {
-        it('active spawn (0.4x) suppresses score vs pre-spawn (1.2x) at similar temps', async () => {
-            // Both temps near bass metabolic optimum (65F) to isolate spawning effect.
-            // 60F = pre-spawn (1.2x boost); 65F = active spawn (0.4x penalty).
-            // Pre-spawn should score higher despite 5F cooler water.
-            const preSpawnEngine = makeEngine(60);
+        it('active spawn (1.1x) produces high scores — spawning fish are catchable', async () => {
+            // With the corrected bite-probability model, spawning bass aggressively
+            // strike lures from nest defense. Active spawn should NOT crush the score.
+            // 65F = active spawn at optimal metabolic temp.
             const activeSpawnEngine = makeEngine(65);
-
-            const preSpawnResult = await preSpawnEngine.calculateScientificStrategy(
-                { speciesName: 'Largemouth Bass', waterColor: 'Clear', lat: 45, lon: -90 },
-                baseWeather,
-                { month: 4, hour: 6 }
-            );
 
             const activeSpawnResult = await activeSpawnEngine.calculateScientificStrategy(
                 { speciesName: 'Largemouth Bass', waterColor: 'Clear', lat: 45, lon: -90 },
@@ -135,8 +128,8 @@ describe('Engine Integration — Phase 2 Science Modules', () => {
                 { month: 5, hour: 6 }
             );
 
-            assert.ok(preSpawnResult.biteProbability > activeSpawnResult.biteProbability,
-                `Pre-spawn 60F/1.2x (${preSpawnResult.biteProbability}) should beat active spawn 65F/0.4x (${activeSpawnResult.biteProbability})`);
+            assert.ok(activeSpawnResult.biteProbability >= 60,
+                `Active spawn at 65F/1.1x should score high (>=60), got ${activeSpawnResult.biteProbability}`);
         });
 
         it('pre-spawn boosts score for bass', async () => {

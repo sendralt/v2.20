@@ -8,8 +8,8 @@ const { getSpawningMultiplier } = require('../src/engine/spawning');
  *
  * Fish behavior changes dramatically across spawning phases:
  * - Pre-spawn: Aggressive feeding to build energy reserves (1.2x)
- * - Active spawn: Fish on nests, minimal feeding (0.4x)
- * - Post-spawn: Recovery period, reduced feeding (0.7x)
+ * - Active spawn: Aggressive nest-defense strikes, high catchability (1.1x)
+ * - Post-spawn: Recovery period, reduced catchability (0.85x)
  * - Outside spawn season: Normal behavior (1.0x)
  *
  * [Source: Carlander 1977 — Handbook of Freshwater Fishery Biology;
@@ -53,14 +53,14 @@ describe('Spawning Cycle Model', () => {
             assert.equal(mult, 1.2);
         });
 
-        it('bass at 68F (active spawn) -> 0.4', () => {
+        it('bass at 68F (active spawn) -> 1.1', () => {
             const mult = getSpawningMultiplier(68, 'Largemouth Bass', mockFishingData);
-            assert.equal(mult, 0.4);
+            assert.equal(mult, 1.1);
         });
 
-        it('bass at 75F (post-spawn) -> 0.7', () => {
+        it('bass at 75F (post-spawn) -> 0.85', () => {
             const mult = getSpawningMultiplier(75, 'Largemouth Bass', mockFishingData);
-            assert.equal(mult, 0.7);
+            assert.equal(mult, 0.85);
         });
 
         it('bass at 50F (outside spawn) -> 1.0', () => {
@@ -81,28 +81,28 @@ describe('Spawning Cycle Model', () => {
             assert.equal(mult, 1.2);
         });
 
-        it('temp just above spawn_temp_start -> spawning (0.4)', () => {
+        it('temp just above spawn_temp_start -> spawning (1.1)', () => {
             // 66F = just into spawning range
             const mult = getSpawningMultiplier(66, 'Largemouth Bass', mockFishingData);
-            assert.equal(mult, 0.4);
+            assert.equal(mult, 1.1);
         });
 
-        it('temp exactly at spawn_temp_end -> spawning (0.4)', () => {
+        it('temp exactly at spawn_temp_end -> spawning (1.1)', () => {
             // 72F = spawn_temp_end
             const mult = getSpawningMultiplier(72, 'Largemouth Bass', mockFishingData);
-            assert.equal(mult, 0.4);
+            assert.equal(mult, 1.1);
         });
 
-        it('temp just above spawn_temp_end -> post-spawn (0.7)', () => {
+        it('temp just above spawn_temp_end -> post-spawn (0.85)', () => {
             // 73F = just into post-spawn
             const mult = getSpawningMultiplier(73, 'Largemouth Bass', mockFishingData);
-            assert.equal(mult, 0.7);
+            assert.equal(mult, 0.85);
         });
 
-        it('temp at spawn_temp_end + 5 -> post-spawn (0.7)', () => {
+        it('temp at spawn_temp_end + 5 -> post-spawn (0.85)', () => {
             // 77F = spawn_temp_end (72) + 5 = boundary of post-spawn
             const mult = getSpawningMultiplier(77, 'Largemouth Bass', mockFishingData);
-            assert.equal(mult, 0.7);
+            assert.equal(mult, 0.85);
         });
 
         it('temp above spawn_temp_end + 5 -> outside (1.0)', () => {
@@ -113,9 +113,9 @@ describe('Spawning Cycle Model', () => {
     });
 
     describe('Other species', () => {
-        it('walleye at 48F (peak spawn) -> 0.4', () => {
+        it('walleye at 48F (peak spawn) -> 1.1', () => {
             const mult = getSpawningMultiplier(48, 'Walleye', mockFishingData);
-            assert.equal(mult, 0.4);
+            assert.equal(mult, 1.1);
         });
 
         it('walleye at 40F (pre-spawn) -> 1.2', () => {
@@ -123,9 +123,9 @@ describe('Spawning Cycle Model', () => {
             assert.equal(mult, 1.2);
         });
 
-        it('catfish at 75F (peak spawn) -> 0.4', () => {
+        it('catfish at 75F (peak spawn) -> 1.1', () => {
             const mult = getSpawningMultiplier(75, 'Catfish', mockFishingData);
-            assert.equal(mult, 0.4);
+            assert.equal(mult, 1.1);
         });
     });
 

@@ -370,8 +370,28 @@ async function getLiveWaterTemp(lat, lon, airTempF, month, maxDistanceMiles = MA
             });
         }
 
+        // Sanity check: reject USGS readings that are wildly implausible vs estimation.
+        // If the live reading differs from the hybrid estimate by more than MAX_TEMP_DEVIATION,
+        // the station may be geothermal, industrial discharge, or a data error.
+        // Fall back to estimation to avoid corrupting the bite score model.
+        const stationTempF = Math.round(nearestStation.fahrenheit);
+        const estimatedTempF = estimateWaterTempHybrid(airTempF, month, lat);
+        const MAX_TEMP_DEVIATION = 20; // °F — reject readings >20°F from hybrid estimate
+        if (Math.abs(stationTempF - estimatedTempF) > MAX_TEMP_DEVIATION) {
+            console.warn(`USGS water temp sanity check failed: station=${stationTempF}F, estimated=${estimatedTempF}F, diff=${Math.abs(stationTempF - estimatedTempF)}F. Falling back to estimation.`);
+            return cache({
+                waterTempF: estimatedTempF,
+                waterTempC: Math.round((estimatedTempF - 32) * 5 / 9 * 10) / 10,
+                source: 'estimated',
+                method: 'hybrid-thermal-lag',
+                stationName: nearestStation.siteName,
+                stationDistance: Math.round(nearestStation.distance * 10) / 10,
+                timestamp: new Date().toISOString(),
+                note: `USGS reading (${stationTempF}F) rejected: ${Math.abs(stationTempF - estimatedTempF)}F deviation from estimate`
+            });
+        }
         return cache({
-            waterTempF: Math.round(nearestStation.fahrenheit),
+            waterTempF: stationTempF,
             waterTempC: Math.round(nearestStation.celsius * 10) / 10,
             source: 'usgs-live',
             method: 'monitoring-station',
