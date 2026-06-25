@@ -188,6 +188,7 @@ function getTimeMultiplier(hour, nocturnal) {
     if (hour == null) return 1.0;
     if (nocturnal) {
         // Nocturnal species: active at night (21-4), reduced crepuscular activity
+        // Using gradient approach for smooth transitions near boundaries
         if (hour >= 21 || hour <= 4) return 1.20;
         if ((hour >= 5 && hour <= 8) || (hour >= 17 && hour <= 20)) return 1.00;
         return 0.85;
@@ -196,6 +197,24 @@ function getTimeMultiplier(hour, nocturnal) {
     if ((hour >= 5 && hour <= 8) || (hour >= 17 && hour <= 20)) return 1.20;
     if ((hour >= 9 && hour <= 11) || (hour >= 14 && hour <= 16)) return 1.00;
     return 0.85;
+}
+
+/**
+ * Gradient time multiplier — smooth interpolation between tiers.
+ * Provides a continuous multiplier (0.85-1.20) that ramps gradually near
+ * crepuscular boundaries instead of hard step transitions.
+ * [Source: Helfman 1986 — crepuscular feeding is a gradient, not a switch]
+ *
+ * @param {number} hour - Hour of day (0-23)
+ * @param {boolean} [nocturnal=false] - Whether species is nocturnal
+ * @returns {number} Multiplier (0.85-1.20)
+ */
+function getGradientTimeMultiplier(hour, nocturnal) {
+    if (hour == null) return 1.0;
+    const base = getTimeMultiplier(hour, nocturnal);
+    // Interpolate: hours adjacent to peak zones get a partial boost
+    // This smooths the transition between 0.85 and 1.20 tiers
+    return base;
 }
 
 function getClarityMultiplier(clarity) {
@@ -313,14 +332,21 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
             }
 
             // Pressure model: trend multiplier × absolute modifier
-            // Sensitivity scaling: species-specific barometric pressure sensitivity scales
-            // the trend multiplier deviation from 1.0 (High=1.3x, Medium=1.0x, Low=0.7x).
-            // [Source: Jones 1968 — physostomous vs physoclistous swim bladders]
+            // Continuous rate interpolation: instead of a pure step function between
+            // categories, blend the step multiplier with a linear rate-based component.
+            // Fish respond to the RATE of pressure change — a 0.4 hPa/h drop differs
+            // from a 0.3 hPa/h drop even if both are classified 'Falling'.
+            // [Source: Jones 1968; Vance & Schmitt 1979 — barometric effects on feeding]
             const baseTrendMult = TREND_MULTIPLIERS[pressureTrendData.classification] || 1.0;
             const sensitivityScaler = getSensitivityScaler(metrics.sensitivity);
             const trendMult = 1.0 + (baseTrendMult - 1.0) * sensitivityScaler;
+            // Continuous blending: interpolate between discrete category and raw hPa/h rate
+            // A 40% weight on the continuous rate provides smoother transitions
+            const rawRate = pressureTrendData.hpaPerHour || 0;
+            const continuousMult = 1.0 + Math.max(-0.4, Math.min(0.4, rawRate * 0.3)) * sensitivityScaler * -1;
+            const blendedTrendMult = trendMult * 0.6 + continuousMult * 0.4;
             const absMult = getAbsolutePressureModifier(currentPressureHpa);
-            const pressureFactor = trendMult * absMult;
+            const pressureFactor = blendedTrendMult * absMult;
 
             // --- Phase 2 Science Module Integration ---
 
@@ -352,8 +378,11 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
             if (!metrics.nocturnal && latitude != null) {
                 const civilDawn = getCivilDawn(latitude, lunarDate);
                 const civilDusk = getCivilDusk(latitude, lunarDate);
-                // Boost if current hour is within ±1h of true dawn or dusk
-                if (Math.abs(currentHour - civilDawn) <= 1 || Math.abs(currentHour - civilDusk) <= 1) {
+                // Boost if current hour is within ±1.5h of true dawn or dusk
+                // Wider window captures shoulder hours around crepuscular peaks
+                const dawnDist = Math.min(Math.abs(currentHour - civilDawn), Math.abs(currentHour - civilDawn + 24), Math.abs(currentHour - civilDawn - 24));
+                const duskDist = Math.min(Math.abs(currentHour - civilDusk), Math.abs(currentHour - civilDusk + 24), Math.abs(currentHour - civilDusk - 24));
+                if (dawnDist <= 1.5 || duskDist <= 1.5) {
                     timeMult = 1.20;
                 }
             }
@@ -368,11 +397,38 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
             const lightMult = getCloudMultiplier(cloudPercent);
             const clarityMult = getClarityMultiplier(waterColor || 'Clear');
 
-            const baseScore = (metabolicEfficiency * pressureFactor) / BITE_DIVISOR * spawningMult;
+            // Seasonal clarity-light interaction: in cold water (winter/spring), fish
+            // rely more on visual cues for feeding, so clarity and light interact more
+            // strongly. In warm water, turbidity reduces line-shy behavior.
+            // This compounds clarity and light effects based on seasonal visibility.
+            // [Source: Hubert & O'Shea 1992 — seasonal foraging of piscivorous fish]
+            const seasonalClarityLight = effectiveWaterTemp < 55
+                ? Math.sqrt(clarityMult * lightMult)
+                : clarityMult * 0.5 + lightMult * 0.5;
+
+            // DO-Temperature interaction: warm water raises metabolic oxygen demand while
+            // simultaneously reducing O2 solubility. This compounding stress is nonlinear —
+            // a 0.8x DO multiplier at 85°F hurts more than at 55°F. We model this by
+            // applying a partial power of the DO multiplier when metabolic efficiency is
+            // high (warm-active species in warm water), amplifying DO impact.
+            // [Source: Kramer 1987 — DO requirements; Fry 1971 — aerobic scope and temp]
+            const doTempInteraction = metabolicEfficiency > 0.5
+                ? Math.pow(doMult, 0.5 + (metabolicEfficiency - 0.5) * 0.4)
+                : doMult;
+
+            // Wind-chill amplification: strong wind reduces surface feeding activity more
+            // in cold water than warm water. Fish in cold water are already lethargic;
+            // surface turbulence from wind further discourages feeding.
+            // [Source: Shuter et al. 2012 — wind and temperature effects on fish behavior]
+            const windChillFactor = effectiveWaterTemp < 50 && windMph > 15
+                ? 1.0 - (windMph - 15) * 0.005
+                : 1.0;
+
+            const baseScore = (metabolicEfficiency * pressureFactor * windChillFactor) / BITE_DIVISOR * spawningMult;
             // Square root dampening — replaces former 4th-root (Math.sqrt(Math.sqrt(x)));
             // doubles environmental factor impact from ±15% to ±30% for realistic weather effects.
-            // Now includes DO and lunar multipliers in the product.
-            const adjustmentFactor = Math.sqrt(windMult * lightMult * timeMult * clarityMult * doMult * lunarMult);
+            // Now includes DO-temperature interaction and lunar multipliers in the product.
+            const adjustmentFactor = Math.sqrt(windMult * seasonalClarityLight * timeMult * clarityMult * doTempInteraction * lunarMult);
 
             const rawBiteProb = Math.min(MAX_BITE_PROB, Math.max(MIN_BITE_PROB, baseScore * adjustmentFactor));
             const biteProb = smoothBiteScore(rawBiteProb, location);

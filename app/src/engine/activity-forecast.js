@@ -55,7 +55,12 @@ function computeHourlyBiteProb(hour, pressureHpa, windMph, cloudPercent, waterTe
 
     const TREND_MULT = { 'Rapidly Falling': 1.25, 'Falling': 1.15, 'Stable': 1.0, 'Rising': 0.85, 'Rapidly Rising': 0.70 };
     const absMult = getAbsolutePressureModifier(pressureHpa);
-    const pressureFactor = TREND_MULT[trendLabel] * absMult;
+    // Continuous pressure-rate blending: 60% discrete category + 40% linear rate
+    const sensitivity = (metrics.sensitivity === 'High') ? 1.3 : (metrics.sensitivity === 'Low') ? 0.7 : 1.0;
+    const discreteMult = 1.0 + (TREND_MULT[trendLabel] - 1.0) * sensitivity;
+    const continuousMult = 1.0 + Math.max(-0.4, Math.min(0.4, delta * 0.3)) * sensitivity * -1;
+    const blendedTrendMult = discreteMult * 0.6 + continuousMult * 0.4;
+    const pressureFactor = blendedTrendMult * absMult;
 
     const windMult = getWindMultiplier(windMph);
     const lightMult = getCloudMultiplier(cloudPercent);
@@ -68,8 +73,21 @@ function computeHourlyBiteProb(hour, pressureHpa, windMph, cloudPercent, waterTe
 
     const spawningMult = getSpawningMultiplier(effectiveWaterTemp, speciesName, fishingData);
 
+    // DO-Temperature interaction: warm water raises metabolic oxygen demand while
+    // reducing O2 solubility. Amplify DO multiplier when metabolic efficiency is high.
+    // [Source: Kramer 1987 — DO requirements; Fry 1971 — aerobic scope and temp]
+    const doTempInteraction = metabolicEfficiency > 0.5
+        ? Math.pow(doMult, 0.5 + (metabolicEfficiency - 0.5) * 0.4)
+        : doMult;
+
+    // Seasonal clarity-light interaction: cold-water fish rely more on visual cues
+    // [Source: Hubert & O'Shea 1992 — seasonal foraging of piscivorous fish]
+    const seasonalClarityLight = effectiveWaterTemp < 55
+        ? Math.sqrt(clarityMult * lightMult)
+        : clarityMult * 0.5 + lightMult * 0.5;
+
     const baseScore = (metabolicEfficiency * pressureFactor) / BITE_DIVISOR * spawningMult;
-    const adjustmentFactor = Math.sqrt(windMult * lightMult * timeMult * clarityMult * doMult * lunarMult);
+    const adjustmentFactor = Math.sqrt(windMult * seasonalClarityLight * timeMult * clarityMult * doTempInteraction * lunarMult);
 
     return Math.min(MAX_BITE_PROB, Math.max(MIN_BITE_PROB, baseScore * adjustmentFactor));
 }
