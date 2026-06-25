@@ -439,7 +439,8 @@ function createAIService(deps) {
                 fishingData: fishPatterns,
                 latitude: weather?.lat,
                 month: new Date().getMonth() + 1,
-                date: new Date()
+                date: new Date(),
+                anchorScore: scientificData.biteProbability
               })
             : generateDefaultActivity();
         const activityContext = `ACTIVITY FORECAST (next 12h, 1-10 scale): [${activity.join(', ')}]`;
