@@ -20,13 +20,11 @@ describe('Activity Forecast Engine', function() {
     });
 
     it('shows crepuscular peaks (dawn/dusk hours higher)', function() {
-        // 6 AM = dawn, should see peak within first few hours
         const result = deriveActivityForecast({
             currentHour: 6,
             pressureTrend: 'Stable',
             metabolicEfficiency: 0.7
         });
-        // With absolute normalization, decent conditions produce ~6 at dawn peak
         assert.ok(result[0] >= 5, 'Dawn hour should be elevated, got: ' + result[0]);
     });
 
@@ -36,7 +34,6 @@ describe('Activity Forecast Engine', function() {
             pressureTrend: 'Stable',
             metabolicEfficiency: 0.7
         });
-        // Hour 0 (12PM) should be low (midday dip)
         assert.ok(result[0] <= 5, 'Midday should be low, got: ' + result[0]);
     });
 
@@ -47,7 +44,6 @@ describe('Activity Forecast Engine', function() {
         const rising = deriveActivityForecast({
             currentHour: 6, pressureTrend: 'Rising', metabolicEfficiency: 0.7
         });
-        // With absolute normalization, falling pressure genuinely produces higher values
         const fallingSum = falling.reduce(function(a, b) { return a + b; }, 0);
         const risingSum = rising.reduce(function(a, b) { return a + b; }, 0);
         assert.ok(fallingSum > risingSum, 'Falling (' + fallingSum + ') should exceed rising (' + risingSum + ')');
@@ -75,11 +71,10 @@ describe('Activity Forecast Engine', function() {
 
     it('wraps around midnight correctly', function() {
         const result = deriveActivityForecast({
-            currentHour: 22, // 10 PM → should hit dawn at hour 7-8
+            currentHour: 22,
             pressureTrend: 'Stable',
             metabolicEfficiency: 0.7
         });
-        // With absolute normalization, dawn peak shows as elevated but not guaranteed 10
         assert.ok(result[8] >= 5 || result[9] >= 5, 'Should show dawn peak after midnight wrap, got: ' + result[8] + ',' + result[9]);
     });
 
@@ -88,7 +83,7 @@ describe('Activity Forecast Engine', function() {
         for (let i = 0; i < 12; i++) {
             hourly.push({
                 temp: 75,
-                pressure: 1010 + i * 0.3, // slowly rising
+                pressure: 1010 + i * 0.3,
                 wind: { speed: 5 },
                 cloudiness: 40,
                 hour: (6 + i) % 24
@@ -107,7 +102,6 @@ describe('Activity Forecast Engine', function() {
             assert.ok(typeof v === 'number' && !isNaN(v), 'must be number: ' + v);
             assert.ok(v >= 1 && v <= 10, 'must be 1-10: ' + v);
         });
-        // With slowly rising pressure, scores should generally trend downward
         const firstHalf = result.slice(0, 6).reduce(function(a, b) { return a + b; }, 0);
         const secondHalf = result.slice(6).reduce(function(a, b) { return a + b; }, 0);
         assert.ok(secondHalf < firstHalf, 'Rising pressure should push scores down: ' + firstHalf + ' vs ' + secondHalf);
@@ -124,8 +118,6 @@ describe('Activity Forecast Engine', function() {
                 hour: (6 + i) % 24
             });
         }
-        // Water temp of 56F is near-optimal for a cold-water species (opt:55)
-        // but well below dormancy for a warm-water species (dorm:52).
         const coldWaterSpecies = deriveActivityForecast({
             currentHour: 6, pressureTrend: 'Stable', metabolicEfficiency: 0.5,
             hourly: hourly, waterTemp: 56, speciesMetrics: { opt: 55, dorm: 35 }
@@ -144,18 +136,16 @@ describe('Activity Forecast Engine', function() {
         for (let i = 0; i < 12; i++) {
             hourly.push({
                 temp: 75,
-                pressure: 1005, // flat going forward
+                pressure: 1005,
                 wind: { speed: 5 },
                 cloudiness: 40,
-                hour: (6 + i) % 24
+                hour: (12 + i) % 24
             });
         }
         const base = {
-            currentHour: 6, pressureTrend: 'Stable', metabolicEfficiency: 0.7,
-            hourly: hourly, waterTemp: 70, speciesMetrics: { opt: 70, dorm: 45 }
+            currentHour: 12, pressureTrend: 'Stable', metabolicEfficiency: 0.7,
+            hourly: hourly, waterTemp: 58, speciesMetrics: { opt: 70, dorm: 45 }
         };
-        // A sharp recent drop into the forecast's flat starting pressure should
-        // boost hour 0 via the "Rapidly Falling" trend multiplier.
         const withFallingHistory = deriveActivityForecast(Object.assign({}, base, {
             pressureHistory: [{ pressure: 1010, timestamp: Date.now() - 3600000 }]
         }));

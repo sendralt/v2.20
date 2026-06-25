@@ -3,6 +3,10 @@
 // Reuse existing multiplier functions from bite-score engine
 const { getTimeMultiplier, getWindMultiplier, getCloudMultiplier, getClarityMultiplier, getAbsolutePressureModifier } = require('./bite-score');
 const { calculateMetabolicEfficiency } = require('./metabolic');
+const { getDOMultiplier } = require('./dissolved-oxygen');
+const { getSpawningMultiplier } = require('./spawning');
+const { getThermoclineDepth, getEffectiveTemp } = require('./thermocline');
+const { getMoonPhase } = require('./lunar');
 
 // Constants matching bite-score.js
 const BITE_DIVISOR = 1.2;
@@ -31,11 +35,24 @@ function classifyTrend(deltaHpa) {
 
 /**
  * Compute a single hour's bite probability using the real bite-score formula.
- * Mirrors bite-score.js:154-158 without EMA smoothing or async water temp lookup.
+ * Now fully aligned with bite-score.js: same Math.sqrt() dampening and
+ * includes all environmental factors (DO, lunar, spawning).
  */
-function computeHourlyBiteProb(hour, pressureHpa, windMph, cloudPercent, waterTempF, speciesMetrics, prevPressureHpa, clarity) {
+function computeHourlyBiteProb(hour, pressureHpa, windMph, cloudPercent, waterTempF, speciesMetrics, prevPressureHpa, clarity, options) {
     const metrics = speciesMetrics || { opt: 65, dorm: 45 };
-    const metabolicEfficiency = calculateMetabolicEfficiency(waterTempF, metrics) / 100;
+    const opts = options || {};
+    const month = opts.month || (new Date().getMonth() + 1);
+    const lat = opts.latitude || 45;
+    const date = opts.date || new Date();
+    const speciesName = opts.speciesName || null;
+    const fishingData = opts.fishingData || null;
+
+    // Thermocline-adjusted effective water temp (matches main engine)
+    const speciesDepth = metrics.preferred_depth || 10;
+    const thermoclineDepth = getThermoclineDepth(lat, month, waterTempF, windMph);
+    const effectiveWaterTemp = getEffectiveTemp(waterTempF, thermoclineDepth, speciesDepth);
+
+    const metabolicEfficiency = calculateMetabolicEfficiency(effectiveWaterTemp, metrics) / 100;
 
     const delta = prevPressureHpa != null ? pressureHpa - prevPressureHpa : 0;
     let trendLabel;
@@ -49,15 +66,25 @@ function computeHourlyBiteProb(hour, pressureHpa, windMph, cloudPercent, waterTe
     const absMult = getAbsolutePressureModifier(pressureHpa);
     const pressureFactor = TREND_MULT[trendLabel] * absMult;
 
-    // Multi-factor adjustment
+    // Multi-factor adjustment — now matches main engine exactly
     const windMult = getWindMultiplier(windMph);
     const lightMult = getCloudMultiplier(cloudPercent);
-    const timeMult = getTimeMultiplier(hour);
+    const timeMult = getTimeMultiplier(hour, metrics.nocturnal);
     const clarityMult = getClarityMultiplier(clarity || 'Clear');
+    const doMult = getDOMultiplier(effectiveWaterTemp, month, windMph, metrics);
 
-    const baseScore = (metabolicEfficiency * pressureFactor) / BITE_DIVISOR;
-    // Match bite-score.js: use 4th root (x^0.25) to dampen environmental factors
-    const adjustmentFactor = Math.sqrt(Math.sqrt(windMult * lightMult * timeMult * clarityMult));
+    // Lunar feeding multiplier
+    const lunarPhase = getMoonPhase(date);
+    const lunarMult = lunarPhase.feedingMultiplier;
+
+    // Spawning multiplier (applied to base score, not adjustment)
+    const spawningMult = getSpawningMultiplier(effectiveWaterTemp, speciesName, fishingData);
+
+    const baseScore = (metabolicEfficiency * pressureFactor) / BITE_DIVISOR * spawningMult;
+
+    // FIX: Use Math.sqrt() (square root) to match main engine — was Math.sqrt(Math.sqrt()) (4th root)
+    // Now includes DO and lunar multipliers in the product
+    const adjustmentFactor = Math.sqrt(windMult * lightMult * timeMult * clarityMult * doMult * lunarMult);
 
     return Math.min(MAX_BITE_PROB, Math.max(MIN_BITE_PROB, baseScore * adjustmentFactor));
 }
@@ -89,10 +116,16 @@ function applyTemporalSmoothing(scores) {
  * @param {Array}  [params.pressureHistory] - Past {pressure, timestamp} readings, ascending by time
  * @param {number} [params.waterTemp] - Water temp °F (real-formula path)
  * @param {Object} [params.speciesMetrics] - {opt, dorm} (real-formula path)
+ * @param {string} [params.speciesName] - Species name for spawning multiplier
+ * @param {Object} [params.fishingData] - Fishing data for spawning lookup
+ * @param {number} [params.latitude] - Latitude for thermocline
+ * @param {Date}   [params.date] - Date for lunar phase
+ * @param {number} [params.month] - Month (1-12)
  * @returns {number[]} Array of 12 numbers on a 1-10 scale for next 12 hours
  */
 function deriveActivityForecast(params) {
-    const { currentHour, pressureTrend, metabolicEfficiency, hourly, pressureHistory, waterTemp, speciesMetrics, clarity } = params;
+    const { currentHour, pressureTrend, metabolicEfficiency, hourly, pressureHistory, waterTemp, speciesMetrics, clarity,
+            speciesName, fishingData, latitude, date, month } = params;
 
     // Real-formula path: use forecasted hourly weather data
     if (hourly && hourly.length >= 2 && waterTemp != null) {
@@ -112,7 +145,8 @@ function deriveActivityForecast(params) {
                 waterTemp,
                 speciesMetrics,
                 prevPressure,
-                clarity
+                clarity,
+                { speciesName, fishingData, latitude, date, month }
             );
             scores.push(Math.max(0, Math.min(10, prob * 10)));
         }
@@ -125,18 +159,25 @@ function deriveActivityForecast(params) {
     }
 
     // Fallback path: use same baseScore × adjustment structure as main engine
+    // FIX: use Math.sqrt() to match main engine, include spawning via spawningMult
     const trendMult = TREND_MULTIPLIERS[pressureTrend] || 1.0;
     const absMult = 1.0; // No absolute pressure data in fallback
     const pressureFactor = trendMult * absMult;
     const meta = metabolicEfficiency || 0.5;
 
+    // Compute spawning multiplier for fallback path too
+    const spawningMult = (speciesName && fishingData)
+        ? getSpawningMultiplier(waterTemp || 65, speciesName, fishingData)
+        : 1.0;
+
     const scores = [];
     for (let i = 0; i < 12; i++) {
         const hour = (currentHour + i) % 24;
-        const timeMult = getTimeMultiplier(hour);
+        const timeMult = getTimeMultiplier(hour, speciesMetrics?.nocturnal);
         // Match main engine formula: baseScore × adjustmentFactor
-        const baseScore = (meta * pressureFactor) / BITE_DIVISOR;
-        const adjustmentFactor = Math.sqrt(timeMult); // Only time factor available
+        const baseScore = (meta * pressureFactor) / BITE_DIVISOR * spawningMult;
+        // FIX: Use Math.sqrt() to match main engine — was Math.sqrt(timeMult) only
+        const adjustmentFactor = Math.sqrt(timeMult); // Only time factor available in fallback
         const prob = Math.min(MAX_BITE_PROB, Math.max(MIN_BITE_PROB, baseScore * adjustmentFactor));
         scores.push(prob * 10);
     }

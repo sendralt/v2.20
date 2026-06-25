@@ -434,7 +434,12 @@ function createAIService(deps) {
                 pressureHistory: weather?.pressureHistory || [],
                 waterTemp: scientificData.waterTemp,
                 speciesMetrics: scientificData.speciesMetrics,
-                clarity: clarity || 'Clear'
+                clarity: clarity || 'Clear',
+                speciesName: species,
+                fishingData: fishPatterns,
+                latitude: weather?.lat,
+                month: new Date().getMonth() + 1,
+                date: new Date()
               })
             : generateDefaultActivity();
         const activityContext = `ACTIVITY FORECAST (next 12h, 1-10 scale): [${activity.join(', ')}]`;
