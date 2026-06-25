@@ -138,7 +138,7 @@ async function geocodeWithOpenMeteo(term) {
     const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(term)}&count=1&country=US&format=json`;
     try {
         const response = await fetch(url, {
-            headers: { 'Accept': 'application/json', 'User-Agent': 'FishSmart-Pro/2.0' },
+            headers: { 'Accept': 'application/json', 'Accept-Encoding': 'identity', 'User-Agent': 'FishSmart-Pro/2.0' },
             signal: AbortSignal.timeout(8000)
         });
         if (!response.ok) return null;
