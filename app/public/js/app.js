@@ -431,14 +431,10 @@ async function displayResults(data) {
             var cardsHtml = lures.map(function(lure) {
                 var rankColor = lure.rank === 'Excellent' ? 'text-neon-green' :
                                 lure.rank === 'Very Good' ? 'text-teal-400' : 'text-gray-400';
-                var sourceBadge = lure.source === 'ai'
-                    ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30">AI Insight</span>'
-                    : '<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">Engine Match</span>';
                 return '<div class="bg-slate-800/50 rounded-xl p-3 border border-slate-700/50">' +
                     '<div class="flex items-center justify-between mb-2">' +
                         '<div class="flex items-center gap-2">' +
                             '<span class="font-bold text-white text-sm">' + DOMPurify.sanitize(lure.name) + '</span>' +
-                            sourceBadge +
                         '</div>' +
                         '<span class="text-xs font-bold ' + rankColor + '">' + DOMPurify.sanitize(lure.rank || '') + '</span>' +
                     '</div>' +

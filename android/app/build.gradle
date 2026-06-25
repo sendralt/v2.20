@@ -72,8 +72,8 @@ android {
         applicationId "com.fishsmart.pro"
         minSdkVersion 21
         targetSdkVersion 35
-        versionCode 21
-        versionName "2.21"
+        versionCode 22
+        versionName "2.22"
 
         // The name for the application
         resValue "string", "appName", twaManifest.name
@@ -91,7 +91,7 @@ android {
             // The URL the Web Manifest for the Progressive Web App that the TWA points to. This
             // is used by Chrome OS and Meta Quest to open the Web version of the PWA instead of
             // the TWA, as it will probably give a better user experience for non-mobile devices.
-            resValue "string", "webManifestUrl", 'https://fishsmart-pro-1.onrender.com/manifest.json'
+            resValue "string", "webManifestUrl", 'https://fishsmart-pro.com/manifest.json'
 
 
 
