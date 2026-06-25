@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE_NAME = 'fishsmart-pro-v2.21';
+const CACHE_NAME = 'fishsmart-pro-v2.22';
 const STATIC_ASSETS = [
   '/manifest.json',
   '/icon.png',
@@ -91,18 +91,29 @@ self.addEventListener('fetch', (event) => {
   // API routes: Network-Only (never cache live data)
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(
-      fetch(request).catch(() => {
-        // Race condition fix: self.navigator.onLine is unreliable in SW context
-        // and can return stale false after SW reinstall/activate lifecycle events.
-        // Always return a generic retry-safe message instead of guessing offline state.
-        return new Response(
-          JSON.stringify({
-            error: 'Service temporarily unavailable. The server may be waking up. Please try again in a moment.',
-            offline: false
-          }),
-          { status: 503, headers: { 'Content-Type': 'application/json' } }
-        );
-      })
+      (async () => {
+        try {
+          return await fetch(request);
+        } catch (err) {
+          // First attempt failed (network error or cold-start timeout).
+          // Retry once after a short delay — Render free tier may be waking up.
+          await new Promise(r => setTimeout(r, 2000));
+          try {
+            return await fetch(request);
+          } catch (err2) {
+            // Race condition fix: self.navigator.onLine is unreliable in SW context
+            // and can return stale false after SW reinstall/activate lifecycle events.
+            // Always return a generic retry-safe message instead of guessing offline state.
+            return new Response(
+              JSON.stringify({
+                error: 'Service temporarily unavailable. The server may be waking up. Please try again in a moment.',
+                offline: false
+              }),
+              { status: 503, headers: { 'Content-Type': 'application/json' } }
+            );
+          }
+        }
+      })()
     );
     return;
   }

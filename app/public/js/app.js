@@ -576,7 +576,7 @@ function initGenerateButton() {
             const authHeaders = typeof window.subscription !== 'undefined'
                 ? window.subscription.getAuthHeaders()
                 : { 'X-Device-ID': deviceId };
-            const response = await fetch('/api/generate', {
+            const fetchOptions = {
                 method: 'POST',
                 signal: abortController.signal,
                 headers: {
@@ -593,7 +593,16 @@ function initGenerateButton() {
                     isBoat: isBoat,
                     currentTime: new Date().toLocaleString()
                 })
-            });
+            };
+            
+            let response = await fetch('/api/generate', fetchOptions);
+            
+            // Retry on 503 (server cold-starting on free-tier hosting)
+            if (response.status === 503) {
+                if (loadingText) loadingText.textContent = '📡 Waking up server, please wait...';
+                await new Promise(function(r) { setTimeout(r, 2500); });
+                response = await fetch('/api/generate', fetchOptions);
+            }
             
             if (!response.ok) {
                 const errorData = await response.json().catch(function() { return {}; });
@@ -615,7 +624,13 @@ function initGenerateButton() {
                 return { success: false, error: 'Unexpected response from server. Please try again.' };
             });
             if (!result.success) throw new Error(result.error || 'Unknown error');
-            
+
+            // Capture auto-recovered session token (server transparently creates new
+            // session when old one was wiped by Render free-tier restart)
+            if (result.sessionId && typeof window.subscription !== 'undefined') {
+                window.subscription.setSessionToken(result.sessionId, result.sessionExpiresAt);
+            }
+
             // Update usage after successful request
             if (typeof window.subscription !== 'undefined') {
                 window.subscription.fetchUsageStats();

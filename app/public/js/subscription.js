@@ -206,11 +206,11 @@ async function createSession() {
             requestBody.productId = GOOGLE_PLAY_PRODUCTS[productId] || productId;
         }
 
-        let response = await requestSession(requestBody);
+        let response = await requestSessionWithRetry(requestBody);
         if (!response.ok && isGooglePlayAvailable && purchaseToken && productId) {
             localStorage.removeItem(GOOGLE_PLAY_TOKEN_KEY);
             localStorage.removeItem('fishsmart_subscription_plan');
-            response = await requestSession({ integrityToken });
+            response = await requestSessionWithRetry({ integrityToken });
         }
 
         return await handleSessionResponse(response);
@@ -225,6 +225,40 @@ async function requestSession(requestBody) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody)
+    });
+}
+
+/**
+ * Retry session creation with exponential backoff for cold-start resilience.
+ * Render free-tier sleeps after ~15min, so the first request after idle
+ * may get a 503 or timeout. This transparently retries so the user
+ * doesn't see an "offline" state on fresh page loads.
+ */
+async function requestSessionWithRetry(requestBody, maxRetries = 2) {
+    let lastError = null;
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+            const response = await requestSession(requestBody);
+            // 503 = server cold-starting; retry with backoff
+            if (response.status === 503 && attempt < maxRetries) {
+                await new Promise(r => setTimeout(r, 1500 * (attempt + 1)));
+                continue;
+            }
+            return response;
+        } catch (err) {
+            // Network error (fetch threw); retry with backoff
+            lastError = err;
+            if (attempt < maxRetries) {
+                await new Promise(r => setTimeout(r, 1500 * (attempt + 1)));
+                continue;
+            }
+        }
+    }
+    // All retries exhausted — return a synthetic 503 so handleSessionResponse
+    // returns null and the caller can degrade gracefully
+    return new Response(JSON.stringify({ success: false, error: 'Service temporarily unavailable' }), {
+        status: 503,
+        headers: { 'Content-Type': 'application/json' }
     });
 }
 
@@ -827,7 +861,7 @@ async function restoreSubscriptionByEmail() {
 
 window.subscription = {
     init: initSubscription,
-    getDeviceId, getSessionToken, createSession, ensureSession, getAuthHeaders, fetchUsageStats,
+    getDeviceId, getSessionToken, setSessionToken, createSession, ensureSession, getAuthHeaders, fetchUsageStats,
     updateUsageDisplay, enforcePaywallState, showPaywall, hidePaywall, checkUsage, initiatePayment,
     initiateStripeCheckout, fetchStripeEntitlement, handleCheckoutReturn, openStripePortal,
     restorePurchases, applyPromoCode, logout, syncWithGooglePlay, getAvailableProducts,

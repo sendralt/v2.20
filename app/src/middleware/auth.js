@@ -115,8 +115,8 @@ function createAuthMiddleware(sessionAuth, subscriptionService = null, options =
             );
 
             if (!validation.valid) {
-                // Session invalid or expired - clear and create new
-                if (validation.code === 'SESSION_EXPIRED' || validation.code === 'SUBSCRIPTION_EXPIRED') {
+                // Subscription expired — require explicit re-auth (don't auto-recover)
+                if (validation.code === 'SUBSCRIPTION_EXPIRED') {
                     return res.status(401).json({
                         success: false,
                         error: validation.error,
@@ -125,11 +125,12 @@ function createAuthMiddleware(sessionAuth, subscriptionService = null, options =
                     });
                 }
 
-                return res.status(401).json({
-                    success: false,
-                    error: validation.error || 'Invalid session',
-                    code: 'INVALID_SESSION'
-                });
+                // Session not found or expired (likely server restart wiped in-memory store).
+                // Auto-recover by creating a new free session transparently instead of
+                // returning a hard 401 that the frontend interprets as "offline".
+                // handleNewSession checks Stripe entitlement via oldToken first.
+                console.info('Session invalid, auto-recovering:', validation.code || validation.error);
+                return await handleNewSession(req, res, next);
             }
 
             // Session valid - attach to request
