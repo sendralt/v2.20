@@ -71,6 +71,10 @@ describe('Pressure Trend-Based Logic', () => {
         );
         assert.ok(result.pressureTrend.includes('Unknown'),
             'Expected Unknown with single reading, got: ' + result.pressureTrend);
+        assert.ok(!result.biteReasoning.toLowerCase().includes('a unknown'),
+            'Bite reasoning should not render broken grammar for unknown pressure: ' + result.biteReasoning);
+        assert.ok(result.biteReasoning.includes('limited pressure-trend data'),
+            'Expected user-friendly pressure fallback, got: ' + result.biteReasoning);
     });
 });
 

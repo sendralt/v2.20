@@ -282,8 +282,16 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
         return score >= 76 ? 'Excellent' : score >= 56 ? 'Good' : score >= 36 ? 'Fair' : 'Tough';
     }
 
+    function formatPressureReasoning(pressureTrend) {
+        const trend = String(pressureTrend || '').trim();
+        if (!trend || trend.toLowerCase().startsWith('unknown')) {
+            return 'with limited pressure-trend data';
+        }
+        return 'with a ' + trend.toLowerCase() + ' pressure profile';
+    }
+
     function buildReasoning(result) {
-        return 'Metabolic efficiency is ' + result.metabolicEfficiency + '% with a ' + result.pressureTrend.toLowerCase() + ' pressure profile, supporting a ' + result.strategyType.toLowerCase() + ' approach.';
+        return 'Metabolic efficiency is ' + result.metabolicEfficiency + '% ' + formatPressureReasoning(result.pressureTrend) + ', supporting a ' + result.strategyType.toLowerCase() + ' approach.';
     }
 
     async function calculateScientificStrategy(input, weather, options = {}) {

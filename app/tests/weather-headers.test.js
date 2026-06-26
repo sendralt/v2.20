@@ -14,59 +14,66 @@ const path = require('node:path');
  * silently return null (weather shows as "offline" for new users while
  * the AI plan still generates).
  *
- * This test statically verifies that every fetch() call in weather.js
- * and water-temp.js includes the required header.
+ * This test now enforces that ALL external fetch calls go through the
+ * centralized safeFetch() wrapper, which ALWAYS includes the header.
  */
 
-const FILES_TO_CHECK = [
-    path.join(__dirname, '..', 'src', 'services', 'weather.js'),
-    path.join(__dirname, '..', 'src', 'engine', 'water-temp.js')
-];
-
-function extractFetchCallHeaders(filePath) {
+function checkNoRawFetch(filePath) {
     const source = fs.readFileSync(filePath, 'utf8');
     const lines = source.split('\n');
-    const results = [];
+    const violations = [];
 
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
-        if (line.includes('fetch(') && !line.trim().startsWith('//') && !line.trim().startsWith('*')) {
-            // Grab surrounding context (5 lines before, 10 after) to find headers
-            const start = Math.max(0, i - 2);
-            const end = Math.min(lines.length - 1, i + 12);
-            const context = lines.slice(start, end + 1).join('\n');
-            results.push({ lineNum: i + 1, context });
+        // Skip comments
+        if (line.trim().startsWith('//') || line.trim().startsWith('*')) continue;
+        // Look for raw fetch( calls that are NOT safeFetch
+        if (line.match(/\bfetch\(/) && !line.includes('safeFetch')) {
+            violations.push(i + 1);
         }
     }
-    return results;
+    return violations;
 }
 
-test('All fetch() calls in weather.js include Accept-Encoding: identity', () => {
+test('weather.js uses safeFetch — no raw fetch() calls', () => {
     const filePath = path.join(__dirname, '..', 'src', 'services', 'weather.js');
-    const calls = extractFetchCallHeaders(filePath);
-
-    assert.ok(calls.length > 0, 'Should find at least one fetch() call in weather.js');
-
-    for (const call of calls) {
-        assert.ok(
-            call.context.includes('Accept-Encoding') && call.context.includes('identity'),
-            `fetch() at line ${call.lineNum} in weather.js is missing 'Accept-Encoding: identity' header.\n` +
-            `This causes gzip corruption on Render, making weather data return null for new users.`
-        );
-    }
+    const violations = checkNoRawFetch(filePath);
+    assert.deepStrictEqual(violations, [],
+        'weather.js has raw fetch() calls that bypass safeFetch (lines: ' + violations.join(', ') + '). ' +
+        'Use safeFetch() from ../lib/safe-fetch for ALL external requests to prevent gzip corruption on Render.'
+    );
 });
 
-test('All fetch() calls in water-temp.js include Accept-Encoding: identity', () => {
+test('water-temp.js uses safeFetch — no raw fetch() calls', () => {
     const filePath = path.join(__dirname, '..', 'src', 'engine', 'water-temp.js');
-    const calls = extractFetchCallHeaders(filePath);
+    const violations = checkNoRawFetch(filePath);
+    assert.deepStrictEqual(violations, [],
+        'water-temp.js has raw fetch() calls that bypass safeFetch (lines: ' + violations.join(', ') + '). ' +
+        'Use safeFetch() from ../lib/safe-fetch for ALL external requests to prevent gzip corruption on Render.'
+    );
+});
 
-    assert.ok(calls.length > 0, 'Should find at least one fetch() call in water-temp.js');
-
-    for (const call of calls) {
+test('safeFetch always includes Accept-Encoding: identity by default', async () => {
+    const { safeFetch } = require('../src/lib/safe-fetch');
+    let capturedHeaders = null;
+    // Mock global fetch
+    const origFetch = global.fetch;
+    global.fetch = async (resource, options) => {
+        capturedHeaders = options?.headers || {};
+        return { ok: true, json: async () => ({}), text: async () => '', clone: function() { return this; } };
+    };
+    try {
+        await safeFetch('https://example.com');
         assert.ok(
-            call.context.includes('Accept-Encoding') && call.context.includes('identity'),
-            `fetch() at line ${call.lineNum} in water-temp.js is missing 'Accept-Encoding: identity' header.\n` +
-            `This causes gzip corruption on Render, making water temp data return null.`
+            capturedHeaders['Accept-Encoding'] === 'identity',
+            'safeFetch should include Accept-Encoding: identity by default'
         );
+
+        // Test with custom headers — identity should still be present
+        await safeFetch('https://example.com', { headers: { 'Custom': 'value' } });
+        assert.strictEqual(capturedHeaders['Accept-Encoding'], 'identity');
+        assert.strictEqual(capturedHeaders['Custom'], 'value');
+    } finally {
+        global.fetch = origFetch;
     }
 });

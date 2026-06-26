@@ -1,5 +1,7 @@
 'use strict';
 
+const { safeFetch } = require('../lib/safe-fetch');
+
 function describeCloudCover(cloudCover) {
     if (typeof cloudCover !== 'number') return 'Unknown';
     if (cloudCover < 20) return 'clear sky';
@@ -66,8 +68,8 @@ async function fetchFromOpenWeather(term, apiKey) {
     const currentUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(term)}&appid=${apiKey}&units=imperial`;
     const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(term)}&appid=${apiKey}&units=imperial`;
     const [currentRes, forecastRes] = await Promise.all([
-        fetch(currentUrl, { headers: { 'Accept-Encoding': 'identity' }, signal: AbortSignal.timeout(5000) }),
-        fetch(forecastUrl, { headers: { 'Accept-Encoding': 'identity' }, signal: AbortSignal.timeout(5000) })
+        await safeFetch(currentUrl, { headers: { 'Accept-Encoding': 'identity' }, signal: AbortSignal.timeout(5000) }),
+        await safeFetch(forecastUrl, { headers: { 'Accept-Encoding': 'identity' }, signal: AbortSignal.timeout(5000) })
     ]);
     if (currentRes.status === 404) return null;
     if (!currentRes.ok) throw new Error(`Weather service returned ${currentRes.status}`);
@@ -96,7 +98,7 @@ async function geocodeWithNominatim(term) {
     for (let attempt = 0; attempt < 2; attempt++) {
         try {
             if (attempt > 0) await new Promise(r => setTimeout(r, 1200 * attempt));
-            const response = await fetch(url, {
+            const response = await safeFetch(url, {
                 headers: {
                     'Accept': 'application/json',
                     'Accept-Encoding': 'identity',
@@ -137,7 +139,7 @@ async function geocodeWithOpenMeteo(term) {
 
     const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(term)}&count=1&country=US&format=json`;
     try {
-        const response = await fetch(url, {
+        const response = await safeFetch(url, {
             headers: { 'Accept': 'application/json', 'Accept-Encoding': 'identity', 'User-Agent': 'FishSmart-Pro/2.0' },
             signal: AbortSignal.timeout(8000)
         });
@@ -161,7 +163,7 @@ async function geocodeWithOpenMeteo(term) {
 
 async function geocodeWithOpenWeather(term, apiKey) {
     const url = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(term)}&limit=1&appid=${apiKey}`;
-    const response = await fetch(url, {
+    const response = await safeFetch(url, {
         headers: { 'Accept': 'application/json', 'Accept-Encoding': 'identity', 'User-Agent': 'FishSmart-Pro/2.0' },
         signal: AbortSignal.timeout(5000)
     });
@@ -198,7 +200,7 @@ async function resolveLocationToCoordinates(location, apiKey, openWeatherApiKey 
     if (apiKey) {
         try {
             const url = `https://api.ipgeolocation.io/v3/timezone?apiKey=${apiKey}&location=${encodeURIComponent(location)}`;
-            const response = await fetch(url, {
+            const response = await safeFetch(url, {
                 headers: { 'Accept': 'application/json', 'Accept-Encoding': 'identity', 'User-Agent': 'FishSmart-Pro/2.0' },
                 signal: AbortSignal.timeout(5000)
             });
@@ -230,7 +232,7 @@ async function fetchFromOpenMeteo(coords) {
         forecast_hours: '24',
         temperature_unit: 'fahrenheit', wind_speed_unit: 'mph', timezone: 'auto'
     });
-    const response = await fetch(`https://api.open-meteo.com/v1/forecast?${params}`, {
+    const response = await safeFetch(`https://api.open-meteo.com/v1/forecast?${params}`, {
         headers: { 'Accept': 'application/json', 'Accept-Encoding': 'identity', 'User-Agent': 'FishSmart-Pro/2.0' },
         signal: AbortSignal.timeout(5000)
     });
@@ -317,7 +319,7 @@ async function fetchUSGSWaterTemp(lat, lon) {
         bbox: `${(lon - delta).toFixed(6)},${(lat - delta).toFixed(6)},${(lon + delta).toFixed(6)},${(lat + delta).toFixed(6)}`
     });
     try {
-        const response = await fetch(`https://waterservices.usgs.gov/nwis/iv/?${params}`, {
+        const response = await safeFetch(`https://waterservices.usgs.gov/nwis/iv/?${params}`, {
             headers: { 'Accept': 'application/json', 'Accept-Encoding': 'identity' },
             signal: AbortSignal.timeout(4000)
         });

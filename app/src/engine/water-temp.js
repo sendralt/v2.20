@@ -1,5 +1,7 @@
 'use strict';
 
+const { safeFetch } = require('../lib/safe-fetch');
+
 // Approximate weekly rate of air temp change (°F/week) in temperate North America.
 // Positive = warming (spring), Negative = cooling (fall).
 const SEASONAL_RATES = { 1:-1, 2:+1, 3:+3, 4:+3, 5:+2, 6:+1, 7:+0.5, 8:-0.5, 9:-2, 10:-3, 11:-3, 12:-1 };
@@ -147,8 +149,8 @@ async function queryUSGSStations(lat, lon, delta, timeoutMs) {
     const bBox = [minLon, minLat, maxLon, maxLat].map(formatUsgsCoordinate).join(',');
 
     const url = `${USGS_BASE_URL}/iv/?format=json&bBox=${bBox}&parameterCd=${WATER_TEMP_PARAM_C}&period=PT2H&siteType=${USGS_SITE_TYPES}`;
-    const response = await fetch(url, {
-        headers: { 'Accept': 'application/json', 'Accept-Encoding': 'identity' },
+    const response = await safeFetch(url, {
+        headers: { 'Accept': 'application/json' },
         signal: AbortSignal.timeout(timeoutMs)
     });
 
@@ -210,8 +212,8 @@ async function findNearbyCounties(lat, lon) {
 
     const counties = new Set();
     const promises = offsets.map(([dlat, dlon]) =>
-        fetch(`${FCC_AREA_API}?lat=${lat + dlat}&lon=${lon + dlon}&format=json`, {
-            headers: { 'Accept': 'application/json', 'Accept-Encoding': 'identity' },
+        safeFetch(`${FCC_AREA_API}?lat=${lat + dlat}&lon=${lon + dlon}&format=json`, {
+            headers: { 'Accept': 'application/json' },
             signal: AbortSignal.timeout(FCC_TIMEOUT_MS)
         })
             .then(r => r.json())
@@ -236,8 +238,8 @@ async function queryUSGSByCounty(lat, lon, countyCodes) {
     if (!countyCodes.length) return [];
 
     const url = `${USGS_BASE_URL}/iv/?format=json&parameterCd=${WATER_TEMP_PARAM_C}&period=PT2H&siteType=${USGS_SITE_TYPES}&countyCd=${countyCodes.join(',')}`;
-    const response = await fetch(url, {
-        headers: { 'Accept': 'application/json', 'Accept-Encoding': 'identity' },
+    const response = await safeFetch(url, {
+        headers: { 'Accept': 'application/json' },
         signal: AbortSignal.timeout(USGS_REQUEST_TIMEOUT_MS)
     });
 
