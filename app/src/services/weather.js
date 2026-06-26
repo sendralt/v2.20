@@ -347,18 +347,51 @@ async function fetchUSGSWaterTemp(lat, lon) {
     }
 }
 
+async function fetchFromOpenWeatherByCoords(lat, lon, apiKey) {
+    const currentUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`;
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`;
+    const [currentRes, forecastRes] = await Promise.all([
+        safeFetch(currentUrl, { signal: AbortSignal.timeout(5000) }),
+        safeFetch(forecastUrl, { signal: AbortSignal.timeout(5000) })
+    ]);
+    if (!currentRes.ok) throw new Error(`OpenWeather (coords) returned ${currentRes.status}`);
+    const currentData = await currentRes.json();
+    const forecastData = forecastRes.ok ? await forecastRes.json() : null;
+    return { current: currentData, forecast: forecastData };
+}
+
+function transformOpenWeatherRaw(raw) {
+    const wx = transformWeatherData(raw.current, raw.current?.coord?.lat, raw.current?.coord?.lon);
+    wx.waterTemp = raw.current?.waterTemp ?? null;
+    if (raw.forecast?.list) {
+        const now = Date.now();
+        const pressureHistory = [];
+        const pressureForecast = [];
+        for (const item of raw.forecast.list) {
+            const ts = item.dt * 1000;
+            const pressure = item.main?.pressure;
+            if (pressure == null) continue;
+            const entry = { pressure, timestamp: ts };
+            if (ts < now) {
+                pressureHistory.push(entry);
+            } else {
+                pressureForecast.push(entry);
+            }
+        }
+        wx.pressureHistory = pressureHistory;
+        wx.pressureForecast = pressureForecast.slice(0, 12);
+    }
+    return wx;
+}
+
 function createWeatherService(config) {
     async function getWeatherData(location) {
-        console.log('[WX-DIAG] getWeatherData called for:', location);
-        console.log('[WX-DIAG] config.openWeatherApiKey set:', !!config.openWeatherApiKey);
-        console.log('[WX-DIAG] config.ipGeoApiKey set:', !!config.ipGeoApiKey);
+        let resolvedCoords = null;
         try {
             const coords = await resolveLocationToCoordinates(location, config.ipGeoApiKey, config.openWeatherApiKey);
-            console.log('[WX-DIAG] resolveLocationToCoordinates result:', coords ? JSON.stringify({ lat: coords.lat, lon: coords.lon, source: coords.source }) : 'NULL');
             if (coords) {
-                console.log('[WX-DIAG] Calling fetchFromOpenMeteo...');
+                resolvedCoords = coords;
                 const wx = await fetchFromOpenMeteo(coords);
-                console.log('[WX-DIAG] fetchFromOpenMeteo result:', wx ? 'GOT DATA (temp=' + (wx.main?.temp || wx.temp) + ')' : 'NULL');
                 if (wx) {
                     wx.locationSource = coords.source || 'geocoder';
                     wx.locationLabel = coords.displayName || location;
@@ -368,16 +401,33 @@ function createWeatherService(config) {
                         wx.waterTemp = waterTempReading.temp;
                         wx.waterTempSource = waterTempReading.siteName;
                     }
-                    console.log('[WX-DIAG] Returning weather data successfully');
                     return wx;
                 }
-                console.warn('[WX-DIAG] fetchFromOpenMeteo returned null — falling through to OpenWeather');
-            } else {
-                console.warn('[WX-DIAG] resolveLocationToCoordinates returned NULL — all geocoders failed');
+                // Open-Meteo failed (likely 429 on Render) — try OpenWeather BY COORDS before falling through
+                if (config.openWeatherApiKey) {
+                    try {
+                        const raw = await fetchFromOpenWeatherByCoords(coords.lat, coords.lon, config.openWeatherApiKey);
+                        if (raw?.current) {
+                            const wx = transformOpenWeatherRaw(raw);
+                            wx.locationSource = coords.source || 'geocoder';
+                            wx.locationLabel = coords.displayName || location;
+                            wx.county = coords.county || null;
+                            const waterTempReading = await fetchUSGSWaterTemp(coords.lat, coords.lon);
+                            if (waterTempReading) {
+                                wx.waterTemp = waterTempReading.temp;
+                                wx.waterTempSource = waterTempReading.siteName;
+                            }
+                            return wx;
+                        }
+                    } catch (err) {
+                        console.warn('Weather: OpenWeather coords fallback failed:', err.message);
+                    }
+                }
             }
         } catch (err) {
-            console.warn('[WX-DIAG] Weather (Open-Meteo/geocode) CAUGHT ERROR:', err.message, err.stack?.split('\n')[1]);
+            console.warn('Weather (Open-Meteo/geocode):', err.message);
         }
+        // Last resort: try OpenWeather by city name (only works for recognized cities)
         if (!config.openWeatherApiKey) {
             console.warn('Weather: OPENWEATHER_API_KEY not set.');
             return null;
@@ -387,28 +437,7 @@ function createWeatherService(config) {
             try {
                 const raw = await fetchFromOpenWeather(term, config.openWeatherApiKey);
                 if (raw) {
-                    const wx = transformWeatherData(raw.current, raw.current?.coord?.lat, raw.current?.coord?.lon);
-                    wx.waterTemp = raw.current?.waterTemp ?? null;
-                    // Extract pressure history from OpenWeather 5-day/3-hour forecast
-                    if (raw.forecast?.list) {
-                        const now = Date.now();
-                        const pressureHistory = [];
-                        const pressureForecast = [];
-                        for (const item of raw.forecast.list) {
-                            const ts = item.dt * 1000;
-                            const pressure = item.main?.pressure;
-                            if (pressure == null) continue;
-                            const entry = { pressure, timestamp: ts };
-                            if (ts < now) {
-                                pressureHistory.push(entry);
-                            } else {
-                                pressureForecast.push(entry);
-                            }
-                        }
-                        wx.pressureHistory = pressureHistory;
-                        wx.pressureForecast = pressureForecast.slice(0, 12);
-                    }
-                    return wx;
+                    return transformOpenWeatherRaw(raw);
                 }
             } catch (err) {
                 console.warn(`Weather for "${term}":`, err.message);
