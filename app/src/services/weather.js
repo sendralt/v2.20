@@ -386,16 +386,14 @@ function transformOpenWeatherRaw(raw) {
 
 function createWeatherService(config) {
     async function getWeatherData(location) {
-        let resolvedCoords = null;
         try {
             const coords = await resolveLocationToCoordinates(location, config.ipGeoApiKey, config.openWeatherApiKey);
             if (coords) {
-                resolvedCoords = coords;
                 let wx = null;
                 try {
                     wx = await fetchFromOpenMeteo(coords);
                 } catch (ometErr) {
-                    console.warn('Weather: Open-Meteo failed (' + ometErr.message + '), trying fallbacks...');
+                    console.warn('Weather: Open-Meteo failed (' + ometErr.message + '), trying coordinate fallback...');
                 }
                 if (wx) {
                     wx.locationSource = coords.source || 'geocoder';
