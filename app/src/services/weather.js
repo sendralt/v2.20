@@ -349,10 +349,16 @@ async function fetchUSGSWaterTemp(lat, lon) {
 
 function createWeatherService(config) {
     async function getWeatherData(location) {
+        console.log('[WX-DIAG] getWeatherData called for:', location);
+        console.log('[WX-DIAG] config.openWeatherApiKey set:', !!config.openWeatherApiKey);
+        console.log('[WX-DIAG] config.ipGeoApiKey set:', !!config.ipGeoApiKey);
         try {
             const coords = await resolveLocationToCoordinates(location, config.ipGeoApiKey, config.openWeatherApiKey);
+            console.log('[WX-DIAG] resolveLocationToCoordinates result:', coords ? JSON.stringify({ lat: coords.lat, lon: coords.lon, source: coords.source }) : 'NULL');
             if (coords) {
+                console.log('[WX-DIAG] Calling fetchFromOpenMeteo...');
                 const wx = await fetchFromOpenMeteo(coords);
+                console.log('[WX-DIAG] fetchFromOpenMeteo result:', wx ? 'GOT DATA (temp=' + (wx.main?.temp || wx.temp) + ')' : 'NULL');
                 if (wx) {
                     wx.locationSource = coords.source || 'geocoder';
                     wx.locationLabel = coords.displayName || location;
@@ -362,11 +368,15 @@ function createWeatherService(config) {
                         wx.waterTemp = waterTempReading.temp;
                         wx.waterTempSource = waterTempReading.siteName;
                     }
+                    console.log('[WX-DIAG] Returning weather data successfully');
                     return wx;
                 }
+                console.warn('[WX-DIAG] fetchFromOpenMeteo returned null — falling through to OpenWeather');
+            } else {
+                console.warn('[WX-DIAG] resolveLocationToCoordinates returned NULL — all geocoders failed');
             }
         } catch (err) {
-            console.warn('Weather (Open-Meteo/geocode):', err.message);
+            console.warn('[WX-DIAG] Weather (Open-Meteo/geocode) CAUGHT ERROR:', err.message, err.stack?.split('\n')[1]);
         }
         if (!config.openWeatherApiKey) {
             console.warn('Weather: OPENWEATHER_API_KEY not set.');
