@@ -367,6 +367,11 @@ function transformOpenWeatherRaw(raw) {
         const now = Date.now();
         const pressureHistory = [];
         const pressureForecast = [];
+        // Include current pressure reading as a history baseline
+        const currentPressure = raw.current?.main?.pressure;
+        if (currentPressure != null) {
+            pressureHistory.push({ pressure: currentPressure, timestamp: now - 10800000 }); // 3h ago as baseline
+        }
         for (const item of raw.forecast.list) {
             const ts = item.dt * 1000;
             const pressure = item.main?.pressure;
@@ -378,6 +383,12 @@ function transformOpenWeatherRaw(raw) {
                 pressureForecast.push(entry);
             }
         }
+        // If we still have fewer than 2 history points, use first forecast entry as pseudo-history
+        if (pressureHistory.length < 2 && pressureForecast.length > 0) {
+            pressureHistory.push(pressureForecast[0]);
+        }
+        // Sort history chronologically so trend engine can compute rate
+        pressureHistory.sort((a, b) => a.timestamp - b.timestamp);
         wx.pressureHistory = pressureHistory;
         wx.pressureForecast = pressureForecast.slice(0, 12);
     }
