@@ -391,7 +391,12 @@ function createWeatherService(config) {
             const coords = await resolveLocationToCoordinates(location, config.ipGeoApiKey, config.openWeatherApiKey);
             if (coords) {
                 resolvedCoords = coords;
-                const wx = await fetchFromOpenMeteo(coords);
+                let wx = null;
+                try {
+                    wx = await fetchFromOpenMeteo(coords);
+                } catch (ometErr) {
+                    console.warn('Weather: Open-Meteo failed (' + ometErr.message + '), trying fallbacks...');
+                }
                 if (wx) {
                     wx.locationSource = coords.source || 'geocoder';
                     wx.locationLabel = coords.displayName || location;

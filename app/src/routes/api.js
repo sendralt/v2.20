@@ -155,6 +155,14 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
             diag.steps.push({ step: 'openweather', skipped: 'no API key' });
         }
 
+        // Step 4b: Test OpenWeather BY COORDS
+        if (config.openWeatherApiKey) {
+            try {
+                const r2 = await safeFetch('https://api.openweathermap.org/data/2.5/weather?lat=39.5153&lon=-84.0005&appid=' + config.openWeatherApiKey + '&units=imperial', { signal: AbortSignal.timeout(5000) });
+                diag.steps.push({ step: 'openweather-coords', status: r2.status, ok: r2.ok });
+            } catch(e) { diag.steps.push({ step: 'openweather-coords', error: e.message }); }
+        }
+
         // Step 5: Call getWeatherData
         if (weatherService) {
             try {
