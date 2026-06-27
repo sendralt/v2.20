@@ -181,7 +181,6 @@ async function resolveLocationToCoordinates(location, apiKey, openWeatherApiKey 
     const terms = generateSearchVariations(location);
     const geocoders = [
         term => geocodeWithNominatim(term),
-        term => geocodeWithOpenMeteo(term),
         term => (openWeatherApiKey ? geocodeWithOpenWeather(term, openWeatherApiKey) : null)
     ];
 
