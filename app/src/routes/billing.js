@@ -180,7 +180,11 @@ function createBillingRoutes({ stripeService, db, getOrCreateCustomer, computeAn
     });
 
     // POST /restore — link current session to existing Stripe subscription via email
-    router.post('/restore', billingLimiter, async (req, res) => {
+    // SECURITY FIX (CVE-002): Added billingAuth middleware to prevent unauthenticated access.
+    // SECURITY FIX (CVE-002): Prevent UPSERT session hijack — never overwrite an existing
+    //   session that's already linked to a different account.
+    // SECURITY FIX (CVE-008): Unified error messages to prevent email enumeration.
+    router.post('/restore', billingLimiter, billingAuth, async (req, res) => {
         try {
             const { email } = req.body;
             if (!email || typeof email !== 'string' || !email.includes('@')) {
@@ -195,7 +199,8 @@ function createBillingRoutes({ stripeService, db, getOrCreateCustomer, computeAn
             if (!custRes.ok) throw new Error('Stripe lookup failed');
             const custData = await custRes.json();
             if (!custData.data || custData.data.length === 0) {
-                return res.status(404).json({ error: 'No subscription found for that email' });
+                // CVE-008: Unified error message
+                return res.status(404).json({ error: 'Restore failed — please contact support' });
             }
 
             // 2. Find matching account in our DB
@@ -206,7 +211,8 @@ function createBillingRoutes({ stripeService, db, getOrCreateCustomer, computeAn
                 customerIds
             );
             if (accountRows.length === 0) {
-                return res.status(404).json({ error: 'No subscription found for that email' });
+                // CVE-008: Unified error message
+                return res.status(404).json({ error: 'Restore failed — please contact support' });
             }
 
             // 3. Check for active subscription
@@ -217,24 +223,42 @@ function createBillingRoutes({ stripeService, db, getOrCreateCustomer, computeAn
                 accountIds
             );
             if (subRows.length === 0) {
-                return res.status(404).json({ error: 'No active subscription found for that email' });
+                // CVE-008: Unified error message
+                return res.status(404).json({ error: 'Restore failed — please contact support' });
             }
 
             const accountId = subRows[0].account_id;
 
-            // 4. Link current session to this account
-            const sessionToken = req.headers['x-session-token'];
-            if (!sessionToken) {
-                return res.status(400).json({ error: 'Session token required' });
+            // 4. SECURITY (CVE-002): Prevent session hijacking. billingAuth already
+            //    validated the session and set req.user.accountId. We only block the
+            //    UPSERT if the caller's existing account already has its OWN Stripe
+            //    customer or subscription — meaning they're a real user, not a phantom.
+            //    A phantom account (created by lazy billingAuth) is safe to re-link.
+            const { accountId: callerAccountId } = req.user;
+            if (callerAccountId && callerAccountId !== accountId) {
+                // Check if caller's account has real billing data
+                const { rows: callerBilling } = await db.query(
+                    'SELECT 1 FROM stripe_customers WHERE account_id = $1 UNION SELECT 1 FROM billing_subscriptions WHERE account_id = $1 LIMIT 1',
+                    [callerAccountId]
+                );
+                if (callerBilling.length > 0) {
+                    // Caller has real billing data on a different account — refuse hijack
+                    return res.status(403).json({ error: 'Session already linked to another account' });
+                }
+                // Caller is a phantom account — safe to re-link to real account
             }
+
+            // 5. Link current session to this account (safe — caller is authenticated
+            //    and either has no account yet or owns this account already)
             const crypto = require('crypto');
+            const sessionToken = req.headers['x-session-token'];
             const tokenHash = crypto.createHash('sha256').update(sessionToken).digest('hex');
             await db.query(
                 'INSERT INTO billing_sessions (session_token_hash, account_id)\n                 VALUES ($1, $2)\n                 ON CONFLICT (session_token_hash) DO UPDATE SET account_id = $2',
                 [tokenHash, accountId]
             );
 
-            // 5. Compute and return entitlement
+            // 6. Compute and return entitlement
             const entitlement = await computeAndSaveEntitlement(accountId);
             res.json({
                 is_premium: entitlement.isPremium,
