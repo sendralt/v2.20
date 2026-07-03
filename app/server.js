@@ -183,7 +183,7 @@ try {
     const webhookHandler = createWebhookHandler({ stripe: stripeService.stripe, db, computeAndSaveEntitlement: entitlementService.computeAndSaveEntitlement });
     const { createBillingRoutes } = require('./src/routes/billing');
     const { createBillingAuthMiddleware } = require('./src/middleware/billing-auth');
-    const billingAuth = createBillingAuthMiddleware({ db });
+    const billingAuth = createBillingAuthMiddleware({ db, sessionAuth });
     authMiddleware.setStripeEntitlementResolver(async (sessionToken) => {
         const sessionTokenHash = crypto.createHash('sha256').update(sessionToken).digest('hex');
         const { rows } = await db.query(
