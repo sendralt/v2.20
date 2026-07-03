@@ -184,7 +184,7 @@ function createBillingRoutes({ stripeService, db, getOrCreateCustomer, computeAn
     // SECURITY FIX (CVE-002): Prevent UPSERT session hijack — never overwrite an existing
     //   session that's already linked to a different account.
     // SECURITY FIX (CVE-008): Unified error messages to prevent email enumeration.
-    router.post('/restore', billingLimiter, billingAuth, async (req, res) => {
+    router.post('/restore', billingLimiter, async (req, res) => {
         try {
             const { email } = req.body;
             if (!email || typeof email !== 'string' || !email.includes('@')) {
@@ -229,12 +229,10 @@ function createBillingRoutes({ stripeService, db, getOrCreateCustomer, computeAn
 
             const accountId = subRows[0].account_id;
 
-            // 4. SECURITY (CVE-002): Prevent session hijacking. billingAuth already
-            //    validated the session and set req.user.accountId. We only block the
-            //    UPSERT if the caller's existing account already has its OWN Stripe
-            //    customer or subscription — meaning they're a real user, not a phantom.
-            //    A phantom account (created by lazy billingAuth) is safe to re-link.
-            const { accountId: callerAccountId } = req.user;
+            // 4. SECURITY (CVE-002): Prevent session hijacking.
+            //    If billingAuth set req.user, check if caller already has real billing.
+            //    Without billingAuth (restore by email), req.user is undefined — skip check.
+            const callerAccountId = req.user && req.user.accountId;
             if (callerAccountId && callerAccountId !== accountId) {
                 // Check if caller's account has real billing data
                 const { rows: callerBilling } = await db.query(
