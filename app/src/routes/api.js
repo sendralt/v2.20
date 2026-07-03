@@ -111,7 +111,20 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
         app.post('/api/auth/logout', express.json(), authMiddleware.logoutEndpoint);
     }
 
-    app.get('/api/weather', async (req, res) => {
+    // SECURITY FIX (CVE-004): Add rate limiting to weather endpoint to prevent
+    // unlimited API cost abuse. Note: checkSubscription is intentionally NOT added
+    // here — the original CVE-004 added it which broke water temps in production
+    // because client-side weather requests during forecast generation don't always
+    // include session tokens. Rate limiting alone is sufficient protection.
+    const weatherLimiter = rateLimit({
+        windowMs: 60 * 1000,
+        max: 30,
+        standardHeaders: true,
+        legacyHeaders: false,
+        message: { success: false, error: 'Too many weather requests. Please try again later.' }
+    });
+
+    app.get('/api/weather', weatherLimiter, async (req, res) => {
         const location = req.query.location;
         if (!location) return res.status(400).json({ success: false, error: 'Location parameter required' });
         if (!weatherService) return res.status(503).json({ success: false, error: 'Weather service not configured' });
