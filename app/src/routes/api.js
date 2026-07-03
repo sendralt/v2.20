@@ -101,9 +101,7 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
         };
         const healthy = checks.db && checks.ai && checks.weather && checks.sessionAuth;
         res.status(healthy ? 200 : 503).json({
-            status: healthy ? 'ok' : 'degraded',
-            timestamp: new Date().toISOString(),
-            services: checks
+            status: healthy ? 'ok' : 'degraded'
         });
     });
 
@@ -113,7 +111,20 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
         app.post('/api/auth/logout', express.json(), authMiddleware.logoutEndpoint);
     }
 
-    app.get('/api/weather', async (req, res) => {
+    // SECURITY FIX (CVE-004): Add rate limiting to weather endpoint to prevent
+    // unlimited API cost abuse. Note: checkSubscription is intentionally NOT added
+    // here — the original CVE-004 added it which broke water temps in production
+    // because client-side weather requests during forecast generation don't always
+    // include session tokens. Rate limiting alone is sufficient protection.
+    const weatherLimiter = rateLimit({
+        windowMs: 60 * 1000,
+        max: 30,
+        standardHeaders: true,
+        legacyHeaders: false,
+        message: { success: false, error: 'Too many weather requests. Please try again later.' }
+    });
+
+    app.get('/api/weather', weatherLimiter, async (req, res) => {
         const location = req.query.location;
         if (!location) return res.status(400).json({ success: false, error: 'Location parameter required' });
         if (!weatherService) return res.status(503).json({ success: false, error: 'Weather service not configured' });
@@ -406,6 +417,10 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
     });
 
     app.get('/api/tokens', authMiddleware.requireAuth, (req, res) => {
+        // CVE-003: Admin-only check to prevent PII leak
+        if (!req.session || req.session.type !== 'admin') {
+            return res.status(403).json({ success: false, error: 'Admin access required' });
+        }
         const { start, end, limit } = req.query;
         try {
             const report = getTokenUsageReport({ startTime: start, endTime: end, limit: parseInt(limit) || 100 });

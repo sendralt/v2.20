@@ -56,11 +56,15 @@ describe('Session auth free tier', () => {
         const service = createTestService(db);
         const created = await service.createFreeSession(null, mockReq());
 
-        const usage = service.incrementUsage(created.sessionId, 3);
+        const usage = await service.incrementUsage(created.sessionId, 3);
 
         assert.equal(usage.usageCount, 1);
         assert.equal(usage.remaining, 2);
-        assert.equal(persisted.length, 1);
-        assert.equal(persisted[0].params[3], 1);
+        // CVE-005: incrementUsage now does a SELECT check before incrementing,
+        // followed by the persist UPSERT. So we expect 2 DB queries.
+        // Find the UPSERT query (has 4 params) to verify usage count persisted.
+        const upsert = persisted.find(p => p.params.length === 4 && p.params[3] !== undefined);
+        assert.ok(upsert, 'UPSERT persist query should exist');
+        assert.equal(upsert.params[3], 1);
     });
 });

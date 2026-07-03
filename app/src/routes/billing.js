@@ -195,7 +195,7 @@ function createBillingRoutes({ stripeService, db, getOrCreateCustomer, computeAn
             if (!custRes.ok) throw new Error('Stripe lookup failed');
             const custData = await custRes.json();
             if (!custData.data || custData.data.length === 0) {
-                return res.status(404).json({ error: 'No subscription found for that email' });
+                return res.status(404).json({ error: 'Restore failed - please contact support' });
             }
 
             // 2. Find matching account in our DB
@@ -206,7 +206,7 @@ function createBillingRoutes({ stripeService, db, getOrCreateCustomer, computeAn
                 customerIds
             );
             if (accountRows.length === 0) {
-                return res.status(404).json({ error: 'No subscription found for that email' });
+                return res.status(404).json({ error: 'Restore failed - please contact support' });
             }
 
             // 3. Check for active subscription
@@ -217,12 +217,28 @@ function createBillingRoutes({ stripeService, db, getOrCreateCustomer, computeAn
                 accountIds
             );
             if (subRows.length === 0) {
-                return res.status(404).json({ error: 'No active subscription found for that email' });
+                return res.status(404).json({ error: 'Restore failed - please contact support' });
             }
 
             const accountId = subRows[0].account_id;
 
-            // 4. Link current session to this account
+            // 4. SECURITY (CVE-002): Prevent session hijacking.
+            //    If caller already has an account with real billing data,
+            //    refuse to re-link their session to a different account.
+            //    Note: billingAuth is NOT on this route (caused restore loop),
+            //    so req.user may be undefined — guard with optional chaining.
+            const callerAccountId = req.user && req.user.accountId;
+            if (callerAccountId && callerAccountId !== accountId) {
+                const { rows: callerBilling } = await db.query(
+                    'SELECT 1 FROM stripe_customers WHERE account_id = $1 UNION SELECT 1 FROM billing_subscriptions WHERE account_id = $1 LIMIT 1',
+                    [callerAccountId]
+                );
+                if (callerBilling.length > 0) {
+                    return res.status(403).json({ error: 'Session already linked to another account' });
+                }
+            }
+
+            // 5. Link current session to this account
             const sessionToken = req.headers['x-session-token'];
             if (!sessionToken) {
                 return res.status(400).json({ error: 'Session token required' });

@@ -52,12 +52,12 @@ function generateCSPPolicy(nonce, options = {}) {
         'default-src': ["'self'"],
         
         // Scripts: STRICT - nonce required for inline, no unsafe-inline
+        // CVE-007: Pinned CDN sources to specific package paths.
         'script-src': [
             "'self'",
             `'nonce-${nonce}'`,
-            'https://cdn.jsdelivr.net',
+            'https://cdn.jsdelivr.net/npm/chart.js@4.4.0',
             'https://cdn.tailwindcss.com',
-            'https://unpkg.com',
             ...(allowEval ? ["'wasm-unsafe-eval'"] : []),
             ...extraScriptSrc
         ],
@@ -90,9 +90,8 @@ function generateCSPPolicy(nonce, options = {}) {
         // API connections
         'connect-src': [
             "'self'",
-            'https://cdn.jsdelivr.net',
+            'https://cdn.jsdelivr.net/npm/chart.js@4.4.0',
             'https://cdn.tailwindcss.com',
-            'https://unpkg.com',
             'https://fonts.googleapis.com',
             'https://fonts.gstatic.com',
             ...extraConnectSrc
