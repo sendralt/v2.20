@@ -438,11 +438,37 @@ function createSessionAuthService(googlePlayBilling, cache = null, db = null) {
     /**
      * Increment usage counter for free tier sessions
      */
-    function incrementUsage(sessionId, limit) {
+    async function incrementUsage(sessionId, limit) {
         const session = sessionStore.get(sessionId);
         
         if (!session || session.type !== 'free') {
             return { allowed: true, usageCount: 0 };
+        }
+
+        // CVE-005: Check DB for total lifetime usage by cookie_id before allowing.
+        // Prevents bypass via User-Agent rotation or server restart (in-memory wipe).
+        if (db && session.cookieId) {
+            try {
+                const { rows } = await db.query(
+                    'SELECT total_uses FROM free_tier_usage WHERE cookie_id = $1',
+                    [session.cookieId]
+                );
+                if (rows.length > 0 && rows[0].total_uses >= limit) {
+                    session.usageCount = rows[0].total_uses;
+                    sessionStore.set(sessionId, session);
+                    return {
+                        allowed: false,
+                        usageCount: rows[0].total_uses,
+                        remaining: 0,
+                        limit
+                    };
+                }
+                if (rows.length > 0 && rows[0].total_uses > (session.usageCount || 0)) {
+                    session.usageCount = rows[0].total_uses;
+                }
+            } catch (dbErr) {
+                console.error('DB free tier check failed:', dbErr.message);
+            }
         }
 
         session.usageCount = (session.usageCount || 0) + 1;

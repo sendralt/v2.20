@@ -165,7 +165,8 @@ function createAuthMiddleware(sessionAuth, subscriptionService = null, options =
                         allowed: (validation.session.usageCount || 0) < FREE_TIER_LIMIT
                     };
                 } else {
-                    usage = sessionAuth.incrementUsage(sessionInfo.token, FREE_TIER_LIMIT);
+                    // CVE-005: incrementUsage is now async (DB-backed check)
+                    usage = await sessionAuth.incrementUsage(sessionInfo.token, FREE_TIER_LIMIT);
                 }
                 
                 if (!usage.allowed && !isUsageCheck) {
@@ -273,7 +274,8 @@ function createAuthMiddleware(sessionAuth, subscriptionService = null, options =
             };
         } else {
             // Increment for actual work
-            usage = sessionAuth.incrementUsage(result.sessionId, FREE_TIER_LIMIT);
+            // CVE-005: incrementUsage is now async (DB-backed check)
+            usage = await sessionAuth.incrementUsage(result.sessionId, FREE_TIER_LIMIT);
         }
 
         req.session = { type: 'free', usageCount: usage.usageCount };
