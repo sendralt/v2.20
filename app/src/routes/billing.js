@@ -195,7 +195,7 @@ function createBillingRoutes({ stripeService, db, getOrCreateCustomer, computeAn
             if (!custRes.ok) throw new Error('Stripe lookup failed');
             const custData = await custRes.json();
             if (!custData.data || custData.data.length === 0) {
-                return res.status(404).json({ error: 'No subscription found for that email' });
+                return res.status(404).json({ error: 'Restore failed - please contact support' });
             }
 
             // 2. Find matching account in our DB
@@ -206,7 +206,7 @@ function createBillingRoutes({ stripeService, db, getOrCreateCustomer, computeAn
                 customerIds
             );
             if (accountRows.length === 0) {
-                return res.status(404).json({ error: 'No subscription found for that email' });
+                return res.status(404).json({ error: 'Restore failed - please contact support' });
             }
 
             // 3. Check for active subscription
@@ -217,7 +217,7 @@ function createBillingRoutes({ stripeService, db, getOrCreateCustomer, computeAn
                 accountIds
             );
             if (subRows.length === 0) {
-                return res.status(404).json({ error: 'No active subscription found for that email' });
+                return res.status(404).json({ error: 'Restore failed - please contact support' });
             }
 
             const accountId = subRows[0].account_id;
