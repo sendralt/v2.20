@@ -56,7 +56,6 @@ function generateCSPPolicy(nonce, options = {}) {
         'script-src': [
             "'self'",
             `'nonce-${nonce}'`,
-            'https://cdn.jsdelivr.net/npm/chart.js@4.4.0',
             'https://cdn.tailwindcss.com',
             ...(allowEval ? ["'wasm-unsafe-eval'"] : []),
             ...extraScriptSrc
@@ -90,7 +89,6 @@ function generateCSPPolicy(nonce, options = {}) {
         // API connections
         'connect-src': [
             "'self'",
-            'https://cdn.jsdelivr.net/npm/chart.js@4.4.0',
             'https://cdn.tailwindcss.com',
             'https://fonts.googleapis.com',
             'https://fonts.gstatic.com',

@@ -165,7 +165,7 @@ function loadChartJs() {
 
     chartJsPromise = new Promise(function(resolve) {
         const s = document.createElement("script");
-        s.src = "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js";
+        s.src = "/chart.umd.min.js";
         s.onload = function() { resolve(true); };
         s.onerror = function() {
             console.warn('Chart.js failed to load; using canvas fallback');
