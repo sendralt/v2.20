@@ -101,9 +101,7 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
         };
         const healthy = checks.db && checks.ai && checks.weather && checks.sessionAuth;
         res.status(healthy ? 200 : 503).json({
-            status: healthy ? 'ok' : 'degraded',
-            timestamp: new Date().toISOString(),
-            services: checks
+            status: healthy ? 'ok' : 'degraded'
         });
     });
 
@@ -406,6 +404,10 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
     });
 
     app.get('/api/tokens', authMiddleware.requireAuth, (req, res) => {
+        // CVE-003: Admin-only check to prevent PII leak
+        if (!req.session || req.session.type !== 'admin') {
+            return res.status(403).json({ success: false, error: 'Admin access required' });
+        }
         const { start, end, limit } = req.query;
         try {
             const report = getTokenUsageReport({ startTime: start, endTime: end, limit: parseInt(limit) || 100 });
