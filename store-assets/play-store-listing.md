@@ -9,7 +9,7 @@ Production-ready copy for Google Play Console. All character limits verified.
 ### App Title (30 char limit)
 
 ```
-FishSmart-Pro Fishing Forecast
+FishSmart Pro:Fishing Forecast
 ```
 
 Character count: **30/30** ✓

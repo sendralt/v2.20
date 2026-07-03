@@ -2,12 +2,6 @@
 
 All notable changes to FishSmart Pro will be documented in this file.
 
-## v2.23 (2026-07-01)
-
-### Changed
-- **Version Bump**: Updated from v2.19 to v2.23 across all project files
-- **Version Sync**: Synchronized version across `package.json`, `android/app/build.gradle`, `android/twa-manifest.json`, and `app/public/sw.js`
-
 ## v2.16 (2026-05-18)
 
 ### Security

@@ -631,17 +631,8 @@ function initGenerateButton() {
                 window.subscription.setSessionToken(result.sessionId, result.sessionExpiresAt);
             }
 
-            // Update usage after successful request. The secure free-tier middleware
-            // includes usage info directly in the response body (the HttpOnly cookie
-            // is not JS-readable), so we read it here directly when present.
-            if (result.freeTier && typeof window.updateFreeTierIndicator === 'function') {
-                window.updateFreeTierIndicator({
-                    isSubscribed: false,
-                    used: result.freeTier.used,
-                    limit: result.freeTier.limit,
-                    remaining: result.freeTier.remaining
-                });
-            } else if (typeof window.subscription !== 'undefined') {
+            // Update usage after successful request
+            if (typeof window.subscription !== 'undefined') {
                 window.subscription.fetchUsageStats();
             }
 
@@ -1000,14 +991,11 @@ function initWelcomeScreen() {
 // FREE TIER INDICATOR (T22)
 // ============================================
 
-function updateFreeTierIndicator(directUsage) {
+function updateFreeTierIndicator() {
     var indicator = document.getElementById('freeTierIndicator');
     if (!indicator) return;
-
-    // Prefer direct usage data from the forecast response body (set by the
-    // secure free-tier middleware) when provided; otherwise fall back to the
-    // subscription service's cached usage data.
-    var data = directUsage || (typeof window.subscription !== 'undefined' ? window.subscription.getUsageData() : null);
+    if (typeof window.subscription === 'undefined') return;
+    var data = window.subscription.getUsageData();
     if (!data) return;
 
     if (data.isSubscribed) {

@@ -5,7 +5,6 @@ const path = require('path');
 const rateLimit = require('express-rate-limit');
 const { getTokenUsageReport } = require('../services/ai');
 const forecastHistory = require('../services/forecast-history');
-const { createFreeTierMiddleware } = require('../middleware/free-tier-check');
 
 function registerRoutes(app, aiService, config, fishingData, subscriptionService, googlePlayBilling = null, weatherService = null, sessionAuth = null, authMiddleware = null, db = null) {
 
@@ -84,10 +83,6 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
 
     const checkSubscription = authMiddleware ? authMiddleware.requireAuth : checkSubscriptionLegacy;
 
-    // Secure free-tier middleware — replaces checkSubscription on the forecast
-    // route ONLY. All other endpoints keep their existing auth.
-    const freeTierMiddleware = createFreeTierMiddleware({ db, sessionAuth });
-
     app.get('/', (req, res) => {
         res.sendFile(path.join(__dirname, '..', '..', 'public', 'index.html'));
     });
@@ -96,8 +91,6 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
         res.sendFile(path.join(__dirname, '..', '..', 'public', 'beta-signup.html'));
     });
 
-    // SECURITY FIX (CVE-006): Remove service details from public health endpoint.
-    // Previously exposed which backend services (db, ai, weather, etc.) are configured.
     app.get('/health', (req, res) => {
         const checks = {
             db: !!db,
@@ -108,7 +101,9 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
         };
         const healthy = checks.db && checks.ai && checks.weather && checks.sessionAuth;
         res.status(healthy ? 200 : 503).json({
-            status: healthy ? 'ok' : 'degraded'
+            status: healthy ? 'ok' : 'degraded',
+            timestamp: new Date().toISOString(),
+            services: checks
         });
     });
 
@@ -118,17 +113,7 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
         app.post('/api/auth/logout', express.json(), authMiddleware.logoutEndpoint);
     }
 
-    // SECURITY FIX (CVE-004): Add authentication and rate limiting to weather endpoint.
-    // Previously unauthenticated with no limits — allowed unlimited API cost abuse.
-    const weatherLimiter = rateLimit({
-        windowMs: 60 * 1000,
-        max: 30,
-        standardHeaders: true,
-        legacyHeaders: false,
-        message: { success: false, error: 'Too many weather requests. Please try again later.' }
-    });
-
-    app.get('/api/weather', weatherLimiter, checkSubscription, async (req, res) => {
+    app.get('/api/weather', async (req, res) => {
         const location = req.query.location;
         if (!location) return res.status(400).json({ success: false, error: 'Location parameter required' });
         if (!weatherService) return res.status(503).json({ success: false, error: 'Weather service not configured' });
@@ -310,10 +295,7 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
         }
     });
 
-    // Forecast route uses the secure free-tier middleware (HMAC token + DB fallback).
-    // All other routes keep checkSubscription. The free-tier token cookie is set
-    // by requireFreeTier before this handler runs.
-    app.post('/api/generate', generateLimiter, freeTierMiddleware.requireFreeTier, async (req, res) => {
+    app.post('/api/generate', generateLimiter, checkSubscription, async (req, res) => {
         const { location, species, clarity, engine, isBoat, currentTime } = req.body;
         if (!location || typeof location !== 'string' || location.length > MAX_INPUT) return res.status(400).json({ success: false, error: 'Invalid location' });
         const sanitizedLocation = sanitizeInput(location, MAX_INPUT);
@@ -323,11 +305,6 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
             if (req.newSession) {
                 response.sessionId = req.newSession.sessionId;
                 response.sessionExpiresAt = req.newSession.expiresAt;
-            }
-            // Include free-tier usage so the client can update its UI directly from
-            // the response body (the HttpOnly cookie is not JS-readable).
-            if (req.freeTier) {
-                response.freeTier = req.freeTier;
             }
 
             // Persist forecast history (fire-and-forget, don't block response)
@@ -428,13 +405,7 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
         }
     });
 
-    // SECURITY FIX (CVE-003): Require admin session type to access token usage report.
-    // Previously any free-tier user could read ALL users' AI token usage data (PII leak).
     app.get('/api/tokens', authMiddleware.requireAuth, (req, res) => {
-        // Admin-only: check session type is 'admin'
-        if (!req.session || req.session.type !== 'admin') {
-            return res.status(403).json({ success: false, error: 'Admin access required' });
-        }
         const { start, end, limit } = req.query;
         try {
             const report = getTokenUsageReport({ startTime: start, endTime: end, limit: parseInt(limit) || 100 });
