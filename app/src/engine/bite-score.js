@@ -10,11 +10,11 @@ const { getMoonPhase } = require('./lunar');
 const { getCivilDawn, getCivilDusk } = require('./photoperiod');
 
 // --- Named Constants ---
-const BITE_DIVISOR = 1.2;
+const BITE_DIVISOR = 1.4;
 const REACTION_THRESHOLD = 0.75;
 const FINESSE_THRESHOLD = 0.35;
 const MIN_BITE_PROB = 0.01;
-const MAX_BITE_PROB = 1.0;
+const MAX_BITE_PROB = 0.85;
 const HPA_TO_INHG = 0.02953;
 const EMA_ALPHA = 0.6;
 const EMA_STALE_MS = 3 * 60 * 60 * 1000; // 3 hours — stale entries are replaced instead of blended
@@ -436,7 +436,7 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
             // Square root dampening — replaces former 4th-root (Math.sqrt(Math.sqrt(x)));
             // doubles environmental factor impact from ±15% to ±30% for realistic weather effects.
             // Now includes DO-temperature interaction and lunar multipliers in the product.
-            const adjustmentFactor = Math.sqrt(windMult * seasonalClarityLight * timeMult * clarityMult * doTempInteraction * lunarMult);
+            const adjustmentFactor = Math.sqrt(windMult * seasonalClarityLight * timeMult * doTempInteraction * lunarMult);
 
             const rawBiteProb = Math.min(MAX_BITE_PROB, Math.max(MIN_BITE_PROB, baseScore * adjustmentFactor));
             const biteProb = smoothBiteScore(rawBiteProb, location);

@@ -9,9 +9,9 @@ const { getThermoclineDepth, getEffectiveTemp } = require('./thermocline');
 const { getMoonPhase } = require('./lunar');
 
 // Constants matching bite-score.js
-const BITE_DIVISOR = 1.2;
+const BITE_DIVISOR = 1.4;
 const MIN_BITE_PROB = 0.01;
-const MAX_BITE_PROB = 1.0;
+const MAX_BITE_PROB = 0.85;
 
 const TREND_MULTIPLIERS = {
     'Rapidly Falling': 1.25,
@@ -87,7 +87,7 @@ function computeHourlyBiteProb(hour, pressureHpa, windMph, cloudPercent, waterTe
         : clarityMult * 0.5 + lightMult * 0.5;
 
     const baseScore = (metabolicEfficiency * pressureFactor) / BITE_DIVISOR * spawningMult;
-    const adjustmentFactor = Math.sqrt(windMult * seasonalClarityLight * timeMult * clarityMult * doTempInteraction * lunarMult);
+    const adjustmentFactor = Math.sqrt(windMult * seasonalClarityLight * timeMult * doTempInteraction * lunarMult);
 
     return Math.min(MAX_BITE_PROB, Math.max(MIN_BITE_PROB, baseScore * adjustmentFactor));
 }
