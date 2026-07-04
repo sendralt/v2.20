@@ -20,8 +20,9 @@ I'm reaching out because I built a fishing forecast app called **FishSmart Pro**
 
 Here's what it does:
 - Pulls **live USGS water temperature** from monitoring stations (not estimates)
-- Calculates a bite score using a transparent multi-factor engine — shows you exactly which conditions are driving the score
-- Uses Google Gemini AI to translate the science into lure recommendations and strategy
+- Calculates a bite score using a transparent 10+ factor engine — barometric pressure trends (with species-specific sensitivity), water temp, metabolic efficiency, dissolved oxygen, spawning cycle detection, thermocline depth, lunar phase, photoperiod (civil dawn/dusk), wind, cloud cover, clarity, and gradient time-of-day
+- Shows you **exactly which factors are driving the score** — every single one, with the actual data
+- Uses Google Gemini 3 Flash AI to translate the science into lure recommendations and strategy
 - Zero social features. No spot burning. Angler privacy by design.
 
 The reason I think it fits your content: your audience clearly values understanding conditions and technique. This app is built for anglers who want to learn the science, not just be told a number.
@@ -130,20 +131,20 @@ I'm a listener — your episode with [PREVIOUS GUEST/TOPIC] was great, especiall
 
 I'm reaching out with a guest pitch I think your audience would love.
 
-**The pitch:** I built **FishSmart Pro**, a fishing forecast app that uses a deterministic scientific engine (modeled from ichthyological research on fish metabolism) to calculate bite scores from live environmental data — before AI touches it. Google Gemini then translates the science into plain-language forecasts and lure recommendations.
+**The pitch:** I built **FishSmart Pro**, a fishing forecast app that uses a deterministic scientific engine (modeled from ichthyological research on fish metabolism) to calculate bite scores from live environmental data — before AI touches it. Google Gemini 3 Flash then translates the science into plain-language forecasts and lure recommendations.
 
 **Talking points for your show:**
 - Why most fishing apps get it wrong (magic numbers, crowdsourced fake data, spot burning)
-- The actual science: how water temperature, pressure trends, and metabolic efficiency drive fish behavior
-- The architecture decision: why a deterministic engine + AI translator is better than pure LLM forecasting
+- The actual science: how 10+ biological and environmental factors drive fish behavior — water temperature, barometric pressure trends (with species-specific sensitivity), metabolic efficiency, dissolved oxygen, spawning cycle detection, thermocline depth, lunar phase, photoperiod (civil dawn/dusk), wind, cloud cover, clarity, and gradient time-of-day
+- The architecture decision: why a deterministic engine + AI translator (Google Gemini 3 Flash) is better than pure LLM forecasting
 - Building a privacy-first product in an industry that's addicted to social features
-- Fair pricing in outdoor apps ($29.99/yr vs $60-100 competitors)
+- Fair pricing in outdoor apps ($29.99/yr vs $59.99 Fishbrain, $49.99 Navionics)
 
 **About me:**
-I'm an angler and developer. I built FishSmart Pro because I was tired of guessing and wanted to understand the science behind fish behavior. The app is live now with 20+ freshwater species.
+I'm an angler and developer. I built FishSmart Pro because I was tired of guessing and wanted to understand the science behind fish behavior. The app is live now with 25 freshwater species.
 
 **Quick stats:**
-- 20+ species with individual biological profiles
+- 25 species with individual biological profiles
 - Live USGS water temperature integration
 - Transparent factor-by-factor bite scoring
 - Zero social features by design

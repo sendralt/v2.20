@@ -11,7 +11,7 @@
 - **Timing:** Launch on a Tuesday or Wednesday (lower competition than Monday)
 - **Tagline:** AI-powered fishing forecasts that tell you WHY fish will bite — not just if.
 - **Description:**
-  FishSmart Pro combines live environmental data (weather, USGS water temperatures, barometric pressure trends) with a proprietary multi-factor scientific engine to produce detailed, species-specific fishing forecasts. The engine calculates a transparent bite score from real biological and environmental factors before Google Gemini AI enhances the output with plain-language explanations, lure recommendations, and strategy tips.
+  FishSmart Pro combines live environmental data (weather, USGS water temperatures, barometric pressure trends) with a proprietary 10+ factor scientific engine to produce detailed, species-specific fishing forecasts. The engine calculates a transparent bite score from real biological and environmental factors before Google Gemini 3 Flash AI enhances the output with plain-language explanations, lure recommendations, and strategy tips.
 
   It's not an LLM guessing — it's real science, explained.
 
@@ -84,27 +84,28 @@
 
 **FishSmart Pro — Know WHY Fish Will Bite**
 
-FishSmart Pro is a science-first fishing forecast app that combines live environmental data with a proprietary multi-factor scoring engine to produce transparent, species-specific bite predictions.
+FishSmart Pro is a science-first fishing forecast app that combines live environmental data with a proprietary 10+ factor scoring engine to produce transparent, species-specific bite predictions.
 
 **How it works:**
-A deterministic engine calculates a bite score (0-100) from real biological and environmental data — USGS water temperature, barometric pressure trends, wind, cloud cover, water clarity, and solar position. Then Google Gemini AI translates the output into plain-language forecasts with lure recommendations and strategy tips.
+A deterministic engine calculates a bite score (0-100) from real biological and environmental data — USGS water temperature, barometric pressure trends (with species-specific sensitivity), metabolic efficiency, dissolved oxygen, spawning cycle detection, thermocline depth, lunar phase, photoperiod (civil dawn/dusk), wind (cold-water chill penalty), cloud cover, water clarity, and gradient time-of-day. Then Google Gemini 3 Flash AI translates the output into plain-language forecasts with lure recommendations and strategy tips.
 
 **Key features:**
-- 7-factor scientific bite scoring with transparent factor breakdown
+- 10+ factor scientific bite scoring with transparent factor breakdown
 - Live USGS water temperature (real station data, not estimates)
 - 12-hour activity forecast for peak fishing windows
-- AI-augmented lure recommendations (engine + Gemini, source-tagged)
-- 20+ freshwater species with species-specific biological models
+- AI-augmented lure recommendations (engine + Gemini 3 Flash, source-tagged)
+- 25 freshwater species with species-specific biological models
 - Zero social features — no spot burning, no catch sharing
 - JSON/CSV data export for forecast history
+- Accessibility: WCAG-compliant with focus trapping, aria-live regions, reduced-motion support
 
 **Pricing:**
-- Free: 3 full AI forecasts per session
+- Free: 3 full AI forecasts
 - Pro: $4.99/mo or $29.99/yr (50% savings)
 
 **Platforms:** PWA (any device) + Android (Google Play)
 
 **Links:**
-- Web app: [link]
+- Web app: [app.fishsmart-pro.com]
 - Google Play: [link]
 - Demo video: [link]

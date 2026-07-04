@@ -60,24 +60,29 @@ Most fishing apps give you a magic number and say "trust us." 🎲
 
 FishSmart Pro shows you the ACTUAL SCIENCE behind every bite score:
 
-📊 Barometric pressure trend (falling = feeding trigger)
-🌡️ Live USGS water temperature (not estimates — real station data)
-🧬 Metabolic efficiency (how close water temp is to species optimum)
-💨 Wind speed (chop = less cautious fish)
+📊 Barometric pressure trend (species-specific sensitivity)
+🌡️ Live USGS water temperature (thermocline-adjusted for deep species)
+🧬 Metabolic efficiency (biological optimum per species)
+💨 Dissolved oxygen (warm water = less O2 = less feeding)
+🐟 Spawning cycle (pre-spawn aggression vs. nest guarding)
+📉 Thermocline depth (where deep fish actually live)
+🌙 Lunar phase (moon-driven night feeding)
+🌅 Photoperiod (exact civil dawn/dusk for your location)
+💨 Wind speed (chop = less cautious fish, cold-water chill penalty)
 ☁️ Cloud cover (overcast = extended feeding windows)
-👀 Water clarity (determines lure strategy)
-☀️ Time of day (solar position)
+👀 Water clarity (reaction baits vs. finesse)
+☀️ Gradient time-of-day (smooth crepuscular transitions)
 
 Every factor visible. Every score traceable. Real biology, not guesses.
 
-Then Google Gemini AI translates it all into plain English with lure picks and strategy.
+Then Google Gemini 3 Flash AI translates it all into plain English with lure picks and strategy.
 
 3 free forecasts. No card required.
 
 👉 [App Store Link]
 
 **Headline:** Know WHY Fish Will Bite — Not Just IF
-**Description:** 7-factor scientific bite scoring engine
+**Description:** 10+ factor scientific bite scoring engine
 **Call to Action:** Install Now
 
 ---

@@ -53,7 +53,7 @@
 *Headline 3:* 3 Free AI Forecasts — Try Now
 
 *Description 1:* Live USGS water temp + barometric pressure + biological models = transparent bite score. AI lure picks.
-*Description 2:* 12-hour activity forecast pinpoints peak fishing windows. 20+ freshwater species. $29.99/yr.
+*Description 2:* 12-hour activity forecast pinpoints peak fishing windows. 25 freshwater species. $29.99/yr.
 
 *Display URL:* fishsmart.pro/forecast
 
@@ -74,7 +74,7 @@
 **Ad Copy:**
 
 *Headline 1:* Why Aren't The Bass Biting?
-*Headline 2:* See The 7 Factors That Matter
+*Headline 2:* See The 10+ Factors That Matter
 *Headline 3:* Real Science. Transparent Scores.
 
 *Description 1:* Falling pressure? Cold water? Wrong lure? FishSmart Pro shows you exactly what's helping or hurting the bite.

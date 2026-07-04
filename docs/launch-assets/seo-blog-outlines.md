@@ -45,7 +45,7 @@
 **H2: How FishSmart Pro Tracks Pressure Automatically (200 words)**
 - Natural mention: I built an app that does this for you
 - It tracks pressure trends in real-time and factors them into a bite score
-- Shows you the pressure trend as one of 7 transparent factors
+- Shows you the pressure trend as one of 10+ transparent factors
 - 3 free forecasts to try it
 - Link to app
 
@@ -84,12 +84,15 @@
 |---------|-----------|-----------|---------------|
 | Price | $59.99/yr | $49.99/yr | $29.99/yr |
 | Free tier | Limited | No | 3 full forecasts |
-| Bite prediction | Black-box | No | 7-factor transparent |
+| Bite prediction | Black-box | No | 10+ factor transparent |
 | Lake maps | Basic | Best-in-class | No |
 | Social feed | Yes (spot exposure) | No | No (by design) |
 | AI lure recs | No | No | Yes (source-tagged) |
 | Water temp | Estimated | No | Live USGS |
 | Data export | No | No | JSON/CSV |
+| Dissolved oxygen model | No | No | Yes |
+| Spawning cycle detection | No | No | Yes |
+| Thermocline model | No | No | Yes |
 
 **H2: Fishbrain — The Social Giant (400 words)**
 - What it does well: community, species ID, catch logging

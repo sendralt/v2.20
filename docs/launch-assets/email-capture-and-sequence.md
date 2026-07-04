@@ -81,13 +81,15 @@ That's exactly why I built FishSmart Pro differently.
 
 | Factor | Reading | Impact |
 |--------|---------|--------|
-| Water Temperature | 71F (live USGS data) | +18 pts — near bass metabolic optimum |
-| Barometric Pressure | Falling 0.08 inHg/3hr | +15 pts — feeding trigger |
+| Water Temperature | 71F (live USGS data, thermocline-adjusted) | +18 pts — near bass metabolic optimum |
+| Barometric Pressure | Falling 0.08 inHg/3hr (species-specific sensitivity) | +15 pts — feeding trigger |
 | Cloud Cover | 80% overcast | +8 pts — extended feeding window |
 | Wind Speed | 8 mph | +5 pts — light chop breaks up light |
-| Time of Day | 6:30 AM | +10 pts — dawn peak |
+| Time of Day | 6:30 AM (civil dawn calculated for latitude) | +10 pts — dawn peak |
+| Dissolved Oxygen | 7.8 mg/L (good — wind-driven mixing) | +5 pts — supports active feeding |
+| Spawning Cycle | Pre-spawn (water temp in range) | +8 pts — aggressive feeding phase |
 | Water Clarity | Stained | Neutral — favors reaction baits |
-| Solar Position | Low angle | +6 pts — low-light feeding |
+| Lunar Phase | Waxing crescent (38% illumination) | +2 pts — minor moon effect |
 | **Total** | | **72/100** |
 
 Every single point is traceable. No black box. No guessing.
@@ -124,7 +126,7 @@ This is exactly what FishSmart Pro's engine calculates automatically — but kno
 **Want unlimited forecasts for the weekend?**
 
 Pro is $4.99/month or $29.99/year (less than $2.50/month). You get:
-- Unlimited forecasts for 20+ species
+- Unlimited forecasts for 25 species
 - 12-hour activity forecast with peak windows
 - Forecast history (save up to 50)
 - Data export

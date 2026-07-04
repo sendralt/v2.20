@@ -19,9 +19,9 @@ So I built my own app. It's called FishSmart Pro.
 
 Here's what makes it different:
 - It uses REAL USGS water temperature data (not estimates from air temp)
-- It has a 7-factor scientific engine that calculates a bite score from actual biology — fish metabolism vs water temp, barometric pressure trends, wind, cloud cover, clarity, solar position
+- It has a 10+ factor scientific engine that calculates a bite score from actual biology — fish metabolism, barometric pressure trends (with species-specific sensitivity), dissolved oxygen, spawning cycle detection, thermocline depth, lunar phase, photoperiod (civil dawn/dusk), wind (with cold-water chill penalty), cloud cover, clarity, and gradient time-of-day
 - Every score shows you the FACTORS — you can see falling pressure is helping, cold water is hurting, etc.
-- Then Google Gemini AI explains it in plain English with lure recommendations
+- Then Google Gemini 3 Flash AI explains it in plain English with lure recommendations
 - ZERO social features. No feed. No catch sharing. No spot burning. Your spots stay YOUR spots.
 - $29.99/year or 3 free full forecasts to try it
 
@@ -68,7 +68,7 @@ What you get:
 - AI lure recommendations (engine + Gemini, each tagged by source)
 - 50 forecast history saves with JSON/CSV export
 - Zero social features, zero spot burning
-- 20+ freshwater species with species-specific models
+- 25 freshwater species with species-specific models
 
 Link: [app link] | Code works at checkout.
 

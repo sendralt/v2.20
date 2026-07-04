@@ -22,16 +22,16 @@
 > So I spent the last [X months] building **FishSmart-Pro** — a fishing forecast app that:
 >
 > - Pulls **live USGS water temperature** from actual monitoring stations (not estimates from air temp)
-> - Calculates a bite score using a **transparent multi-factor engine** (barometric pressure trends, water temp, metabolic efficiency, wind, cloud cover, clarity, solar position)
+> - Calculates a bite score using a **transparent 10+ factor engine** — pressure trends (with species-specific sensitivity), water temp, metabolic efficiency, dissolved oxygen, spawning cycle detection, thermocline depth, lunar phase, photoperiod (civil dawn/dusk), wind, cloud cover, clarity, and gradient time-of-day
 > - Shows you **exactly which factors are driving the score** — every single one, with the actual data
-> - Uses Google Gemini AI to translate the science into plain-language forecasts, lure recommendations, and strategy tips
+> - Uses Google Gemini 3 Flash AI to translate the science into plain-language forecasts, lure recommendations, and strategy tips
 >
 > **The AI doesn't guess the forecast. The science engine calculates it first, then AI explains it.**
 >
 > Here's what makes it different:
 > - **3 free full-power forecasts per session** — not a crippled demo. Every feature works.
 > - **Zero social features.** No catch sharing, no feed, no spot burning. Your spots stay yours.
-> - **20+ freshwater species** — each with its own biological profile
+> - **25 freshwater species** — each with its own biological profile
 > - **$4.99/mo or $29.99/yr** for unlimited (less than half what Navionics charges)
 >
 > I'd genuinely love your feedback — especially if you think the science is wrong somewhere. I want this to be real, not a gimmick.
@@ -109,7 +109,7 @@
 
 **Title:**
 
-> I built a fishing forecast app that uses a deterministic science engine + Google Gemini AI. The AI doesn't guess — it explains the science.
+> I built a fishing forecast app that uses a deterministic science engine + Google Gemini 3 Flash AI. The AI doesn't guess — it explains the science.
 
 **Body:**
 
@@ -117,19 +117,21 @@
 >
 > I took a different approach with **FishSmart Pro**:
 >
-> 1. Built a **deterministic multi-factor scoring engine** from ichthyological research — models fish metabolism as a biological function of water temperature, cross-referenced with live barometric pressure trends, wind, cloud cover, clarity, and solar position
+> 1. Built a **deterministic 10+ factor scoring engine** from ichthyological research — models fish metabolism as a biological function of water temperature, cross-referenced with live barometric pressure trends (species-specific sensitivity scaling), dissolved oxygen, spawning cycle detection, thermocline depth, lunar phase, photoperiod (civil dawn/dusk), wind (cold-water chill penalty), cloud cover, clarity, and gradient time-of-day
 > 2. Pull **live data from USGS monitoring stations** for actual water temperature (not estimates)
-> 3. **Then** feed the engine's structured output into Google Gemini to generate plain-language forecasts, lure recommendations, and strategy tips
+> 3. **Then** feed the engine's structured output into Google Gemini 3 Flash to generate plain-language forecasts, lure recommendations, and strategy tips
 >
 > The engine runs first. The AI translates. The science drives the AI, not the other way around.
 >
 > **Tech stack:**
 > - Express.js server-side rendered PWA
-> - Android TWA for Google Play
-> - Stripe billing (env-var pricing)
-> - Google Gemini API for AI enhancement
+> - Android TWA for Google Play (v2.22)
+> - Stripe billing + Google Play Billing (env-var pricing)
+> - Google Gemini 3 Flash for AI enhancement
 > - USGS Water Services API for live water temp
 > - OpenWeather API for atmospheric data
+> - PostgreSQL with 6 migrations (billing, free-tier tracking, promo codes, forecast history, cookie device tracking)
+> - 826 tests passing, 106/106 scientific benchmark invariants
 >
 > **Business model:** Freemium — 3 free full forecasts per session, $4.99/mo or $29.99/yr Pro
 >
@@ -163,7 +165,7 @@
 > You learn while you fish. That was the whole point.
 >
 > - 3 free forecasts per session
-> - 20+ freshwater species with individual biological profiles
+> - 25 freshwater species with individual biological profiles
 > - Zero social stuff — just you, the data, and the science
 >
 > Try it: [link]
