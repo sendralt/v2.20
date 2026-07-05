@@ -10,9 +10,9 @@ module.exports = {
         xs: '360px',
       },
       fontFamily: {
-        body: ['Inter', 'Noto Sans', 'Noto Sans CJK SC', 'Microsoft YaHei UI', 'Microsoft YaHei', 'sans-serif'],
-        orbitron: ['Orbitron', 'Rajdhani', 'Noto Sans', 'Noto Sans CJK SC', 'Microsoft YaHei UI', 'Microsoft YaHei', 'sans-serif'],
-        rajdhani: ['Rajdhani', 'Noto Sans', 'Noto Sans CJK SC', 'Microsoft YaHei UI', 'Microsoft YaHei', 'sans-serif'],
+        body: ['Inter', 'Noto Sans', 'sans-serif'],
+        orbitron: ['Orbitron', 'Rajdhani', 'Noto Sans', 'sans-serif'],
+        rajdhani: ['Rajdhani', 'Noto Sans', 'sans-serif'],
       },
       colors: {
         ocean: {
