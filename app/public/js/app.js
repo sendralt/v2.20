@@ -378,6 +378,23 @@ async function displayResults(data) {
     document.getElementById('biteRank').textContent = data.bite_rank || '--';
     document.getElementById('biteReasoning').textContent = data.bite_reasoning || '';
 
+    // Confidence range bar
+    var confidence = data.bite_probability_confidence;
+    var confContainer = document.getElementById('confidenceBarContainer');
+    if (confContainer) {
+        if (confidence && typeof confidence.low === 'number' && typeof confidence.high === 'number') {
+            var core = data.bite_probability ?? 0;
+            document.getElementById('confidenceLow').textContent = confidence.low + '%';
+            document.getElementById('confidenceHigh').textContent = confidence.high + '%';
+            document.getElementById('confidenceBarRange').style.left = confidence.low + '%';
+            document.getElementById('confidenceBarRange').style.width = (confidence.high - confidence.low) + '%';
+            document.getElementById('confidenceBarMarker').style.left = Math.min(100, Math.max(0, core)) + '%';
+            confContainer.classList.remove('hidden');
+        } else {
+            confContainer.classList.add('hidden');
+        }
+    }
+
     // Weather
     if (data.weather) {
         const pressureInHg = data.weather.pressure ? (data.weather.pressure * 0.029529983071445).toFixed(2) : '--';

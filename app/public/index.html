@@ -320,6 +320,19 @@
                             <span id="biteRank" class="text-lg font-bold text-cyan-400">--</span>
                         </div>
                         <p id="biteReasoning" class="text-sm text-gray-400 mt-2">--</p>
+
+                        <!-- Confidence Range Bar -->
+                        <div id="confidenceBarContainer" class="confidence-container hidden">
+                            <div class="confidence-labels">
+                                <span id="confidenceLow" class="confidence-label">--%</span>
+                                <span class="confidence-label confidence-label-center">confidence range</span>
+                                <span id="confidenceHigh" class="confidence-label">--%</span>
+                            </div>
+                            <div class="confidence-track">
+                                <div id="confidenceBarRange" class="confidence-range"></div>
+                                <div id="confidenceBarMarker" class="confidence-marker"></div>
+                            </div>
+                        </div>
                     </div>
                     <button type="button" onclick="document.getElementById('results-safety').scrollIntoView({behavior:'smooth'})" class="flex items-center gap-1.5 mx-auto mt-2 text-xs text-yellow-400/70 hover:text-yellow-400 transition-colors">
                         <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>

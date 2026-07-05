@@ -264,3 +264,54 @@ a.nav-btn {
     padding: 2px;
     filter: drop-shadow(0 0 8px rgba(0,243,255,.22));
 }
+
+/* === Confidence Range Bar === */
+.confidence-container {
+    margin-top: 1rem;
+    padding-top: .75rem;
+    border-top: 1px solid rgba(255,255,255,.06);
+}
+.confidence-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .4rem;
+}
+.confidence-label {
+    font-size: .7rem;
+    font-family: 'Orbitron','Rajdhani',system-ui,sans-serif;
+    letter-spacing: .03em;
+    color: #94a3b8;
+}
+.confidence-label-center {
+    color: #64748b;
+    font-size: .65rem;
+    text-transform: uppercase;
+}
+.confidence-track {
+    position: relative;
+    height: 8px;
+    background: rgba(255,255,255,.06);
+    border-radius: 999px;
+    overflow: visible;
+}
+.confidence-range {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(34,211,238,.35), rgba(34,211,238,.55), rgba(34,211,238,.35));
+    border-radius: 999px;
+    transition: all .4s ease;
+}
+.confidence-marker {
+    position: absolute;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    background: #00f3ff;
+    border: 2px solid #0f172a;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px rgba(0,243,255,.6);
+    transition: all .4s ease;
+}
