@@ -264,6 +264,28 @@
                             </div>
                             <input id="boatMode" type="checkbox" class="setup-checkbox cursor-pointer">
                         </label>
+
+                        <!-- Manual Water Temperature Toggle + Input -->
+                        <div class="p-4 rounded-xl border border-cyan-500/10 bg-slate-800/30">
+                            <label for="manualWaterTempToggle" class="flex items-center justify-between cursor-pointer">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center">
+                                        <i data-lucide="thermometer" class="w-5 h-5 text-cyan-400"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-white">Manual Water Temp</p>
+                                        <p class="text-xs text-gray-500">Override live sensor data</p>
+                                    </div>
+                                </div>
+                                <input id="manualWaterTempToggle" type="checkbox" class="setup-checkbox cursor-pointer">
+                            </label>
+                            <div id="manualWaterTempWrapper" class="hidden mt-3 flex items-center gap-2">
+                                <input id="manualWaterTempInput" type="number" min="32" max="120" step="1" placeholder="Enter °F"
+                                    class="input-field flex-1 px-4 py-3 rounded-xl text-sm text-white bg-slate-900/50 border border-slate-700 focus:border-cyan-500 focus:outline-none"
+                                    disabled>
+                                <span class="text-sm text-gray-400 font-medium">°F</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

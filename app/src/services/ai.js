@@ -333,7 +333,7 @@ function createAIService(deps) {
      * @returns {string|null} Explanation note, or null for live data
      */
     function buildWaterTempNote(source) {
-        if (source === 'usgs-live') return null;
+        if (source === 'usgs-live' || source === 'manual') return null;
         switch (source) {
             case 'estimated':
             case 'hybrid-thermal-lag':
@@ -351,7 +351,7 @@ function createAIService(deps) {
     const METHODOLOGY_NOTE = 'Bite probability is a heuristic estimate combining metabolic efficiency, barometric pressure trends, water temperature, dissolved oxygen, lunar phase, and seasonal spawning cycles. It does not account for local baitfish abundance, recent fishing pressure, water depth variations, or real-time fish sonar data. Treat predictions as an approximation, not a guarantee — local knowledge and on-water observation remain essential.';
 
     async function buildOfflineStrategy(params, weather, reason) {
-        const { location, species, clarity, currentTime } = params;
+        const { location, species, clarity, currentTime, manualWaterTemp } = params;
         const currentHour = parseHour(currentTime);
         const scientificData = await biteEngine.calculateScientificStrategy(
             {
@@ -359,7 +359,8 @@ function createAIService(deps) {
                 waterColor: clarity,
                 location,
                 lat: weather?.lat,
-                lon: weather?.lon
+                lon: weather?.lon,
+                manualWaterTemp: manualWaterTemp != null ? Number(manualWaterTemp) : null
             },
             weather,
             { useLureCatalog: true, hour: currentHour }
@@ -404,7 +405,7 @@ function createAIService(deps) {
     }
 
     async function generateFishingStrategy(params) {
-        const { location, species, clarity, engine, isBoat, currentTime } = params;
+        const { location, species, clarity, engine, isBoat, currentTime, manualWaterTemp } = params;
         const weather = await weatherService.getWeatherData(location);
         const currentHour = parseHour(currentTime);
         // H-7: Enable lure catalog in online path — Pro users now get lure recommendations
@@ -414,7 +415,8 @@ function createAIService(deps) {
                 waterColor: clarity,
                 location,
                 lat: weather?.lat,
-                lon: weather?.lon
+                lon: weather?.lon,
+                manualWaterTemp: manualWaterTemp != null ? Number(manualWaterTemp) : null
             },
             weather,
             { useLureCatalog: true, hour: currentHour }

@@ -307,11 +307,16 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
     });
 
     app.post('/api/generate', generateLimiter, checkSubscription, async (req, res) => {
-        const { location, species, clarity, engine, isBoat, currentTime } = req.body;
+        const { location, species, clarity, engine, isBoat, currentTime, manualWaterTemp } = req.body;
         if (!location || typeof location !== 'string' || location.length > MAX_INPUT) return res.status(400).json({ success: false, error: 'Invalid location' });
+        // Validate manual water temp if provided (32–120°F covers ice fishing to hot springs)
+        const parsedManualTemp = manualWaterTemp != null && manualWaterTemp !== '' ? Number(manualWaterTemp) : null;
+        if (parsedManualTemp != null && (isNaN(parsedManualTemp) || parsedManualTemp < 32 || parsedManualTemp > 120)) {
+            return res.status(400).json({ success: false, error: 'Water temperature must be between 32 and 120°F' });
+        }
         const sanitizedLocation = sanitizeInput(location, MAX_INPUT);
         try {
-            const result = await aiService.generateFishingStrategy({ location: sanitizedLocation, species, clarity, engine, isBoat, currentTime });
+            const result = await aiService.generateFishingStrategy({ location: sanitizedLocation, species, clarity, engine, isBoat, currentTime, manualWaterTemp: parsedManualTemp });
             const response = { success: true, data: result };
             if (req.newSession) {
                 response.sessionId = req.newSession.sessionId;

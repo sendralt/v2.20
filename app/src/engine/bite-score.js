@@ -297,7 +297,7 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
     async function calculateScientificStrategy(input, weather, options = {}) {
         try {
             const { useLureCatalog = false, month, hour } = options;
-            const { speciesName, waterColor, location, lat, lon } = input;
+            const { speciesName, waterColor, location, lat, lon, manualWaterTemp } = input;
             const metrics = getSpeciesMetrics(speciesName);
 
             // Cache Date.now() for consistent timestamps within this calculation
@@ -314,13 +314,15 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
             const latitude = lat ?? weather?.lat ?? null;
             const longitude = lon ?? weather?.lon ?? null;
 
-            // Fetch live water temperature from USGS or fall back to estimation
-            const waterTempData = await waterTempProvider(
-                latitude,
-                longitude,
-                airTemp,
-                currentMonth
-            );
+            // Use manual water temp override if provided, otherwise fetch from USGS/estimation
+            const waterTempData = (manualWaterTemp != null && !isNaN(manualWaterTemp))
+                ? { waterTempF: manualWaterTemp, waterTempC: (manualWaterTemp - 32) * 5 / 9, source: 'manual' }
+                : await waterTempProvider(
+                    latitude,
+                    longitude,
+                    airTemp,
+                    currentMonth
+                );
             const waterTemp = waterTempData.waterTempF;
 
             // Pressure trend — API history first, in-memory cache second

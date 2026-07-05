@@ -390,7 +390,16 @@ async function displayResults(data) {
         var waterSourceEl = document.getElementById('wxWaterSource');
         var waterStationEl = document.getElementById('wxWaterStation');
         if (waterSourceEl) {
-            var sourceLabel = data.water_temp_source || data.weather.locationSource || '';
+            var rawSource = data.water_temp_source || data.weather.locationSource || '';
+            var sourceMap = {
+                'usgs-live': 'USGS Live Sensor',
+                'estimated': 'Estimated',
+                'hybrid-thermal-lag': 'Estimated (Thermal Lag)',
+                'offline': 'Offline Estimation',
+                'error': 'Estimation (Sensor Error)',
+                'manual': 'Manual Input'
+            };
+            var sourceLabel = sourceMap[rawSource] || rawSource;
             waterSourceEl.textContent = sourceLabel ? 'Water temp source: ' + sourceLabel : '--';
         }
         if (waterStationEl) {
@@ -498,7 +507,7 @@ function initGenerateButton() {
         const locationInput = document.getElementById('waterBody');
         const speciesInput = document.getElementById('speciesSelect');
         const clarityBtn = document.querySelector('.clarity-btn.border-cyan-500');
-        const boatCheckbox = document.querySelector('input[type="checkbox"]');
+        const boatCheckbox = document.getElementById('boatMode');
         
         const location = locationInput ? locationInput.value.trim() : '';
         const species = speciesInput ? speciesInput.value : '';
@@ -591,7 +600,16 @@ function initGenerateButton() {
                     clarity: clarity,
                     engine: 'gemini-3-flash-preview',
                     isBoat: isBoat,
-                    currentTime: new Date().toLocaleString()
+                    currentTime: new Date().toLocaleString(),
+                    manualWaterTemp: (function() {
+                        var toggle = document.getElementById('manualWaterTempToggle');
+                        var input = document.getElementById('manualWaterTempInput');
+                        if (toggle && toggle.checked && input && input.value) {
+                            var v = parseFloat(input.value);
+                            return isNaN(v) ? null : v;
+                        }
+                        return null;
+                    })()
                 })
             };
             
@@ -1027,6 +1045,7 @@ if (document.readyState === 'loading') {
         initWelcomeScreen();
         initHistoryPanel();
         initMenuToggle();
+        initManualWaterTempToggle();
         restoreFormState();
     });
 } else {
@@ -1034,7 +1053,28 @@ if (document.readyState === 'loading') {
     initWelcomeScreen();
     initHistoryPanel();
     initMenuToggle();
+    initManualWaterTempToggle();
     restoreFormState();
+}
+
+function initManualWaterTempToggle() {
+    var toggle = document.getElementById('manualWaterTempToggle');
+    var wrapper = document.getElementById('manualWaterTempWrapper');
+    var input = document.getElementById('manualWaterTempInput');
+    if (!toggle || !wrapper || !input) return;
+    toggle.addEventListener('change', function() {
+        if (toggle.checked) {
+            wrapper.classList.remove('hidden');
+            wrapper.classList.add('flex');
+            input.disabled = false;
+            input.focus();
+        } else {
+            wrapper.classList.add('hidden');
+            wrapper.classList.remove('flex');
+            input.disabled = true;
+            input.value = '';
+        }
+    });
 }
 
 function restoreFormState() {
