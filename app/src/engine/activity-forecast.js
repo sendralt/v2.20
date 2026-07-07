@@ -7,6 +7,7 @@ const { getDOMultiplier } = require('./dissolved-oxygen');
 const { getSpawningMultiplier } = require('./spawning');
 const { getThermoclineDepth, getEffectiveTemp } = require('./thermocline');
 const { getMoonPhase } = require('./lunar');
+const { getCivilDawn, getCivilDusk } = require('./photoperiod');
 
 // Constants matching bite-score.js
 const BITE_DIVISOR = 1.4;
@@ -64,7 +65,18 @@ function computeHourlyBiteProb(hour, pressureHpa, windMph, cloudPercent, waterTe
 
     const windMult = getWindMultiplier(windMph);
     const lightMult = getCloudMultiplier(cloudPercent);
-    const timeMult = getTimeMultiplier(hour, metrics.nocturnal);
+    let timeMult = getTimeMultiplier(hour, metrics.nocturnal);
+    // Photoperiod refinement — boost timeMult within ±1.5h of true civil dawn/dusk
+    // [Source: NOAA solar calculator; Helfman 1986 — diel activity patterns]
+    if (!metrics.nocturnal && lat != null) {
+        const civilDawn = getCivilDawn(lat, date);
+        const civilDusk = getCivilDusk(lat, date);
+        const dawnDist = Math.min(Math.abs(hour - civilDawn), Math.abs(hour - civilDawn + 24), Math.abs(hour - civilDawn - 24));
+        const duskDist = Math.min(Math.abs(hour - civilDusk), Math.abs(hour - civilDusk + 24), Math.abs(hour - civilDusk - 24));
+        if (dawnDist <= 1.5 || duskDist <= 1.5) {
+            timeMult = 1.20;
+        }
+    }
     const clarityMult = getClarityMultiplier(clarity || 'Clear');
     const doMult = getDOMultiplier(effectiveWaterTemp, month, windMph, metrics);
 
@@ -86,7 +98,15 @@ function computeHourlyBiteProb(hour, pressureHpa, windMph, cloudPercent, waterTe
         ? Math.sqrt(clarityMult * lightMult)
         : clarityMult * 0.5 + lightMult * 0.5;
 
-    const baseScore = (metabolicEfficiency * pressureFactor) / BITE_DIVISOR * spawningMult;
+    // Wind-chill amplification: strong wind reduces surface feeding activity more
+    // in cold water than warm water. Fish in cold water are already lethargic;
+    // surface turbulence from wind further discourages feeding.
+    // [Source: Shuter et al. 2012 — wind and temperature effects on fish behavior]
+    const windChillFactor = effectiveWaterTemp < 50 && windMph > 15
+        ? 1.0 - (windMph - 15) * 0.005
+        : 1.0;
+
+    const baseScore = (metabolicEfficiency * pressureFactor * windChillFactor) / BITE_DIVISOR * spawningMult;
     const adjustmentFactor = Math.sqrt(windMult * seasonalClarityLight * timeMult * doTempInteraction * lunarMult);
 
     return Math.min(MAX_BITE_PROB, Math.max(MIN_BITE_PROB, baseScore * adjustmentFactor));
