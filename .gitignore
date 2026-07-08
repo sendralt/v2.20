@@ -1,6 +1,5 @@
 # === PWA / Node.js ===
 node_modules
-package-lock.json
 app/.env
 
 # === Android ===
