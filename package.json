@@ -10,6 +10,7 @@
     "test": "npm run test -w app",
     "sync-versions": "node tools/sync-versions.js",
     "sync-versions:write": "node tools/sync-versions.js --write",
+    "prepare": "node tools/setup-hooks.js",
     "predev": "npm run build:css"
   },
   "engines": {
