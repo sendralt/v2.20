@@ -42,6 +42,12 @@ fi
 echo "✓ All tests passed — proceeding with commit."
 `;
 
+// Skip in CI environments — hooks aren't needed and can fail on restricted runners
+if (process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true') {
+    console.log('CI environment — skipping pre-commit hook installation');
+    return;
+}
+
 try {
     // Ensure .git/hooks directory exists
     const hooksDir = path.dirname(hookPath);
