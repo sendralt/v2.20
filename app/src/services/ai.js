@@ -429,7 +429,7 @@ function createAIService(deps) {
         // Otherwise falls back to simplified time×trend×metabolic composite
         const activity = scientificData
             ? deriveActivityForecast({
-                currentHour: new Date().getHours(),
+                currentHour: currentHour,
                 pressureTrend: scientificData.pressureTrend || 'Unknown',
                 metabolicEfficiency: (scientificData.metabolicEfficiency || 50) / 100,
                 hourly: weather?.hourly || [],

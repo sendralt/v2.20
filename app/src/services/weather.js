@@ -291,7 +291,7 @@ async function fetchFromOpenMeteo(coords) {
                     wind: { speed: hourlyWind?.[i] ?? wx.wind.speed, direction: wx.wind.direction },
                     cloudiness: hourlyCloud?.[i] ?? wx.cloudiness,
                     timestamp: hourlyTime[i],
-                    hour: new Date(hourlyTime[i]).getHours()
+                    hour: new Date(hourlyTime[i] + utcOffset * 1000).getUTCHours()
                 });
             }
         }
