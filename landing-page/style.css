@@ -903,3 +903,99 @@ a { color: inherit; text-decoration: none; }
   }
   .wave, .bg-waves { display: none; }
 }
+
+/* ---- Screenshot-led rewrite additions ---- */
+.hero-visual-stack {
+  min-height: 560px;
+  isolation: isolate;
+}
+
+.phone-frame-main {
+  z-index: 2;
+}
+
+.phone-frame-secondary {
+  position: absolute;
+  right: 8%;
+  bottom: 2%;
+  width: 220px;
+  opacity: 0.72;
+  transform: rotate(6deg);
+  z-index: 1;
+  animation-delay: -2s;
+}
+
+.screenshot-gallery-featured {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+}
+
+.screenshot-item-large {
+  padding: 12px;
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+}
+
+.screenshot-item-large img {
+  width: 100%;
+  max-height: 620px;
+  object-fit: contain;
+  background: rgba(2, 6, 23, 0.8);
+}
+
+@media (max-width: 1024px) {
+  .screenshot-gallery-featured { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero-visual-stack { min-height: 520px; }
+  .phone-frame-secondary { width: 190px; right: 0; }
+}
+
+@media (max-width: 768px) {
+  .hero-visual-stack { min-height: 440px; }
+  .phone-frame-main { width: 240px; }
+  .phone-frame-secondary { width: 160px; right: 8%; bottom: 4%; }
+}
+
+@media (max-width: 480px) {
+  .hero-visual-stack { min-height: 390px; }
+  .phone-frame-main { width: 220px; }
+  .phone-frame-secondary { width: 138px; right: 0; }
+  .screenshot-item-large { padding: 10px; }
+}
+
+/* ---- Hero overflow fix after browser verification ---- */
+.hero-visual-stack {
+  max-width: 100%;
+  overflow: hidden;
+  padding-inline: 12px;
+  box-sizing: border-box;
+}
+
+.hero-visual-stack .floating-card-1 {
+  left: 12px;
+}
+
+.hero-visual-stack .floating-card-2 {
+  right: 12px;
+}
+
+.hero-visual-stack .phone-frame-secondary {
+  right: 12px;
+}
+
+/* ---- Final responsive containment ---- */
+html {
+  overflow-x: hidden;
+}
+
+.bg-waves {
+  contain: paint;
+}
+
+@media (max-width: 900px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+}
