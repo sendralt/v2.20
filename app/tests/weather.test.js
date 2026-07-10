@@ -42,6 +42,14 @@ describe('Weather Service Timezone Alignment', () => {
     });
 
     it('correctly parses hourly weather hour using the location local timezone offset', async () => {
+        // Use dynamic timestamps computed from now so entries are always
+        // current/future hours relative to currentHourMs. Hardcoded past
+        // dates caused entries to be classified as pressureHistory,
+        // leaving hourly empty.
+        const now = new Date();
+        const t1 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), 0, 0);
+        const t2 = new Date(t1.getTime() + 3600000); // +1h, handles midnight rollover
+        const fmt = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${String(d.getHours()).padStart(2,'0')}:00`;
         const mockOpenMeteoResponse = {
             current: {
                 temperature_2m: 72,
@@ -55,8 +63,8 @@ describe('Weather Service Timezone Alignment', () => {
             },
             hourly: {
                 time: [
-                    '2026-07-09T03:00',
-                    '2026-07-09T04:00'
+                    fmt(t1),
+                    fmt(t2)
                 ],
                 pressure_msl: [1013, 1014],
                 temperature_2m: [72, 73],
