@@ -189,9 +189,23 @@ function deriveActivityForecast(params) {
         scores.push(prob * 10);
     }
 
+    // Anchor scores to bite score so chart bar 1 matches Bite Score even in fallback mode
+    if (anchorScore != null && scores.length > 0) {
+        const anchorValue = anchorScore / 10;
+        const offset = anchorValue - scores[0];
+        for (let i = 0; i < scores.length; i++) {
+            scores[i] = Math.max(0, Math.min(10, scores[i] + offset));
+        }
+    }
+
     const smoothed = applyTemporalSmoothing(scores);
 
-    return smoothed.map(function(v) { return Math.max(1, Math.min(10, Math.round(v))); });
+    // Re-pin hour 0 to exact anchor value after smoothing prevents drift
+    if (anchorScore != null) {
+        smoothed[0] = Math.max(0, Math.min(10, anchorScore / 10));
+    }
+
+    return smoothed.map(function(v) { return Math.max(1, Math.min(10, Math.round(v * 10) / 10)); });
 }
 
 module.exports = { deriveActivityForecast };

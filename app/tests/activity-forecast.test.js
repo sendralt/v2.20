@@ -155,4 +155,35 @@ describe('Activity Forecast Engine', function() {
         assert.ok(withFallingHistory[0] > withoutHistory[0],
             'Hour 0 should reflect the falling trend from pressureHistory: ' + withFallingHistory[0] + ' vs ' + withoutHistory[0]);
     });
+
+    it('anchors fallback path to biteScore when hourly data is missing', function() {
+        // Regression: when hourly weather is unavailable, the simplified fallback
+        // path must still re-pin hour 0 to anchorScore so the chart bar 1
+        // matches the Bite Score shown to the user.
+        var anchorScore = 67;
+        var result = deriveActivityForecast({
+            currentHour: 12,
+            pressureTrend: 'Stable',
+            metabolicEfficiency: 0.6,
+            anchorScore: anchorScore
+            // NOTE: no hourly, no waterTemp -> forces fallback path
+        });
+        assert.equal(result.length, 12, 'must return 12 values');
+        var chartValue = Math.round(result[0] * 10);
+        assert.ok(Math.abs(chartValue - anchorScore) <= 1,
+            'Fallback hour 0 chart value (' + chartValue + ') must match anchorScore (' + anchorScore + ') within +/-1');
+    });
+
+    it('fallback anchoring produces progressively shaped chart, not flat', function() {
+        // Ensure the anchored fallback still shows time-of-day variation
+        var result = deriveActivityForecast({
+            currentHour: 6,
+            pressureTrend: 'Falling',
+            metabolicEfficiency: 0.7,
+            anchorScore: 55
+        });
+        var max = Math.max.apply(null, result);
+        var min = Math.min.apply(null, result);
+        assert.ok(max - min >= 0.5, 'Chart should show time-of-day variation, not be completely flat (range=' + (max - min) + ')');
+    });
 });
