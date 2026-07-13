@@ -217,25 +217,6 @@ if (config.isDev) console.log(' Registering routes...');
 registerRoutes(app, aiService, config, fishingData, subscriptionService, googlePlayBilling, weatherService, sessionAuth, authMiddleware, db);
 if (config.isDev) console.log(' Routes registered');
 
-// --- Global Error Middleware (must be after all routes) ---
-// Express 4 does not catch rejected promises from async handlers.
-// This is the safety net — never hang a request.
-app.use((err, req, res, _next) => {
-    console.error('Unhandled route error:', err.message || err);
-    if (!res.headersSent) {
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
-// Process-level safety nets
-process.on('unhandledRejection', (reason, promise) => {
-    console.error('Unhandled Promise Rejection:', reason);
-});
-process.on('uncaughtException', (err) => {
-    console.error('Uncaught Exception:', err.message);
-    // Do not crash — the Express error middleware handles request-level errors
-});
-
 
 // --- Start Server ---
 let server = null;
