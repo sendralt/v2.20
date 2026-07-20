@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.fishsmart.pro",
+      "sha256_cert_fingerprints": [
+        "30:A2:3F:50:75:13:A7:F5:52:49:83:02:04:D6:C9:C6:68:7F:13:33:8B:49:A4:7D:78:B0:A3:D9:4C:9A:68:09"
+      ]
+    }
+  }
+]

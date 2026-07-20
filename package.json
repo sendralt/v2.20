@@ -1,0 +1,19 @@
+{
+  "name": "fishsmart-pro-monorepo",
+  "version": "2.19",
+  "private": true,
+  "workspaces": ["app"],
+  "scripts": {
+    "dev": "npm run dev -w app",
+    "start": "npm run start -w app",
+    "build:css": "npm run build:css -w app",
+    "test": "npm run test -w app",
+    "sync-versions": "node tools/sync-versions.js",
+    "sync-versions:write": "node tools/sync-versions.js --write",
+    "prepare": "node tools/setup-hooks.js",
+    "predev": "npm run build:css"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0e27">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="Join the FishSmart Pro Beta - Get early access to advanced AI-powered fishing intelligence">
+    <title>FishSmart Pro Beta | Join the Revolution</title>
+    <link rel="icon" type="image/png" href="/icon.png">
+    <link rel="apple-touch-icon" href="/apple-icon-180.png">
+    <link rel="manifest" href="/manifest.json">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" media="print" id="async-font">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap"></noscript>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Rajdhani', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0c4a6e 100%);
+            min-height: 100vh;
+            color: #f3f4f6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .water-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.15;
+            background: radial-gradient(ellipse at 20% 80%, rgba(0, 243, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 20%, rgba(0, 255, 217, 0.08) 0%, transparent 50%);
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            padding-bottom: 5rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .beta-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4),
+                        0 0 30px rgba(0, 243, 255, 0.1);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #00f3ff 0%, #00ffd9 50%, #39ff14 100%);
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.3);
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 10px 30px rgba(0, 243, 255, 0.3); }
+            50% { box-shadow: 0 10px 40px rgba(0, 243, 255, 0.5); }
+        }
+
+        .logo-icon svg {
+            width: 45px;
+            height: 45px;
+            color: #0f172a;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            background: linear-gradient(90deg, #00f3ff, #00ffd9, #39ff14);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .beta-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #00f3ff 0%, #00ffd9 100%);
+            color: #0f172a;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.4rem 1rem;
+            border-radius: 9999px;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .features-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+
+        .feature-item svg {
+            width: 18px;
+            height: 18px;
+            color: #00ffd9;
+            flex-shrink: 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #00f3ff;
+            margin-bottom: 0.5rem;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 12px;
+            color: #f3f4f6;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #00f3ff;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #64748b;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-top: 0.25rem;
+            accent-color: #00f3ff;
+        }
+
+        .checkbox-group label {
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: none;
+            letter-spacing: normal;
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 0;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #00f3ff 0%, #00ffd9 100%);
+            border: none;
+            border-radius: 12px;
+            color: #0f172a;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 243, 255, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 243, 255, 0.5);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .success-message.active {
+            display: block;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #39ff14 0%, #00ffd9 100%);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .success-icon svg {
+            width: 45px;
+            height: 45px;
+            color: #0f172a;
+        }
+
+        .success-message h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: #00ffd9;
+            margin-bottom: 0.75rem;
+        }
+
+        .success-message p {
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .home-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #00f3ff;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.3s ease;
+        }
+
+        .home-link:hover {
+            color: #00ffd9;
+        }
+
+        .form-section {
+            transition: opacity 0.3s ease;
+        }
+
+        .form-section.hidden {
+            display: none;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(15, 23, 42, 0.3);
+            border-top-color: #0f172a;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        .loading-spinner.active {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #64748b;
+            font-size: 0.75rem;
+        }
+
+        footer a {
+            color: #00f3ff;
+            text-decoration: none;
+        }
+
+        @media (max-width: 640px) {
+            .beta-card {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .features-list {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.75rem;
+            }
+
+            .feature-item {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="water-bg"></div>
+    
+    <div class="container">
+        <div class="beta-card">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 15c6.667-6 13.333 0 20-6"/>
+                        <path d="M9.5 15c.5-2.5 2-3.5 3.5-3s2 2 2 3"/>
+                        <circle cx="9" cy="8" r="1"/>
+                    </svg>
+                </div>
+                <span class="beta-badge">Beta Access</span>
+                <h1>FishSmart Pro</h1>
+                <p class="subtitle">Join the revolution in AI-powered fishing intelligence. Get exclusive early access to features that will transform how you fish.</p>
+            </div>
+
+            <div class="features-list">
+                <div class="feature-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                    </svg>
+                    <span>Real-time Bite Score</span>
+                </div>
+                <div class="feature-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                    </svg>
+                    <span>AI Lure Matching</span>
+                </div>
+                <div class="feature-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17.5 19c0-1.7-1.3-3.5-3.5-3.5s-3.5 1.8-3.5 3.5"/>
+                        <path d="M17.5 4l-2 10"/>
+                        <path d="M8.5 4l2 10"/>
+                        <path d="M12 4v2"/>
+                        <path d="M12 12v2"/>
+                    </svg>
+                    <span>Weather Analysis</span>
+                </div>
+                <div class="feature-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                    <span>Offline PWA Mode</span>
+                </div>
+            </div>
+
+            <div id="errorMsg" class="error-message"></div>
+
+            <form id="betaForm" class="form-section">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="deviceType">Primary Device</label>
+                    <select id="deviceType" name="deviceType">
+                        <option value="">Select your device</option>
+                        <option value="android">Android Phone/Tablet</option>
+                        <option value="ios">iPhone/iPad</option>
+                        <option value="desktop">Desktop/Laptop</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="fishingLevel">Experience Level</label>
+                    <select id="fishingLevel" name="fishingLevel">
+                        <option value="">Select your level</option>
+                        <option value="beginner">Beginner (0-1 years)</option>
+                        <option value="intermediate">Intermediate (1-5 years)</option>
+                        <option value="advanced">Advanced (5-10 years)</option>
+                        <option value="expert">Expert (10+ years)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="feedback">What features excite you most? (Optional)</label>
+                    <textarea id="feedback" name="feedback" placeholder="Tell us what you're looking forward to..."></textarea>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="updates" name="updates" checked>
+                    <label for="updates">Send me updates about new features, fishing tips, and exclusive beta announcements.</label>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="feedbackConsent" name="feedbackConsent">
+                    <label for="feedbackConsent">I'm willing to provide feedback and bug reports to help improve FishSmart Pro.</label>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <span class="loading-spinner"></span>
+                    <span class="btn-text">Join Beta Program</span>
+                </button>
+            </form>
+
+            <div id="successMsg" class="success-message">
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20,6 9,17 4,12"/>
+                    </svg>
+                </div>
+                <h2>Welcome to the Beta!</h2>
+                <p>You're on the list! We'll send you an email with download instructions and early access details soon. Get ready to fish smarter!</p>
+                <a href="/" class="home-link">← Back to FishSmart Pro</a>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 FishSmart Pro | <a href="/privacy.html">Privacy Policy</a></p>
+        </footer>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 glass-panel border-t border-cyan-500/20 pb-safe z-50" style="background:rgba(15,23,42,.7);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.1);border-top-color:rgba(6,182,212,.2);padding-bottom:env(safe-area-inset-bottom);z-index:50;">
+        <div style="max-width:32rem;margin-left:auto;margin-right:auto;display:flex;align-items:center;justify-content:space-around;padding-top:.75rem;padding-bottom:.75rem;padding-left:1rem;padding-right:1rem;">
+            <a href="/" style="display:flex;flex-direction:column;align-items:center;gap:.25rem;color:#22d3ee;text-decoration:none;">
+                <div style="width:2.5rem;height:2.5rem;border-radius:.75rem;background-color:rgba(6,182,212,.2);display:flex;align-items:center;justify-content:center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#22d3ee;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                </div>
+                <span style="font-size:10px;font-weight:500;">Home</span>
+            </a>
+            <a href="/privacy.html" style="display:flex;flex-direction:column;align-items:center;gap:.25rem;color:#6b7280;text-decoration:none;transition:color .15s ease;">
+                <div style="width:2.5rem;height:2.5rem;border-radius:.75rem;display:flex;align-items:center;justify-content:center;transition:background-color .15s ease;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <span style="font-size:10px;font-weight:500;">Privacy</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        document.getElementById('betaForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            const submitBtn = form.querySelector('.submit-btn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const spinner = submitBtn.querySelector('.loading-spinner');
+            const errorMsg = document.getElementById('errorMsg');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            spinner.classList.add('active');
+            btnText.textContent = 'Joining...';
+            errorMsg.classList.remove('active');
+            
+            // Collect form data
+            const formData = {
+                fullName: document.getElementById('fullName').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                deviceType: document.getElementById('deviceType').value,
+                fishingLevel: document.getElementById('fishingLevel').value,
+                feedback: document.getElementById('feedback').value.trim(),
+                updates: document.getElementById('updates').checked,
+                feedbackConsent: document.getElementById('feedbackConsent').checked,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent
+            };
+            
+            try {
+                // Store in localStorage for demo (in production, send to your backend)
+                const betaSignups = JSON.parse(localStorage.getItem('betaSignups') || '[]');
+                betaSignups.push(formData);
+                localStorage.setItem('betaSignups', JSON.stringify(betaSignups));
+                
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Show success
+                form.classList.add('hidden');
+                document.getElementById('successMsg').classList.add('active');
+                
+            } catch (err) {
+                errorMsg.textContent = 'Something went wrong. Please try again.';
+                errorMsg.classList.add('active');
+                submitBtn.disabled = false;
+                spinner.classList.remove('active');
+                btnText.textContent = 'Join Beta Program';
+            }
+        });
+    </script>
+</body>
+</html>

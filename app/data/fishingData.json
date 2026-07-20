@@ -1,0 +1,575 @@
+{
+  "species_data": [
+    {
+      "name": "Largemouth Bass",
+      "scientific_metrics": {
+        "opt": 72,
+        "dorm": 45,
+        "sensitivity": "Medium",
+        "feeding_cease_temp": 87,
+        "nocturnal": false,
+        "spawn_temp_start": 65,
+        "spawn_temp_peak": 68,
+        "spawn_temp_end": 72,
+        "do_tolerance": 3.0,
+        "preferred_depth": 8,
+        "forage_base": [
+          "shad",
+          "sunfish",
+          "crawfish",
+          "shiners",
+          "frog"
+        ],
+        "turbidity_preference": "Stained"
+      }
+    },
+    {
+      "name": "Smallmouth Bass",
+      "scientific_metrics": {
+        "opt": 67,
+        "dorm": 42,
+        "sensitivity": "Medium",
+        "feeding_cease_temp": 82,
+        "nocturnal": false,
+        "spawn_temp_start": 60,
+        "spawn_temp_peak": 63,
+        "spawn_temp_end": 67,
+        "do_tolerance": 3.5,
+        "preferred_depth": 12,
+        "forage_base": [
+          "crawfish",
+          "minnows",
+          "shiners",
+          "sculpin",
+          "hellgrammite"
+        ],
+        "turbidity_preference": "Clear"
+      }
+    },
+    {
+      "name": "Walleye",
+      "scientific_metrics": {
+        "opt": 62,
+        "dorm": 38,
+        "sensitivity": "High",
+        "feeding_cease_temp": 80,
+        "nocturnal": true,
+        "spawn_temp_start": 44,
+        "spawn_temp_peak": 48,
+        "spawn_temp_end": 52,
+        "do_tolerance": 4.0,
+        "preferred_depth": 18,
+        "forage_base": [
+          "yellow perch",
+          "shiners",
+          "minnows",
+          "cisco",
+          "smelt"
+        ],
+        "turbidity_preference": "Stained"
+      }
+    },
+    {
+      "name": "Northern Pike",
+      "scientific_metrics": {
+        "opt": 58,
+        "dorm": 35,
+        "sensitivity": "Low",
+        "feeding_cease_temp": 78,
+        "nocturnal": false,
+        "spawn_temp_start": 40,
+        "spawn_temp_peak": 45,
+        "spawn_temp_end": 50,
+        "do_tolerance": 2.5,
+        "preferred_depth": 10,
+        "forage_base": [
+          "perch",
+          "suckers",
+          "minnows",
+          "shiners",
+          "cisco"
+        ],
+        "turbidity_preference": "Clear to Stained"
+      }
+    },
+    {
+      "name": "Yellow Perch",
+      "scientific_metrics": {
+        "opt": 60,
+        "dorm": 36,
+        "sensitivity": "Medium",
+        "feeding_cease_temp": 79,
+        "nocturnal": false,
+        "spawn_temp_start": 44,
+        "spawn_temp_peak": 48,
+        "spawn_temp_end": 52,
+        "do_tolerance": 3.0,
+        "preferred_depth": 15,
+        "forage_base": [
+          "minnows",
+          "insects",
+          "amphipods",
+          "small fish",
+          "zooplankton"
+        ],
+        "turbidity_preference": "Clear"
+      }
+    },
+    {
+      "name": "White Bass",
+      "scientific_metrics": {
+        "opt": 68,
+        "dorm": 42,
+        "sensitivity": "Medium",
+        "feeding_cease_temp": 84,
+        "nocturnal": false,
+        "spawn_temp_start": 55,
+        "spawn_temp_peak": 60,
+        "spawn_temp_end": 65,
+        "do_tolerance": 3.5,
+        "preferred_depth": 14,
+        "forage_base": [
+          "shad",
+          "minnows",
+          "insects",
+          "crayfish"
+        ],
+        "turbidity_preference": "Stained"
+      }
+    },
+    {
+      "name": "Striped Bass",
+      "scientific_metrics": {
+        "opt": 66,
+        "dorm": 44,
+        "sensitivity": "Medium",
+        "feeding_cease_temp": 82,
+        "nocturnal": false,
+        "spawn_temp_start": 60,
+        "spawn_temp_peak": 65,
+        "spawn_temp_end": 70,
+        "do_tolerance": 4.0,
+        "preferred_depth": 20,
+        "forage_base": [
+          "shad",
+          "herring",
+          "alewife",
+          "eels",
+          "silversides"
+        ],
+        "turbidity_preference": "Clear"
+      }
+    },
+    {
+      "name": "Muskie",
+      "scientific_metrics": {
+        "opt": 65,
+        "dorm": 40,
+        "sensitivity": "Low",
+        "feeding_cease_temp": 80,
+        "nocturnal": false,
+        "spawn_temp_start": 50,
+        "spawn_temp_peak": 55,
+        "spawn_temp_end": 60,
+        "do_tolerance": 3.0,
+        "preferred_depth": 12,
+        "forage_base": [
+          "suckers",
+          "perch",
+          "minnows",
+          "cisco",
+          "catfish"
+        ],
+        "turbidity_preference": "Clear"
+      }
+    },
+    {
+      "name": "Crappie",
+      "scientific_metrics": {
+        "opt": 68,
+        "dorm": 44,
+        "sensitivity": "High",
+        "feeding_cease_temp": 82,
+        "nocturnal": false,
+        "spawn_temp_start": 58,
+        "spawn_temp_peak": 62,
+        "spawn_temp_end": 66,
+        "do_tolerance": 3.0,
+        "preferred_depth": 10,
+        "forage_base": [
+          "minnows",
+          "shad",
+          "insects",
+          "crustaceans"
+        ],
+        "turbidity_preference": "Stained"
+      }
+    },
+    {
+      "name": "Bluegill",
+      "scientific_metrics": {
+        "opt": 70,
+        "dorm": 48,
+        "sensitivity": "Medium",
+        "feeding_cease_temp": 88,
+        "nocturnal": false,
+        "spawn_temp_start": 67,
+        "spawn_temp_peak": 72,
+        "spawn_temp_end": 77,
+        "do_tolerance": 2.5,
+        "preferred_depth": 5,
+        "forage_base": [
+          "insects",
+          "zooplankton",
+          "small minnows",
+          "snails",
+          "algae"
+        ],
+        "turbidity_preference": "Clear to Stained"
+      }
+    },
+    {
+      "name": "Catfish",
+      "scientific_metrics": {
+        "opt": 75,
+        "dorm": 50,
+        "sensitivity": "Low",
+        "feeding_cease_temp": 90,
+        "nocturnal": true,
+        "spawn_temp_start": 70,
+        "spawn_temp_peak": 75,
+        "spawn_temp_end": 80,
+        "do_tolerance": 2.0,
+        "preferred_depth": 16,
+        "forage_base": [
+          "fish",
+          "crawfish",
+          "insects",
+          "mollusks",
+          "detritus"
+        ],
+        "turbidity_preference": "Stained to Muddy"
+      }
+    },
+    {
+      "name": "Channel Catfish",
+      "scientific_metrics": {
+        "opt": 76,
+        "dorm": 52,
+        "sensitivity": "Low",
+        "feeding_cease_temp": 90,
+        "nocturnal": true,
+        "spawn_temp_start": 70,
+        "spawn_temp_peak": 75,
+        "spawn_temp_end": 80,
+        "do_tolerance": 2.0,
+        "preferred_depth": 16,
+        "forage_base": [
+          "fish",
+          "crawfish",
+          "insects",
+          "clams",
+          "dead bait"
+        ],
+        "turbidity_preference": "Stained to Muddy"
+      }
+    },
+    {
+      "name": "Bullhead",
+      "scientific_metrics": {
+        "opt": 73,
+        "dorm": 48,
+        "sensitivity": "Low",
+        "feeding_cease_temp": 89,
+        "nocturnal": true,
+        "spawn_temp_start": 68,
+        "spawn_temp_peak": 72,
+        "spawn_temp_end": 76,
+        "do_tolerance": 1.5,
+        "preferred_depth": 8,
+        "forage_base": [
+          "insects",
+          "mollusks",
+          "fish",
+          "detritus",
+          "worms"
+        ],
+        "turbidity_preference": "Muddy"
+      }
+    },
+    {
+      "name": "Trout",
+      "scientific_metrics": {
+        "opt": 55,
+        "dorm": 33,
+        "sensitivity": "High",
+        "feeding_cease_temp": 72,
+        "nocturnal": false,
+        "spawn_temp_start": 44,
+        "spawn_temp_peak": 50,
+        "spawn_temp_end": 56,
+        "do_tolerance": 5.0,
+        "preferred_depth": 8,
+        "forage_base": [
+          "insects",
+          "minnows",
+          "crustaceans",
+          "fish eggs",
+          "zooplankton"
+        ],
+        "turbidity_preference": "Clear"
+      }
+    },
+    {
+      "name": "Brown Trout",
+      "scientific_metrics": {
+        "opt": 57,
+        "dorm": 35,
+        "sensitivity": "High",
+        "feeding_cease_temp": 75,
+        "nocturnal": true,
+        "spawn_temp_start": 44,
+        "spawn_temp_peak": 50,
+        "spawn_temp_end": 56,
+        "do_tolerance": 5.0,
+        "preferred_depth": 8,
+        "forage_base": [
+          "insects",
+          "minnows",
+          "crayfish",
+          "baitfish",
+          "terrestrials"
+        ],
+        "turbidity_preference": "Clear"
+      }
+    },
+    {
+      "name": "Steelhead",
+      "scientific_metrics": {
+        "opt": 54,
+        "dorm": 34,
+        "sensitivity": "High",
+        "feeding_cease_temp": 70,
+        "nocturnal": false,
+        "spawn_temp_start": 40,
+        "spawn_temp_peak": 46,
+        "spawn_temp_end": 52,
+        "do_tolerance": 5.0,
+        "preferred_depth": 8,
+        "forage_base": [
+          "insects",
+          "salmon eggs",
+          "baitfish",
+          "crustaceans",
+          "amphipods"
+        ],
+        "turbidity_preference": "Clear"
+      }
+    },
+    {
+      "name": "Salmon",
+      "scientific_metrics": {
+        "opt": 52,
+        "dorm": 34,
+        "sensitivity": "High",
+        "feeding_cease_temp": 68,
+        "nocturnal": false,
+        "spawn_temp_start": 44,
+        "spawn_temp_peak": 50,
+        "spawn_temp_end": 56,
+        "do_tolerance": 5.0,
+        "preferred_depth": 18,
+        "forage_base": [
+          "alewife",
+          "smelt",
+          "herring",
+          "krill",
+          "baitfish"
+        ],
+        "turbidity_preference": "Clear"
+      }
+    },
+    {
+      "name": "Saugeye",
+      "scientific_metrics": {
+        "opt": 63,
+        "dorm": 39,
+        "sensitivity": "High",
+        "feeding_cease_temp": 81,
+        "nocturnal": false,
+        "spawn_temp_start": 44,
+        "spawn_temp_peak": 48,
+        "spawn_temp_end": 52,
+        "do_tolerance": 3.5,
+        "preferred_depth": 16,
+        "forage_base": [
+          "minnows",
+          "shad",
+          "crawfish",
+          "insects",
+          "perch"
+        ],
+        "turbidity_preference": "Stained"
+      }
+    },
+    {
+      "name": "Brook Trout",
+      "scientific_metrics": {
+        "opt": 50,
+        "dorm": 31,
+        "sensitivity": "High",
+        "feeding_cease_temp": 70,
+        "nocturnal": false,
+        "spawn_temp_start": 44,
+        "spawn_temp_peak": 50,
+        "spawn_temp_end": 56,
+        "do_tolerance": 5.0,
+        "preferred_depth": 5,
+        "forage_base": [
+          "insects",
+          "minnows",
+          "crustaceans",
+          "worms",
+          "terrestrials"
+        ],
+        "turbidity_preference": "Clear"
+      }
+    },
+    {
+      "name": "Rainbow Trout",
+      "scientific_metrics": {
+        "opt": 56,
+        "dorm": 34,
+        "sensitivity": "High",
+        "feeding_cease_temp": 72,
+        "nocturnal": false,
+        "spawn_temp_start": 44,
+        "spawn_temp_peak": 50,
+        "spawn_temp_end": 56,
+        "do_tolerance": 5.0,
+        "preferred_depth": 6,
+        "forage_base": [
+          "insects",
+          "minnows",
+          "salmon eggs",
+          "crustaceans",
+          "zooplankton"
+        ],
+        "turbidity_preference": "Clear"
+      }
+    },
+    {
+      "name": "Common Carp",
+      "scientific_metrics": {
+        "opt": 72,
+        "dorm": 38,
+        "sensitivity": "Low",
+        "feeding_cease_temp": 88,
+        "nocturnal": true,
+        "spawn_temp_start": 64,
+        "spawn_temp_peak": 70,
+        "spawn_temp_end": 75,
+        "do_tolerance": 1.5,
+        "preferred_depth": 8,
+        "forage_base": [
+          "insects",
+          "mollusks",
+          "crustaceans",
+          "detritus",
+          "worms"
+        ],
+        "turbidity_preference": "Muddy"
+      }
+    },
+    {
+      "name": "Longnose Gar",
+      "scientific_metrics": {
+        "opt": 75,
+        "dorm": 45,
+        "sensitivity": "Low",
+        "feeding_cease_temp": 90,
+        "nocturnal": true,
+        "spawn_temp_start": 68,
+        "spawn_temp_peak": 75,
+        "spawn_temp_end": 80,
+        "do_tolerance": 1.5,
+        "preferred_depth": 6,
+        "forage_base": [
+          "minnows",
+          "shad",
+          "sunfish",
+          "small fish"
+        ],
+        "turbidity_preference": "Stained to Muddy"
+      }
+    },
+    {
+      "name": "Bowfin",
+      "scientific_metrics": {
+        "opt": 73,
+        "dorm": 40,
+        "sensitivity": "Low",
+        "feeding_cease_temp": 88,
+        "nocturnal": true,
+        "spawn_temp_start": 60,
+        "spawn_temp_peak": 66,
+        "spawn_temp_end": 72,
+        "do_tolerance": 1.0,
+        "preferred_depth": 5,
+        "forage_base": [
+          "fish",
+          "crawfish",
+          "insects",
+          "frogs",
+          "minnows"
+        ],
+        "turbidity_preference": "Stained to Muddy"
+      }
+    },
+    {
+      "name": "Lake Sturgeon",
+      "scientific_metrics": {
+        "opt": 58,
+        "dorm": 35,
+        "sensitivity": "Medium",
+        "feeding_cease_temp": 75,
+        "nocturnal": true,
+        "spawn_temp_start": 53,
+        "spawn_temp_peak": 58,
+        "spawn_temp_end": 64,
+        "do_tolerance": 3.0,
+        "preferred_depth": 25,
+        "forage_base": [
+          "insects",
+          "mollusks",
+          "crustaceans",
+          "worms",
+          "small fish"
+        ],
+        "turbidity_preference": "Stained"
+      }
+    },
+    {
+      "name": "Redear Sunfish",
+      "scientific_metrics": {
+        "opt": 75,
+        "dorm": 50,
+        "sensitivity": "Medium",
+        "feeding_cease_temp": 88,
+        "nocturnal": false,
+        "spawn_temp_start": 68,
+        "spawn_temp_peak": 73,
+        "spawn_temp_end": 80,
+        "do_tolerance": 2.5,
+        "preferred_depth": 8,
+        "forage_base": [
+          "snails",
+          "mollusks",
+          "insects",
+          "crustaceans"
+        ],
+        "turbidity_preference": "Clear to Stained"
+      }
+    }
+  ]
+}

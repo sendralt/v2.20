@@ -1,0 +1,54 @@
+{
+  "packageId": "com.fishsmart.pro",
+  "host": "fishsmart-pro-1.onrender.com",
+  "name": "FishSmart Pro:Fishing Forecast",
+  "launcherName": "FishSmart",
+  "display": "standalone",
+  "themeColor": "#0A0E27",
+  "themeColorDark": "#000000",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#0A0E27",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://fishsmart-pro-1.onrender.com/manifest-icon-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "2.19",
+  "appVersionCode": 19,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://fishsmart-pro-1.onrender.com/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {
+    "locationDelegation": {
+      "enabled": true
+    },
+    "playBilling": {
+      "enabled": true
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "minSdkVersion": 21,
+  "orientation": "any",
+  "fingerprints": [
+    {
+      "name": "release",
+      "value": "58:58:F3:E7:85:D2:C7:A3:77:5B:95:F7:EB:1C:79:F7:1A:1F:47:FF:93:03:79:7F:FD:36:C8:0A:05:47:99:0F"
+    }
+  ],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "displayOverride": [],
+  "appVersion": "2.19"
+}

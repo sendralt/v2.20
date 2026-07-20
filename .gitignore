@@ -1,0 +1,31 @@
+# === PWA / Node.js ===
+node_modules
+app/.env
+
+# === Android ===
+android/.gradle/
+android/build/
+android/app/build/
+android/app-release-unsigned-aligned.apk
+android/app-release-signed.apk
+android/android.keystore
+android/local.properties
+
+# === Build Artifacts (root) ===
+*.aab
+*.apk
+
+# === Debug / Generated CSS ===
+app/public/css/tailwind.debug.css
+app/public/css/tailwind.debug.css.map
+
+# === Environment ===
+.env
+
+# === Agent Zero ===
+.a0proj/
+.promptinclude.md
+
+# === Stripe Sample Code ===
+stripe-sample-code/
+stripe-sample-code.zip
