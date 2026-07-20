@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE_NAME = 'fishsmart-pro-v2.30';
+const CACHE_NAME = 'fishsmart-pro-v2.20';
 const STATIC_ASSETS = [
   '/manifest.json',
   '/icon.png',
