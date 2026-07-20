@@ -79,6 +79,7 @@ For content ideas that have worked well:
 - **"I tested an AI fishing app for 30 days"** — show real forecasts vs. real results
 - **"This app told me what lure to use — was it right?"** — show the lure recommendation reasoning
 - **"The science of barometric pressure and fishing"** — educational deep dive using the app's data
+- **"I shared my AI fishing forecast on Instagram and here's what happened"** — use the Shareable Forecast Card feature: every forecast generates a beautiful 1080×1350 image with bite score ring, top 3 factors, lure pick, and conditions strip. Post it to Instagram Stories, Reddit, or TikTok and show audience reactions. This is a built-in viral loop — every shared card includes a footer CTA ("Get your free fishing forecast → fishsmart-pro.com") that drives curiosity clicks
 
 Whatever feels natural to you. I'm happy to provide screenshots, data, or do a collab if that's your style.
 
@@ -148,7 +149,7 @@ I'm an angler and developer. I built FishSmart Pro because I was tired of guessi
 - Live USGS water temperature integration
 - Transparent factor-by-factor bite scoring
 - Zero social features by design
-- Freemium: 3 free forecasts per session, $29.99/yr Pro
+- Freemium: 3 free forecasts per device, $29.99/yr Pro
 
 I'm available for [in-person recording / remote recording via Riverside/Squadcast] whenever works for your schedule.
 

@@ -33,6 +33,7 @@ const ALLOWLIST = new Set([
     // Browser-loaded public/ files (loaded via <script> tags, not require())
     'public/js/app.js',
     'public/js/auth-utils.js',
+    'public/js/forecast-card.js',
     'public/js/subscription.js',
     'public/sw.js',
     'public/chart.umd.min.js',

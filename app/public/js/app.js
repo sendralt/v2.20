@@ -6,6 +6,7 @@
  */
 
 // ============================================
+ // DISPLAY RESULTS
 // INITIALIZATION
 // ============================================
 
@@ -360,7 +361,14 @@ function getMoonEmoji(phase) {
 // DISPLAY RESULTS
 // ============================================
 
-async function displayResults(data) {
+async function displayResults(data, formData) {
+    // Store for share card feature
+    window._lastForecastData = data;
+    window._lastFormData = formData || {};
+    // Clear any tease-wall state from previous exhausted forecasts
+    if (typeof hideTeaseWall === 'function') hideTeaseWall();
+    // Clear funnel UX from previous forecasts
+    if (typeof clearFunnelUX === 'function') clearFunnelUX();
     const section = document.getElementById('resultsSection');
     section.classList.remove('hidden');
     section.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -520,7 +528,17 @@ function initGenerateButton() {
             const canGenerate = window.subscription.checkUsage();
             if (!canGenerate) return;
         }
-        
+
+        // Funnel UX: Forecast #3 pre-warning (when this will be the last free forecast)
+        if (typeof window.subscription !== 'undefined' &&
+            typeof showLastForecastWarning === 'function') {
+            var usage = window.subscription.getUsageData();
+            if (usage && !usage.isSubscribed && usage.remaining === 1) {
+                var proceed = await showLastForecastWarning();
+                if (!proceed) return;
+            }
+        }
+
         const locationInput = document.getElementById('waterBody');
         const speciesInput = document.getElementById('speciesSelect');
         const clarityBtn = document.querySelector('.clarity-btn.border-cyan-500');
@@ -647,6 +665,32 @@ function initGenerateButton() {
                         errorData.code === 'SUBSCRIPTION_EXPIRED' ||
                         (response.status === 401 && errorData.error && errorData.error.toLowerCase().indexOf('limit') !== -1);
                 if (isSubscriptionError) {
+                    // Tease-wall: fetch bite score + conditions (no AI), show with blurred details
+                    try {
+                        const teaseResponse = await fetch('/api/tease', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', ...authHeaders },
+                            body: JSON.stringify({ location, species, clarity, currentTime: new Date().toLocaleString(), manualWaterTemp: null })
+                        });
+                        if (teaseResponse.ok) {
+                            const teaseResult = await teaseResponse.json();
+                            if (teaseResult.success) {
+                                displayResults(teaseResult.data, { location: location, species: species, clarity: clarity, isBoat: isBoat });
+                                showTeaseWall();
+                                // Still update usage display
+                                if (typeof window.subscription !== 'undefined') {
+                                    window.subscription.fetchUsageStats();
+                                }
+                                clearInterval(textInterval);
+                                if (overlay) { overlay.classList.add('hidden'); overlay.classList.remove('flex'); }
+                                generateBtn.disabled = false;
+                                return; // Don't throw — we handled it
+                            }
+                        }
+                    } catch (teaseErr) {
+                        console.warn('Tease fetch failed, falling back to hard paywall:', teaseErr.message);
+                    }
+                    // Fallback: hard paywall if tease fails
                     if (typeof window.subscription !== 'undefined') {
                         window.subscription.showPaywall();
                     }
@@ -669,12 +713,22 @@ function initGenerateButton() {
             // Update usage after successful request
             if (typeof window.subscription !== 'undefined') {
                 window.subscription.fetchUsageStats();
+                // Funnel UX: check remaining after this forecast and show appropriate messaging
+                setTimeout(function() {
+                    var u = window.subscription.getUsageData();
+                    if (!u || u.isSubscribed) return;
+                    if (u.remaining === 1 && typeof showInlineNudge === 'function') {
+                        showInlineNudge();
+                    } else if (u.remaining === 0 && typeof showConversionBanner === 'function') {
+                        showConversionBanner();
+                    }
+                }, 1500);
             }
 
             clearInterval(textInterval);
             if (loadingText) loadingText.textContent = 'Analysis complete!';
             
-            displayResults(result.data);
+            displayResults(result.data, { location: location, species: species, clarity: clarity, isBoat: isBoat });
 
             setTimeout(function() { 
                 if (overlay) {
@@ -1054,11 +1108,237 @@ function updateFreeTierIndicator() {
 window.updateFreeTierIndicator = updateFreeTierIndicator;
 
 // ============================================
+// TEASE-WALL PAYWALL
+// ============================================
+
+var TEASE_BLUR_IDS = [
+    'results-strategy', 'results-lures', 'results-chart',
+    'results-location', 'results-notes', 'results-best-time', 'results-solunar'
+];
+
+function showTeaseWall() {
+    TEASE_BLUR_IDS.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.add('tease-blurred');
+    });
+    var resultsSection = document.getElementById('resultsSection');
+    if (!resultsSection || document.getElementById('teaseWallCTA')) return;
+    var cta = document.createElement('div');
+    cta.id = 'teaseWallCTA';
+    cta.className = 'tease-wall-cta';
+    cta.innerHTML =
+        '<div class="tease-wall-content">' +
+            '<div class="tease-wall-icon">🔒</div>' +
+            '<h3 class="tease-wall-title">The bite score is yours. The strategy isn\'t.</h3>' +
+            '<p class="tease-wall-desc">Unlock AI-powered strategy, lure recommendations, the 12-hour activity forecast, and location intel.</p>' +
+            '<button type="button" class="tease-wall-btn" id="teaseUpgradeBtn">Unlock for $2.50/month →</button>' +
+            '<p class="tease-wall-sub">Or $29.99/year. Cancel anytime. Price locked for 12 months.</p>' +
+        '</div>';
+    resultsSection.appendChild(cta);
+    var upgradeBtn = document.getElementById('teaseUpgradeBtn');
+    if (upgradeBtn) {
+        upgradeBtn.addEventListener('click', function() {
+            if (typeof window.subscription !== 'undefined') window.subscription.showPaywall();
+        });
+    }
+}
+
+function hideTeaseWall() {
+    TEASE_BLUR_IDS.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.remove('tease-blurred');
+    });
+    var cta = document.getElementById('teaseWallCTA');
+    if (cta) cta.remove();
+}
+
+window.showTeaseWall = showTeaseWall;
+window.hideTeaseWall = hideTeaseWall;
+
+// ============================================
+// FUNNEL UX — Per-forecast messaging
+// ============================================
+
+/**
+ * Forecast #3 pre-generate warning.
+ * Shows a dismissible dialog when remaining === 1 (this will be the last free forecast).
+ * Returns a Promise<boolean> — true = proceed, false = cancel.
+ */
+function showLastForecastWarning() {
+    return new Promise(function(resolve) {
+        // Only show once per session
+        if (sessionStorage.getItem('fishsmart_last_warning_shown')) {
+            resolve(true);
+            return;
+        }
+
+        // Create modal overlay
+        var overlay = document.createElement('div');
+        overlay.id = 'lastForecastWarning';
+        overlay.className = 'fixed inset-0 bg-slate-900/95 backdrop-blur-xl z-[75] flex items-center justify-center p-4';
+        overlay.innerHTML =
+            '<div class="glass-panel rounded-2xl p-6 max-w-sm w-full text-center">' +
+                '<div class="text-4xl mb-4">⚠️</div>' +
+                '<h3 class="font-orbitron text-xl font-bold text-yellow-400 mb-3">Last Free Forecast</h3>' +
+                '<p class="text-sm text-gray-300 leading-relaxed mb-6">This is your final free forecast. After this, you\'ll still see the bite score and live conditions — but the full AI strategy, lure picks, and activity forecast unlock with Pro.</p>' +
+                '<div class="space-y-3">' +
+                    '<button type="button" id="lastForecastProceedBtn" class="btn-primary w-full py-3 rounded-xl font-bold text-slate-900 transition-all">Make it count →</button>' +
+                    '<button type="button" id="lastForecastCancelBtn" class="w-full py-2 text-sm text-gray-400 hover:text-gray-300 transition-colors">Cancel</button>' +
+                '</div>' +
+            '</div>';
+        document.body.appendChild(overlay);
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+
+        var proceedBtn = document.getElementById('lastForecastProceedBtn');
+        var cancelBtn = document.getElementById('lastForecastCancelBtn');
+
+        proceedBtn.addEventListener('click', function() {
+            overlay.remove();
+            sessionStorage.setItem('fishsmart_last_warning_shown', '1');
+            resolve(true);
+        });
+
+        cancelBtn.addEventListener('click', function() {
+            overlay.remove();
+            resolve(false);
+        });
+
+        // Allow Escape to cancel
+        overlay.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                overlay.remove();
+                resolve(false);
+            }
+        });
+    });
+}
+
+/**
+ * Forecast #2 inline nudge.
+ * After results load, when remaining === 1, show a delayed, non-pushy message.
+ */
+function showInlineNudge() {
+    var existing = document.getElementById('inlineNudge');
+    if (existing) existing.remove();
+
+    // Delay 4 seconds so the user has time to read results first
+    setTimeout(function() {
+        var results = document.getElementById('resultsSection');
+        if (!results || results.classList.contains('hidden')) return;
+        // Don't show if tease-wall is active
+        if (document.getElementById('teaseWallCTA')) return;
+
+        var nudge = document.createElement('div');
+        nudge.id = 'inlineNudge';
+        nudge.className = 'glass-panel rounded-2xl p-4 border border-yellow-500/20 max-w-lg mx-auto mt-4';
+        nudge.innerHTML =
+            '<div class="flex items-start gap-3">' +
+                '<span class="text-xl flex-shrink-0">💡</span>' +
+                '<div class="flex-1">' +
+                    '<p class="text-sm text-gray-300 leading-relaxed">You have <strong class="text-yellow-400">1 forecast left</strong>. After that, you\'ll still see the bite score — but the full AI strategy, lure picks, and activity forecast unlock with Pro.</p>' +
+                    '<p class="text-xs text-gray-500 mt-1">Just $2.50/month. <button type="button" id="nudgeSeePricingBtn" class="text-cyan-400 hover:text-cyan-300 underline transition-colors">See pricing</button></p>' +
+                '</div>' +
+                '<button type="button" id="nudgeDismissBtn" class="text-gray-500 hover:text-gray-300 transition-colors flex-shrink-0" aria-label="Dismiss">✕</button>' +
+            '</div>';
+        results.appendChild(nudge);
+
+        document.getElementById('nudgeDismissBtn').addEventListener('click', function() {
+            nudge.remove();
+        });
+        var seePricingBtn = document.getElementById('nudgeSeePricingBtn');
+        if (seePricingBtn) {
+            seePricingBtn.addEventListener('click', function() {
+                if (typeof window.subscription !== 'undefined') window.subscription.showPaywall();
+            });
+        }
+    }, 4000);
+}
+
+/**
+ * Forecast #3 post-results conversion banner.
+ * After the last free forecast, show a persistent banner about what just ended.
+ */
+function showConversionBanner() {
+    var existing = document.getElementById('conversionBanner');
+    if (existing) existing.remove();
+
+    var results = document.getElementById('resultsSection');
+    if (!results) return;
+
+    var banner = document.createElement('div');
+    banner.id = 'conversionBanner';
+    banner.className = 'glass-panel rounded-2xl p-5 border border-cyan-500/30 max-w-lg mx-auto mt-4';
+    banner.innerHTML =
+        '<div class="text-center">' +
+            '<div class="text-3xl mb-3">🎣</div>' +
+            '<h3 class="font-orbitron text-lg font-bold text-white mb-2">That was your last free forecast</h3>' +
+            '<p class="text-sm text-gray-400 leading-relaxed mb-4">Good news — you\'ll still see the bite score and live conditions anytime. But to unlock AI strategy, lure picks, and the full activity forecast, upgrade to Pro.</p>' +
+            '<button type="button" id="conversionSeePricingBtn" class="btn-primary px-6 py-3 rounded-xl font-bold text-slate-900 transition-all">See Pricing →</button>' +
+            '<p class="text-xs text-gray-500 mt-3">$2.50/month (billed yearly). Cancel anytime. Price locked for 12 months.</p>' +
+        '</div>';
+    results.appendChild(banner);
+
+    var seePricingBtn = document.getElementById('conversionSeePricingBtn');
+    if (seePricingBtn) {
+        seePricingBtn.addEventListener('click', function() {
+            if (typeof window.subscription !== 'undefined') window.subscription.showPaywall();
+        });
+    }
+}
+
+/**
+ * Clear all funnel UX elements (called on fresh forecast render).
+ */
+function clearFunnelUX() {
+    var ids = ['inlineNudge', 'conversionBanner'];
+    ids.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.remove();
+    });
+}
+
+// ============================================
+// SHARE FORECAST CARD
+// ============================================
+
+function initShareButton() {
+    var btn = document.getElementById('shareForecastBtn');
+    if (!btn) return;
+    btn.addEventListener('click', async function() {
+        var data = window._lastForecastData;
+        var formData = window._lastFormData;
+        if (!data || !window.ForecastCard) {
+            showToast('No forecast available to share yet', 'warning');
+            return;
+        }
+        btn.disabled = true;
+        var originalText = btn.innerHTML;
+        btn.innerHTML = '<span class="animate-pulse">Generating...</span>';
+        try {
+            var result = await ForecastCard.share(data, formData);
+            if (result.method === 'web-share' && result.shared) {
+                showToast('Forecast shared!', 'success');
+            } else {
+                showToast('Forecast card downloaded — share it anywhere!', 'success');
+            }
+        } catch (err) {
+            console.error('Share card error:', err);
+            showToast('Could not generate card. Try again.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+    });
+}
+
+// ============================================
 // INITIALIZE ON DOM READY
 // ============================================
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
         initGenerateButton();
+        initShareButton();
         initWelcomeScreen();
         initHistoryPanel();
         initMenuToggle();
@@ -1067,6 +1347,7 @@ if (document.readyState === 'loading') {
     });
 } else {
     initGenerateButton();
+    initShareButton();
     initWelcomeScreen();
     initHistoryPanel();
     initMenuToggle();

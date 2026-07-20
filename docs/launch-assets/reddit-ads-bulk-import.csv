@@ -1,0 +1,281 @@
+﻿Results,Campaign ID,Campaign name,Special ad category,Campaign objective,Campaign budget,Funding instrument,Campaign status,Campaign App ID,Ad group ID,Ad group name,Start time,End time,Ad Group Pixel ID,Bid strategy,Bid,Budget type,Budget,Conversion goal,Conversion optimization window,Frequency caps,Ad group status,Locations,Exclude locations,Gender,Language targeting,Exclude keywords,Keywords,Interests,Communities,Exclude communities,Auto app exclusions,Device type,Minimum OS version,Carriers,Placements,Platforms,Custom audiences,Exclude custom audiences,Third-party audiences,Exclude third-party audiences,Expand audience automatically,Delivery type,Ad Group App ID,Shopping Ad Type,Product Catalog ID,Ad ID,Ad name,Impression trackers,Click trackers,Ad status,Second Line CTA,Ad product IDs,Post ID,Profile name or ID,Post type,Call to action,Headline,Destination URL,Display URL,Media file name,Thumbnail file name,Body,Allow comments,Additional Text,Carousel card 1 - Media file name,Carousel card 1 - Destination URL,Carousel card 1 - Display URL,Carousel card 1 - Caption,Carousel card 1 - Call to action,Carousel card 2 - Media file name,Carousel card 2 - Destination URL,Carousel card 2 - Display URL,Carousel card 2 - Caption,Carousel card 2 - Call to action,Carousel card 3 - Media file name,Carousel card 3 - Destination URL,Carousel card 3 - Display URL,Carousel card 3 - Caption,Carousel card 3 - Call to action,Carousel card 4 - Media file name,Carousel card 4 - Destination URL,Carousel card 4 - Display URL,Carousel card 4 - Caption,Carousel card 4 - Call to action,Carousel card 5 - Media file name,Carousel card 5 - Destination URL,Carousel card 5 - Display URL,Carousel card 5 - Caption,Carousel card 5 - Call to action,Carousel card 6 - Media file name,Carousel card 6 - Destination URL,Carousel card 6 - Display URL,Carousel card 6 - Caption,Carousel card 6 - Call to action,Hero card - Media file name,Hero card - Destination URL,Hero card - Display URL,Hero card - Caption,Hero card - Call to action,Secondary card 1 - Media file name,Secondary card 1 - Destination URL,Secondary card 1 - Display URL,Secondary card 2 - Media file name,Secondary card 2 - Destination URL,Secondary card 2 - Display URL,Secondary card 3 - Media file name,Secondary card 3 - Destination URL,Secondary card 3 - Display URL,Secondary card 4 - Media file name,Secondary card 4 - Destination URL,Secondary card 4 - Display URL,Secondary card 5 - Media file name,Secondary card 5 - Destination URL,Secondary card 5 - Display URL
+"# The result of your bulk import.
+
+Successful imports return SUCCESS.
+
+Enter IGNORE to ignore this row.","The campaign you want to modify.
+
+Leave blank to create a campaign.
+
+Enter a temporary ID (eg. TEMPC1) in rows below a campaign to create ad groups under that campaign.","How your campaign is labeled in the dashboard and reports.
+
+Required for new campaigns.","Categories with limited targeting options, gender and zip code targeting are unavailable.
+
+Uneditable for existing campaigns.
+
+A value of TRUE is required if advertising:
+
+Housing: ads for sale or rental of real estate listings, homeowners insurance, mortgage loans, or other services related to finding housing.
+Employment: ads for job opportunities or services for job seekers.
+Credit: ads for credit card offers, loans, financing, or any other services related to debt or credit.
+
+Values:
+TRUE, FALSE","What you want your ad campaign to achieve.
+
+Uneditable for existing campaigns.
+
+Values:
+BRAND_AWARENESS, TRAFFIC, CONVERSIONS, VIDEO_VIEWS, APP_INSTALLS","Specify how much your campaign should spend over its lifetime. Campaigns will never be billed more than their budgeted amount. Optional.
+
+Format in dollars.cents, ie 10000.00","How your campaign will be funded.
+
+Admin only.
+
+Leave blank for advertiser-level funding.","The status of your campaign.
+
+Values:
+ACTIVE, PAUSED, ARCHIVED, DELETED","Your app's App Store or Google Play ID.
+
+Required for new app install campaigns.
+
+Uneditable for existing campaigns.","The ad group you want to modify.
+
+Leave blank to create an ad group.
+
+Enter a temporary ID (eg. TEMPC1) in rows below an ad group to create ads under that ad group.","How your ad group is labeled in the dashboard and reports.
+
+Required for new ad groups.","The start time of your ad group
+
+
+Format:
+YYYY-MM-DD HH:MM TZ.
+
+Timezone (TZ) will be UTC if left blank.","The end time of your ad group.
+
+Format:
+YYYY-MM-DD HH:MM TZ.
+
+Timezone (TZ) will be UTC if left blank.
+
+Leave blank to run continuously.","The Pixel ID used for measurement and optimization. Can be found in Events Manager.
+
+Example: a2_a1b2c3","How you'll bid in ad auctions.
+Values:
+MAXIMIZE_VOLUME, MANUAL_BIDDING, LOWEST_COST","For ad groups using maximize volume or cost cap, enter your cost per click cap.
+
+For ad groups using lowest cost, enter 'None.'
+
+For ad groups with the manual bidding strategy, your bid per click.
+
+Required for new ad groups.
+
+Format:
+0.00","Choose a lifetime or daily budget for your ad group.
+
+Values:
+LIFETIME, DAILY","The maximum spend for your ad group, in USD.
+
+Format:
+00.00","Set the conversion goal for your ad group with conversion objective campaign.
+
+It includes PURCHASE, CLICKS, LEAD, ADD_TO_CART, ADD_TO_WISHLIST, SIGN_UP, SEARCH, VIEW_CONTENT or PAGE_VISIT","Set the conversion optimization window for your ad group with conversion objective campaign.
+
+It includes SEVEN_DAY_CLICKS_ONE_DAY_VIEW or SEVEN_DAY_CLICKS","The frequency cap for your ad group.
+
+Admin only.
+
+Values:
+RECOMMENDED, NONE, [number]/DAY, [number]/HOUR, [number]/WEEK, [number]/MONTH","The status of your ad group.
+
+Values:
+ACTIVE, PAUSED, ARCHIVED, DELETED","Target users based on their location.
+
+Country format, Alpha-2 code:
+US
+
+State format:
+US-NY
+
+DMA format, numerical ID:
+501
+
+More info:
+https://www.iban.com/country-codes
+https://www.ssa.gov/international/coc-docs/states.html
+http://www.spstechnical.com/DMACodes.html","Prevent your ad from running in certain locations.
+
+Country format, Alpha-2 code:
+US
+
+State format:
+US-NY
+
+DMA format, numerical ID:
+501
+
+More info:
+https://www.iban.com/country-codes
+https://www.ssa.gov/international/coc-docs/states.html
+http://www.spstechnical.com/DMACodes.html","Set or edit the gender your ad group should target. Leave blank to target all genders.
+
+Valid inputs: MEN, WOMEN","Provide a comma separated list of approved languages code.
+
+Values: ES, FR",Prevent your ad from appearing above or below headlines that include these words.,Add keywords to target your ad group,"Target users based on their interests, determined by content they've interacted with recently.
+
+Values:
+https://redditinc.force.com/helpcenter/s/article/Overview-Reddit-Ads-Interest-Targeting","Target users who are subscribed to or who have recently interacted with a community.
+
+Format:
+[community]","Prevent your ad from running in certain communities.
+
+Format:
+[community]","Automatically exclude users who have your app installed.
+
+Values:
+TRUE, FALSE","Target certain devices.
+
+Values:
+ALL, DESKTOP, MOBILE:ALL, MOBILE:ANDROID, MOBILE:IOS","The minimum mobile OS version your ad group targets.
+
+Values:
+NONE, ALL, iOS14, iOS15, iOS16, Android7, Android8, Android9, Android10, Android11, Android12, Android13",Target devices on certain mobile carriers.,"Where your ads will be displayed.
+
+Values:
+ALL, FEED, CONVERSATION","Target certain platforms.
+
+Admin only.
+
+Values:
+DESKTOP, MOBILE_WEB, MOBILE_NATIVE, MOBILE_WEB_3X, SHREDTOP, ALL","Target custom audiences.
+
+Custom audience IDs can be found in Audience Manager","Exclude custom audiences.
+
+Custom audience IDs can be found in Audience Manager","Target users based on their online and real world interests and behaviors, as provided by a third-party partner.","Exclude users based on their online and real world interests and behaviors, as provided by a third-party partner.","Dynamically expand your audience to include users who are similar to those you're targeting.
+
+Values:
+TRUE, FALSE","The rate at which your ad group budget is spent. Also called pacing.
+
+Admin only.
+
+Values:
+UNIFORM, ACCELERATED","Your app's App Store or Google Play ID.
+
+Required for new app install ad groups.
+
+Leave blank if editing an ad group.","This is the type of shopping ad that you want to create.
+
+The available options are STATIC or DYNAMIC. These will create the two types of shopping ads that we have available, CPA (Custom Product Ads) and DPA (Dynamic Product Ads).
+
+Example: STATIC","This is the ID of the product catalog that you want to use for the ad group. You can find it by going to the Catalogs section in Ads Manager. This is the ID shown in the ID column of the table. This will be a UUID.
+
+Example: a1b2c3d4-5678-90e1-2f3g-4h56i7j8k9l0","The ad you want to modify.
+
+Leave blank if creating an ad.","How your ad is labeled in the dashboard and reports.
+
+Required for new ads.",URLs for impression trackers from Reddit's list of approved measurement providers.,URLs for click trackers from Reddit's list of approved measurement providers.,"The status of your ad.
+
+Values:
+ACTIVE, PAUSED, ARCHIVED, DELETED","This determines what is shown on the second line of the call-to-action that will be shown in the ad. This is optional and can be left empty. When filled in, the accepted values refer to either the price or description of the product, using values PRICE or DESCRIPTION.
+Example: PRICE","This is a list of the product IDs that you want to include in the ad. The ID refers to the ID column given in the catalog CSV, and is therefore the advertisers' own product ID. Any valid string of max. 128 characters is accepted.
+
+Example product ID: SKU-ABC-123
+Example array: SKU-ABC-123,SKU-DEF-456","The post to use for ad creative.
+
+Leave blank if creating a new post.
+
+Existing posts are uneditable.",Indicate the name or T2 ID of the profile that will publish the ad.,"The type of your post.
+
+Existing posts are uneditable.
+
+Values:
+IMAGE, TEXT, VIDEO, CAROUSEL","Encourages users to interact with your post in a way that aligns with your campaign objective.
+
+
+Leave blank for carousel posts.
+
+Existing posts are uneditable.
+
+Values:
+DOWNLOAD, INSTALL, SHOP NOW, VIEW MORE, SIGN UP, LEARN MORE, CONTACT US, GET SHOWTIMES, GET A QUOTE, SEE MENU, APPLY NOW, WATCH NOW, PLAY NOW, PRE-ORDER NOW, ORDER NOW","Existing posts are uneditable.
+
+300 character max.","Your ad will direct redditors here.
+
+Leave blank for carousel posts.
+
+Existing posts are uneditable.","The link that redditors see.
+
+Leave blank for carousel posts.
+
+Existing posts are uneditable.
+
+100 character max.","The primary media of your post.
+
+Enter the filename of uploaded media.
+
+Leave blank for text and carousel posts.
+
+Existing posts are uneditable.","The thumbnail of your post.
+
+Enter the filename of uploaded media.
+
+Existing posts are uneditable.","Appears in the body of your post.
+
+For text posts only.
+
+Existing posts are uneditable.","Allow users to engage with your post and start a conversation with you and other users.
+
+Values
+
+TRUE, FALSE","Appears in the body of your post.
+
+For image, video, or free-form posts only.
+
+Existing posts are uneditable.",Set the media for carousel card 1 using the filename of the image uploaded. Cannot be changed on existing posts.,Set the destination URL for carousel card 1. Cannot be changed on existing posts.,Set the display URL for carousel card 1. Cannot be changed on existing posts.,Text will appear directly under the card image. 50 character limit. Cannot be changed on existing posts.,Encourages users to interact with your post in a way that aligns with your campaign objective. Cannot be changed on existing posts.,Set the media for carousel card 2 using the filename of the image uploaded. Cannot be changed on existing posts.,Set the destination URL for carousel card 2. Cannot be changed on existing posts.,Set the display URL for carousel card 2. Cannot be changed on existing posts.,Text will appear directly under the card image. 50 character limit. Cannot be changed on existing posts.,Encourages users to interact with your post in a way that aligns with your campaign objective. Cannot be changed on existing posts.,Set the media for carousel card 3 using the filename of the image uploaded. Cannot be changed on existing posts.,Set the destination URL for carousel card 3. Cannot be changed on existing posts.,Set the display URL for carousel card 3. Cannot be changed on existing posts.,Text will appear directly under the card image. 50 character limit. Cannot be changed on existing posts.,Encourages users to interact with your post in a way that aligns with your campaign objective. Cannot be changed on existing posts.,Set the media for carousel card 4 using the filename of the image uploaded. Cannot be changed on existing posts.,Set the destination URL for carousel card 4. Cannot be changed on existing posts.,Set the display URL for carousel card 4. Cannot be changed on existing posts.,Text will appear directly under the card image. 50 character limit. Cannot be changed on existing posts.,Encourages users to interact with your post in a way that aligns with your campaign objective. Cannot be changed on existing posts.,Set the media for carousel card 5 using the filename of the image uploaded. Cannot be changed on existing posts.,Set the destination URL for carousel card 5. Cannot be changed on existing posts.,Set the display URL for carousel card 5. Cannot be changed on existing posts.,Text will appear directly under the card image. 50 character limit. Cannot be changed on existing posts.,Encourages users to interact with your post in a way that aligns with your campaign objective. Cannot be changed on existing posts.,Set the media for carousel card 6 using the filename of the image uploaded. Cannot be changed on existing posts.,Set the destination URL for carousel card 6. Cannot be changed on existing posts.,Set the display URL for carousel card 6. Cannot be changed on existing posts.,Text will appear directly under the card image. 50 character limit. Cannot be changed on existing posts.,Encourages users to interact with your post in a way that aligns with your campaign objective. Cannot be changed on existing posts.,Set the media for the hero card using the filename of the image uploaded. Cannot be changed on existing posts. For Collection posts only.,Set the destination URL for the hero card. Cannot be changed on existing posts. For Collection posts only.,Set the display URL for the hero card. Cannot be changed on existing posts. For Collection posts only.,Text will appear directly under the hero card image. 50 character limit. Cannot be changed on existing posts. For Collection posts only.,Encourages users to interact with your post in a way that aligns with your campaign objective. Cannot be changed on existing posts. For Collection posts only.,Set the media for secondary card 1 using the filename of the image uploaded. Cannot be changed on existing posts. For Collection posts only.,Set the destination URL for secondary card 1. Cannot be changed on existing posts. For Collection posts only.,Set the display URL for secondary card 1. Cannot be changed on existing posts For Collection posts only.,Set the media for secondary card 2 using the filename of the image uploaded. Cannot be changed on existing posts. For Collection posts only.,Set the destination URL for secondary card 2. Cannot be changed on existing posts. For Collection posts only.,Set the display URL for secondary card 2. Cannot be changed on existing posts. For Collection posts only.,Set the media for secondary card 3 using the filename of the image uploaded. Cannot be changed on existing posts. For Collection posts only.,Set the destination URL for secondary card 3. Cannot be changed on existing posts. For Collection posts only.,Set the display URL for secondary card 3. Cannot be changed on existing posts. For Collection posts only.,Set the media for secondary card 4 using the filename of the image uploaded. Cannot be changed on existing posts. For Collection posts only.,Set the destination URL for secondary card 4. Cannot be changed on existing posts. For Collection posts only.,Set the display URL for secondary card 4. Cannot be changed on existing posts. For Collection posts only.,Set the media for secondary card 5 using the filename of the image uploaded. Cannot be changed on existing posts. For Collection posts only.,Set the destination URL for secondary card 5. Cannot be changed on existing posts. For Collection posts only.,Set the display URL for secondary card 5. Cannot be changed on existing posts. For Collection posts only.
+,,FSP_REDDIT_TRAFFIC_SCIENCE,FALSE,TRAFFIC,,,PAUSED,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC1,,,,,,,,,FSP_AG_TRAFFIC_SCIENCE,2026-07-20 06:00 America/New_York,,,MAXIMIZE_VOLUME,,DAILY,10.00,,,RECOMMENDED,PAUSED,US,,,,,,,"[Fishing],[bassfishing],[FishingForBeginners]",,,ALL,,,FEED,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC1,,,,,,,,TEMPAG1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_SCIENCE_AD_01,,,PAUSED,,,,,IMAGE,LEARN MORE,Stop trusting fishing apps that give you a random bite score with zero explanation,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-1-science.png,,,TRUE,3 free full-power forecasts. No crippled features. Try the science yourself.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC1,,,,,,,,TEMPAG1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_SCIENCE_AD_02,,,PAUSED,,,,,IMAGE,LEARN MORE,"FishSmart Pro shows you WHY fish will bite — every factor, every species, explained",https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-1-science.png,,,TRUE,25 freshwater species. Each with its own biological profile.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC1,,,,,,,,TEMPAG1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_SCIENCE_AD_03,,,PAUSED,,,,,IMAGE,LEARN MORE,This app doesn't guess the bite. A 10+ factor science engine calculates it first.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-1-science.png,,,TRUE,"Transparent bite score: see every factor, every weight, every data point.",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC1,,,,,,,,TEMPAG1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_SCIENCE_AD_04,,,PAUSED,,,,,IMAGE,LEARN MORE,Live USGS water temp + barometric pressure trends + species biology = real forecasts,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-1-science.png,,,TRUE,Falling pressure + water temp near optimum + overcast = active feeding window.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC1,,,,,,,,TEMPAG1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_SCIENCE_AD_05,,,PAUSED,,,,,IMAGE,LEARN MORE,See exactly which conditions are driving the bite. No magic numbers. Ever.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-1-science.png,,,TRUE,3 free full-power forecasts. No crippled features. Try the science yourself.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC1,,,,,,,,TEMPAG1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_SCIENCE_AD_06,,,PAUSED,,,,,IMAGE,LEARN MORE,The AI explains the science. The science doesn't come from the AI. Here's the difference.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-1-science.png,,,TRUE,"Transparent bite score: see every factor, every weight, every data point.",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,FSP_REDDIT_TRAFFIC_PRIVACY,FALSE,TRAFFIC,,,PAUSED,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC2,,,,,,,,,FSP_AG_TRAFFIC_PRIVACY,2026-07-20 06:00 America/New_York,,,MAXIMIZE_VOLUME,,DAILY,8.75,,,RECOMMENDED,PAUSED,US,,,,,,,"[KayakFishing],[Fishing]",,,ALL,,,FEED,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC2,,,,,,,,TEMPAG2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_PRIVACY_AD_01,,,PAUSED,,,,,IMAGE,LEARN MORE,Tired of fishing apps that share your spots? This one has zero social features.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-2-privacy.png,,,TRUE,No social feed. No catch map. No community. Your spots are YOURS.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC2,,,,,,,,TEMPAG2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_PRIVACY_AD_02,,,PAUSED,,,,,IMAGE,LEARN MORE,No catch sharing. No community feed. No spot burning. Just you and the science.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-2-privacy.png,,,TRUE,3 free forecasts to try. No account required to start.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC2,,,,,,,,TEMPAG2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_PRIVACY_AD_03,,,PAUSED,,,,,IMAGE,LEARN MORE,Your secret fishing spots stay secret. No social feed. No crowdsourced data.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-2-privacy.png,,,TRUE,The only fishing app with zero social features. Built for privacy.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC2,,,,,,,,TEMPAG2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_PRIVACY_AD_04,,,PAUSED,,,,,IMAGE,LEARN MORE,Fishbrain showed your spots to everyone. This app doesn't have social features at all.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-2-privacy.png,,,TRUE,No tracking. No sharing. No spot burning. Science only.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC2,,,,,,,,TEMPAG2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_PRIVACY_AD_05,,,PAUSED,,,,,IMAGE,LEARN MORE,Privacy isn't a setting. It's the whole design. Zero social. Zero spot burning.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-2-privacy.png,,,TRUE,No social feed. No catch map. No community. Your spots are YOURS.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC2,,,,,,,,TEMPAG2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_PRIVACY_AD_06,,,PAUSED,,,,,IMAGE,LEARN MORE,Built for anglers who value solitude. No social features. No catch sharing. Ever.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-2-privacy.png,,,TRUE,The only fishing app with zero social features. Built for privacy.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,FSP_REDDIT_TRAFFIC_PRICE,FALSE,TRAFFIC,,,PAUSED,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC3,,,,,,,,,FSP_AG_TRAFFIC_PRICE,2026-07-20 06:00 America/New_York,,,MAXIMIZE_VOLUME,,DAILY,6.25,,,RECOMMENDED,PAUSED,US,,,,,,,"[Fishing],[bassfishing],[KayakFishing]",,,ALL,,,FEED,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC3,,,,,,,,TEMPAG3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_PRICE_AD_01,,,PAUSED,,,,,IMAGE,LEARN MORE,Why pay $60/year for Fishbrain when you can get better science for $29.99/year?,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-3-price.png,,,TRUE,Less than half what Fishbrain costs. Try 3 forecasts free first.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC3,,,,,,,,TEMPAG3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_PRICE_AD_02,,,PAUSED,,,,,IMAGE,LEARN MORE,Navionics charges $49.99/yr for marine charts. This costs $29.99/yr and forecasts the bite.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-3-price.png,,,TRUE,$2.50/month billed yearly. Cancel anytime. No lock-in.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC3,,,,,,,,TEMPAG3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_PRICE_AD_03,,,PAUSED,,,,,IMAGE,LEARN MORE,Half the price of Fishbrain. More freshwater science. No social BS.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-3-price.png,,,TRUE,3 free full forecasts to try. No credit card to start.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC3,,,,,,,,TEMPAG3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_PRICE_AD_04,,,PAUSED,,,,,IMAGE,LEARN MORE,$4.99/month or $29.99/year. Or 3 free forecasts to try. That's it.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-3-price.png,,,TRUE,Pro Yearly: $29.99. That's ~$2.50/month. No hidden fees.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC3,,,,,,,,TEMPAG3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_PRICE_AD_05,,,PAUSED,,,,,IMAGE,LEARN MORE,The only fishing app under $30/yr with a transparent 10+ factor science engine,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-3-price.png,,,TRUE,3 free full forecasts to try. No credit card to start.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC3,,,,,,,,TEMPAG3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_PRICE_AD_06,,,PAUSED,,,,,IMAGE,LEARN MORE,Stop paying $60+/year for a community feed. Get real forecasts for $29.99/yr.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-3-price.png,,,TRUE,Less than half what Fishbrain costs. Try 3 forecasts free first.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,FSP_REDDIT_CONV_FREETRIAL,FALSE,CONVERSIONS,,,PAUSED,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC4,,,,,,,,,FSP_AG_CONV_FREETRIAL,2026-07-20 06:00 America/New_York,,,LOWEST_COST,None,DAILY,6.25,SIGN_UP,SEVEN_DAY_CLICKS_ONE_DAY_VIEW,RECOMMENDED,PAUSED,US,,,,,,,"[FishingForBeginners],[Fishing]",,,ALL,,,FEED,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC4,,,,,,,,TEMPAG4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_CONV_FREETRIAL_AD_01,,,PAUSED,,,,,IMAGE,SIGN UP,3 free fishing forecasts to try. Every feature unlocked. No credit card.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-4-free-trial.png,,,TRUE,No signup required. No credit card. Just open and forecast.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC4,,,,,,,,TEMPAG4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_CONV_FREETRIAL_AD_02,,,PAUSED,,,,,IMAGE,SIGN UP,"Try a real bite forecast for free. 3 free forecasts, full power, no catch.",https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-4-free-trial.png,,,TRUE,25 species. Live USGS water temp. AI lure recommendations. All free.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC4,,,,,,,,TEMPAG4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_CONV_FREETRIAL_AD_03,,,PAUSED,,,,,IMAGE,SIGN UP,"No crippled free tier. No paywalled science. 3 full forecasts, free to try.",https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-4-free-trial.png,,,TRUE,Every feature works on the free tier. 3 forecasts free to try.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC4,,,,,,,,TEMPAG4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_CONV_FREETRIAL_AD_04,,,PAUSED,,,,,IMAGE,SIGN UP,Free to try. Actually free. Not free with a paywall after 1 use. 3 full forecasts.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-4-free-trial.png,,,TRUE,Pro unlocks unlimited forecasts + history + data export. Try free first.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC4,,,,,,,,TEMPAG4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_CONV_FREETRIAL_AD_05,,,PAUSED,,,,,IMAGE,SIGN UP,The only fishing app where the free tier isn't a demo. 3 full forecasts, free to try.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-4-free-trial.png,,,TRUE,No signup required. No credit card. Just open and forecast.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC4,,,,,,,,TEMPAG4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_CONV_FREETRIAL_AD_06,,,PAUSED,,,,,IMAGE,SIGN UP,Start forecasting the bite for free. 3 free to start. Pro is just $2.50/month.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-4-free-trial.png,,,TRUE,25 species. Live USGS water temp. AI lure recommendations. All free.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,FSP_REDDIT_TRAFFIC_TIMEWINDOW,FALSE,TRAFFIC,,,PAUSED,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC5,,,,,,,,,FSP_AG_TRAFFIC_TIMEWINDOW,2026-07-20 06:00 America/New_York,,,MAXIMIZE_VOLUME,,DAILY,6.25,,,RECOMMENDED,PAUSED,US,,,,,,,"[bassfishing],[KayakFishing],[Fishing]",,,ALL,,,FEED,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC5,,,,,,,,TEMPAG5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_TIMEWINDOW_AD_01,,,PAUSED,,,,,IMAGE,LEARN MORE,Stop wasting fishing trips on dead days. Know the best 2-hour bite window before you go.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-5-time-saving.png,,,TRUE,12-hour activity forecast. Best Time to Fish card. Lure recommendations.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC5,,,,,,,,TEMPAG5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_TIMEWINDOW_AD_02,,,PAUSED,,,,,IMAGE,LEARN MORE,12-hour activity forecast pinpoints your peak bite window. Stop guessing.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-5-time-saving.png,,,TRUE,Check the bite window before you leave the house. 3 forecasts free.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC5,,,,,,,,TEMPAG5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_TIMEWINDOW_AD_03,,,PAUSED,,,,,IMAGE,LEARN MORE,Only have 2 hours to fish? This tells you exactly which 2 hours to go.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-5-time-saving.png,,,TRUE,Stop fishing through dead hours. Know your peak window.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC5,,,,,,,,TEMPAG5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_TIMEWINDOW_AD_04,,,PAUSED,,,,,IMAGE,LEARN MORE,Peak bite: 5:45-7:30 AM. That's what you see before you decide to drive to the lake.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-5-time-saving.png,,,TRUE,12-hour activity forecast. Best Time to Fish card. Lure recommendations.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC5,,,,,,,,TEMPAG5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_TIMEWINDOW_AD_05,,,PAUSED,,,,,IMAGE,LEARN MORE,Know if the bite is worth the drive before you waste gas on a dead day.,https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-5-time-saving.png,,,TRUE,"Real data: USGS water temp, pressure trends, wind, cloud cover all scored.",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,TEMPC5,,,,,,,,TEMPAG5,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,FSP_REDDIT_TRAFFIC_TIMEWINDOW_AD_06,,,PAUSED,,,,,IMAGE,LEARN MORE,"The 12-hour forecast that tells you when to fish, where to cast, and what to throw.",https://app.fishsmart-pro.com,app.fishsmart-pro.com,ad-5-time-saving.png,,,TRUE,Check the bite window before you leave the house. 3 forecasts free.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Results,Campaign ID,Campaign name,Special ad category,Campaign objective,Campaign budget,Funding instrument,Campaign status,Campaign App ID,Ad group ID,Ad group name,Start time,End time,Ad Group Pixel ID,Bid strategy,Bid,Budget type,Budget,Conversion goal,Conversion optimization window,Frequency caps,Ad group status,Locations,Exclude locations,Gender,Language targeting,Exclude keywords,Keywords,Interests,Communities,Exclude communities,Auto app exclusions,Device type,Minimum OS version,Carriers,Placements,Platforms,Custom audiences,Exclude custom audiences,Third-party audiences,Exclude third-party audiences,Expand audience automatically,Delivery type,Ad Group App ID,Shopping Ad Type,Product Catalog ID,Ad ID,Ad name,Impression trackers,Click trackers,Ad status,Second Line CTA,Ad product IDs,Post ID,Profile name or ID,Post type,Call to action,Headline,Destination URL,Display URL,Media file name,Thumbnail file name,Body,Allow comments,Additional Text,Carousel card 1 - Media file name,Carousel card 1 - Destination URL,Carousel card 1 - Display URL,Carousel card 1 - Caption,Carousel card 1 - Call to action,Carousel card 2 - Media file name,Carousel card 2 - Destination URL,Carousel card 2 - Display URL,Carousel card 2 - Caption,Carousel card 2 - Call to action,Carousel card 3 - Media file name,Carousel card 3 - Destination URL,Carousel card 3 - Display URL,Carousel card 3 - Caption,Carousel card 3 - Call to action,Carousel card 4 - Media file name,Carousel card 4 - Destination URL,Carousel card 4 - Display URL,Carousel card 4 - Caption,Carousel card 4 - Call to action,Carousel card 5 - Media file name,Carousel card 5 - Destination URL,Carousel card 5 - Display URL,Carousel card 5 - Caption,Carousel card 5 - Call to action,Carousel card 6 - Media file name,Carousel card 6 - Destination URL,Carousel card 6 - Display URL,Carousel card 6 - Caption,Carousel card 6 - Call to action,Hero card - Media file name,Hero card - Destination URL,Hero card - Display URL,Hero card - Caption,Hero card - Call to action,Secondary card 1 - Media file name,Secondary card 1 - Destination URL,Secondary card 1 - Display URL,Secondary card 2 - Media file name,Secondary card 2 - Destination URL,Secondary card 2 - Display URL,Secondary card 3 - Media file name,Secondary card 3 - Destination URL,Secondary card 3 - Display URL,Secondary card 4 - Media file name,Secondary card 4 - Destination URL,Secondary card 4 - Display URL,Secondary card 5 - Media file name,Secondary card 5 - Destination URL,Secondary card 5 - Display URL
+Results,Campaign ID,Campaign name,Special ad category,Campaign objective,Campaign budget,Funding instrument,Campaign status,Campaign App ID,Ad group ID,Ad group name,Start time,End time,Ad Group Pixel ID,Bid strategy,Bid,Budget type,Budget,Conversion goal,Conversion optimization window,Frequency caps,Ad group status,Locations,Exclude locations,Gender,Language targeting,Exclude keywords,Keywords,Interests,Communities,Exclude communities,Auto app exclusions,Device type,Minimum OS version,Carriers,Placements,Platforms,Custom audiences,Exclude custom audiences,Third-party audiences,Exclude third-party audiences,Expand audience automatically,Delivery type,Ad Group App ID,Shopping Ad Type,Product Catalog ID,Ad ID,Ad name,Impression trackers,Click trackers,Ad status,Second Line CTA,Ad product IDs,Post ID,Profile name or ID,Post type,Call to action,Headline,Destination URL,Display URL,Media file name,Thumbnail file name,Body,Allow comments,Additional Text,Carousel card 1 - Media file name,Carousel card 1 - Destination URL,Carousel card 1 - Display URL,Carousel card 1 - Caption,Carousel card 1 - Call to action,Carousel card 2 - Media file name,Carousel card 2 - Destination URL,Carousel card 2 - Display URL,Carousel card 2 - Caption,Carousel card 2 - Call to action,Carousel card 3 - Media file name,Carousel card 3 - Destination URL,Carousel card 3 - Display URL,Carousel card 3 - Caption,Carousel card 3 - Call to action,Carousel card 4 - Media file name,Carousel card 4 - Destination URL,Carousel card 4 - Display URL,Carousel card 4 - Caption,Carousel card 4 - Call to action,Carousel card 5 - Media file name,Carousel card 5 - Destination URL,Carousel card 5 - Display URL,Carousel card 5 - Caption,Carousel card 5 - Call to action,Carousel card 6 - Media file name,Carousel card 6 - Destination URL,Carousel card 6 - Display URL,Carousel card 6 - Caption,Carousel card 6 - Call to action,Hero card - Media file name,Hero card - Destination URL,Hero card - Display URL,Hero card - Caption,Hero card - Call to action,Secondary card 1 - Media file name,Secondary card 1 - Destination URL,Secondary card 1 - Display URL,Secondary card 2 - Media file name,Secondary card 2 - Destination URL,Secondary card 2 - Display URL,Secondary card 3 - Media file name,Secondary card 3 - Destination URL,Secondary card 3 - Display URL,Secondary card 4 - Media file name,Secondary card 4 - Destination URL,Secondary card 4 - Display URL,Secondary card 5 - Media file name,Secondary card 5 - Destination URL,Secondary card 5 - Display URL
+Results,Campaign ID,Campaign name,Special ad category,Campaign objective,Campaign budget,Funding instrument,Campaign status,Campaign App ID,Ad group ID,Ad group name,Start time,End time,Ad Group Pixel ID,Bid strategy,Bid,Budget type,Budget,Conversion goal,Conversion optimization window,Frequency caps,Ad group status,Locations,Exclude locations,Gender,Language targeting,Exclude keywords,Keywords,Interests,Communities,Exclude communities,Auto app exclusions,Device type,Minimum OS version,Carriers,Placements,Platforms,Custom audiences,Exclude custom audiences,Third-party audiences,Exclude third-party audiences,Expand audience automatically,Delivery type,Ad Group App ID,Shopping Ad Type,Product Catalog ID,Ad ID,Ad name,Impression trackers,Click trackers,Ad status,Second Line CTA,Ad product IDs,Post ID,Profile name or ID,Post type,Call to action,Headline,Destination URL,Display URL,Media file name,Thumbnail file name,Body,Allow comments,Additional Text,Carousel card 1 - Media file name,Carousel card 1 - Destination URL,Carousel card 1 - Display URL,Carousel card 1 - Caption,Carousel card 1 - Call to action,Carousel card 2 - Media file name,Carousel card 2 - Destination URL,Carousel card 2 - Display URL,Carousel card 2 - Caption,Carousel card 2 - Call to action,Carousel card 3 - Media file name,Carousel card 3 - Destination URL,Carousel card 3 - Display URL,Carousel card 3 - Caption,Carousel card 3 - Call to action,Carousel card 4 - Media file name,Carousel card 4 - Destination URL,Carousel card 4 - Display URL,Carousel card 4 - Caption,Carousel card 4 - Call to action,Carousel card 5 - Media file name,Carousel card 5 - Destination URL,Carousel card 5 - Display URL,Carousel card 5 - Caption,Carousel card 5 - Call to action,Carousel card 6 - Media file name,Carousel card 6 - Destination URL,Carousel card 6 - Display URL,Carousel card 6 - Caption,Carousel card 6 - Call to action,Hero card - Media file name,Hero card - Destination URL,Hero card - Display URL,Hero card - Caption,Hero card - Call to action,Secondary card 1 - Media file name,Secondary card 1 - Destination URL,Secondary card 1 - Display URL,Secondary card 2 - Media file name,Secondary card 2 - Destination URL,Secondary card 2 - Display URL,Secondary card 3 - Media file name,Secondary card 3 - Destination URL,Secondary card 3 - Display URL,Secondary card 4 - Media file name,Secondary card 4 - Destination URL,Secondary card 4 - Display URL,Secondary card 5 - Media file name,Secondary card 5 - Destination URL,Secondary card 5 - Display URL
+Results,Campaign ID,Campaign name,Special ad category,Campaign objective,Campaign budget,Funding instrument,Campaign status,Campaign App ID,Ad group ID,Ad group name,Start time,End time,Ad Group Pixel ID,Bid strategy,Bid,Budget type,Budget,Conversion goal,Conversion optimization window,Frequency caps,Ad group status,Locations,Exclude locations,Gender,Language targeting,Exclude keywords,Keywords,Interests,Communities,Exclude communities,Auto app exclusions,Device type,Minimum OS version,Carriers,Placements,Platforms,Custom audiences,Exclude custom audiences,Third-party audiences,Exclude third-party audiences,Expand audience automatically,Delivery type,Ad Group App ID,Shopping Ad Type,Product Catalog ID,Ad ID,Ad name,Impression trackers,Click trackers,Ad status,Second Line CTA,Ad product IDs,Post ID,Profile name or ID,Post type,Call to action,Headline,Destination URL,Display URL,Media file name,Thumbnail file name,Body,Allow comments,Additional Text,Carousel card 1 - Media file name,Carousel card 1 - Destination URL,Carousel card 1 - Display URL,Carousel card 1 - Caption,Carousel card 1 - Call to action,Carousel card 2 - Media file name,Carousel card 2 - Destination URL,Carousel card 2 - Display URL,Carousel card 2 - Caption,Carousel card 2 - Call to action,Carousel card 3 - Media file name,Carousel card 3 - Destination URL,Carousel card 3 - Display URL,Carousel card 3 - Caption,Carousel card 3 - Call to action,Carousel card 4 - Media file name,Carousel card 4 - Destination URL,Carousel card 4 - Display URL,Carousel card 4 - Caption,Carousel card 4 - Call to action,Carousel card 5 - Media file name,Carousel card 5 - Destination URL,Carousel card 5 - Display URL,Carousel card 5 - Caption,Carousel card 5 - Call to action,Carousel card 6 - Media file name,Carousel card 6 - Destination URL,Carousel card 6 - Display URL,Carousel card 6 - Caption,Carousel card 6 - Call to action,Hero card - Media file name,Hero card - Destination URL,Hero card - Display URL,Hero card - Caption,Hero card - Call to action,Secondary card 1 - Media file name,Secondary card 1 - Destination URL,Secondary card 1 - Display URL,Secondary card 2 - Media file name,Secondary card 2 - Destination URL,Secondary card 2 - Display URL,Secondary card 3 - Media file name,Secondary card 3 - Destination URL,Secondary card 3 - Display URL,Secondary card 4 - Media file name,Secondary card 4 - Destination URL,Secondary card 4 - Display URL,Secondary card 5 - Media file name,Secondary card 5 - Destination URL,Secondary card 5 - Display URL
+Results,Campaign ID,Campaign name,Special ad category,Campaign objective,Campaign budget,Funding instrument,Campaign status,Campaign App ID,Ad group ID,Ad group name,Start time,End time,Ad Group Pixel ID,Bid strategy,Bid,Budget type,Budget,Conversion goal,Conversion optimization window,Frequency caps,Ad group status,Locations,Exclude locations,Gender,Language targeting,Exclude keywords,Keywords,Interests,Communities,Exclude communities,Auto app exclusions,Device type,Minimum OS version,Carriers,Placements,Platforms,Custom audiences,Exclude custom audiences,Third-party audiences,Exclude third-party audiences,Expand audience automatically,Delivery type,Ad Group App ID,Shopping Ad Type,Product Catalog ID,Ad ID,Ad name,Impression trackers,Click trackers,Ad status,Second Line CTA,Ad product IDs,Post ID,Profile name or ID,Post type,Call to action,Headline,Destination URL,Display URL,Media file name,Thumbnail file name,Body,Allow comments,Additional Text,Carousel card 1 - Media file name,Carousel card 1 - Destination URL,Carousel card 1 - Display URL,Carousel card 1 - Caption,Carousel card 1 - Call to action,Carousel card 2 - Media file name,Carousel card 2 - Destination URL,Carousel card 2 - Display URL,Carousel card 2 - Caption,Carousel card 2 - Call to action,Carousel card 3 - Media file name,Carousel card 3 - Destination URL,Carousel card 3 - Display URL,Carousel card 3 - Caption,Carousel card 3 - Call to action,Carousel card 4 - Media file name,Carousel card 4 - Destination URL,Carousel card 4 - Display URL,Carousel card 4 - Caption,Carousel card 4 - Call to action,Carousel card 5 - Media file name,Carousel card 5 - Destination URL,Carousel card 5 - Display URL,Carousel card 5 - Caption,Carousel card 5 - Call to action,Carousel card 6 - Media file name,Carousel card 6 - Destination URL,Carousel card 6 - Display URL,Carousel card 6 - Caption,Carousel card 6 - Call to action,Hero card - Media file name,Hero card - Destination URL,Hero card - Display URL,Hero card - Caption,Hero card - Call to action,Secondary card 1 - Media file name,Secondary card 1 - Destination URL,Secondary card 1 - Display URL,Secondary card 2 - Media file name,Secondary card 2 - Destination URL,Secondary card 2 - Display URL,Secondary card 3 - Media file name,Secondary card 3 - Destination URL,Secondary card 3 - Display URL,Secondary card 4 - Media file name,Secondary card 4 - Destination URL,Secondary card 4 - Display URL,Secondary card 5 - Media file name,Secondary card 5 - Destination URL,Secondary card 5 - Display URL
+Results,Campaign ID,Campaign name,Special ad category,Campaign objective,Campaign budget,Funding instrument,Campaign status,Campaign App ID,Ad group ID,Ad group name,Start time,End time,Ad Group Pixel ID,Bid strategy,Bid,Budget type,Budget,Conversion goal,Conversion optimization window,Frequency caps,Ad group status,Locations,Exclude locations,Gender,Language targeting,Exclude keywords,Keywords,Interests,Communities,Exclude communities,Auto app exclusions,Device type,Minimum OS version,Carriers,Placements,Platforms,Custom audiences,Exclude custom audiences,Third-party audiences,Exclude third-party audiences,Expand audience automatically,Delivery type,Ad Group App ID,Shopping Ad Type,Product Catalog ID,Ad ID,Ad name,Impression trackers,Click trackers,Ad status,Second Line CTA,Ad product IDs,Post ID,Profile name or ID,Post type,Call to action,Headline,Destination URL,Display URL,Media file name,Thumbnail file name,Body,Allow comments,Additional Text,Carousel card 1 - Media file name,Carousel card 1 - Destination URL,Carousel card 1 - Display URL,Carousel card 1 - Caption,Carousel card 1 - Call to action,Carousel card 2 - Media file name,Carousel card 2 - Destination URL,Carousel card 2 - Display URL,Carousel card 2 - Caption,Carousel card 2 - Call to action,Carousel card 3 - Media file name,Carousel card 3 - Destination URL,Carousel card 3 - Display URL,Carousel card 3 - Caption,Carousel card 3 - Call to action,Carousel card 4 - Media file name,Carousel card 4 - Destination URL,Carousel card 4 - Display URL,Carousel card 4 - Caption,Carousel card 4 - Call to action,Carousel card 5 - Media file name,Carousel card 5 - Destination URL,Carousel card 5 - Display URL,Carousel card 5 - Caption,Carousel card 5 - Call to action,Carousel card 6 - Media file name,Carousel card 6 - Destination URL,Carousel card 6 - Display URL,Carousel card 6 - Caption,Carousel card 6 - Call to action,Hero card - Media file name,Hero card - Destination URL,Hero card - Display URL,Hero card - Caption,Hero card - Call to action,Secondary card 1 - Media file name,Secondary card 1 - Destination URL,Secondary card 1 - Display URL,Secondary card 2 - Media file name,Secondary card 2 - Destination URL,Secondary card 2 - Display URL,Secondary card 3 - Media file name,Secondary card 3 - Destination URL,Secondary card 3 - Display URL,Secondary card 4 - Media file name,Secondary card 4 - Destination URL,Secondary card 4 - Display URL,Secondary card 5 - Media file name,Secondary card 5 - Destination URL,Secondary card 5 - Display URL
+Results,Campaign ID,Campaign name,Special ad category,Campaign objective,Campaign budget,Funding instrument,Campaign status,Campaign App ID,Ad group ID,Ad group name,Start time,End time,Ad Group Pixel ID,Bid strategy,Bid,Budget type,Budget,Conversion goal,Conversion optimization window,Frequency caps,Ad group status,Locations,Exclude locations,Gender,Language targeting,Exclude keywords,Keywords,Interests,Communities,Exclude communities,Auto app exclusions,Device type,Minimum OS version,Carriers,Placements,Platforms,Custom audiences,Exclude custom audiences,Third-party audiences,Exclude third-party audiences,Expand audience automatically,Delivery type,Ad Group App ID,Shopping Ad Type,Product Catalog ID,Ad ID,Ad name,Impression trackers,Click trackers,Ad status,Second Line CTA,Ad product IDs,Post ID,Profile name or ID,Post type,Call to action,Headline,Destination URL,Display URL,Media file name,Thumbnail file name,Body,Allow comments,Additional Text,Carousel card 1 - Media file name,Carousel card 1 - Destination URL,Carousel card 1 - Display URL,Carousel card 1 - Caption,Carousel card 1 - Call to action,Carousel card 2 - Media file name,Carousel card 2 - Destination URL,Carousel card 2 - Display URL,Carousel card 2 - Caption,Carousel card 2 - Call to action,Carousel card 3 - Media file name,Carousel card 3 - Destination URL,Carousel card 3 - Display URL,Carousel card 3 - Caption,Carousel card 3 - Call to action,Carousel card 4 - Media file name,Carousel card 4 - Destination URL,Carousel card 4 - Display URL,Carousel card 4 - Caption,Carousel card 4 - Call to action,Carousel card 5 - Media file name,Carousel card 5 - Destination URL,Carousel card 5 - Display URL,Carousel card 5 - Caption,Carousel card 5 - Call to action,Carousel card 6 - Media file name,Carousel card 6 - Destination URL,Carousel card 6 - Display URL,Carousel card 6 - Caption,Carousel card 6 - Call to action,Hero card - Media file name,Hero card - Destination URL,Hero card - Display URL,Hero card - Caption,Hero card - Call to action,Secondary card 1 - Media file name,Secondary card 1 - Destination URL,Secondary card 1 - Display URL,Secondary card 2 - Media file name,Secondary card 2 - Destination URL,Secondary card 2 - Display URL,Secondary card 3 - Media file name,Secondary card 3 - Destination URL,Secondary card 3 - Display URL,Secondary card 4 - Media file name,Secondary card 4 - Destination URL,Secondary card 4 - Display URL,Secondary card 5 - Media file name,Secondary card 5 - Destination URL,Secondary card 5 - Display URL
+Results,Campaign ID,Campaign name,Special ad category,Campaign objective,Campaign budget,Funding instrument,Campaign status,Campaign App ID,Ad group ID,Ad group name,Start time,End time,Ad Group Pixel ID,Bid strategy,Bid,Budget type,Budget,Conversion goal,Conversion optimization window,Frequency caps,Ad group status,Locations,Exclude locations,Gender,Language targeting,Exclude keywords,Keywords,Interests,Communities,Exclude communities,Auto app exclusions,Device type,Minimum OS version,Carriers,Placements,Platforms,Custom audiences,Exclude custom audiences,Third-party audiences,Exclude third-party audiences,Expand audience automatically,Delivery type,Ad Group App ID,Shopping Ad Type,Product Catalog ID,Ad ID,Ad name,Impression trackers,Click trackers,Ad status,Second Line CTA,Ad product IDs,Post ID,Profile name or ID,Post type,Call to action,Headline,Destination URL,Display URL,Media file name,Thumbnail file name,Body,Allow comments,Additional Text,Carousel card 1 - Media file name,Carousel card 1 - Destination URL,Carousel card 1 - Display URL,Carousel card 1 - Caption,Carousel card 1 - Call to action,Carousel card 2 - Media file name,Carousel card 2 - Destination URL,Carousel card 2 - Display URL,Carousel card 2 - Caption,Carousel card 2 - Call to action,Carousel card 3 - Media file name,Carousel card 3 - Destination URL,Carousel card 3 - Display URL,Carousel card 3 - Caption,Carousel card 3 - Call to action,Carousel card 4 - Media file name,Carousel card 4 - Destination URL,Carousel card 4 - Display URL,Carousel card 4 - Caption,Carousel card 4 - Call to action,Carousel card 5 - Media file name,Carousel card 5 - Destination URL,Carousel card 5 - Display URL,Carousel card 5 - Caption,Carousel card 5 - Call to action,Carousel card 6 - Media file name,Carousel card 6 - Destination URL,Carousel card 6 - Display URL,Carousel card 6 - Caption,Carousel card 6 - Call to action,Hero card - Media file name,Hero card - Destination URL,Hero card - Display URL,Hero card - Caption,Hero card - Call to action,Secondary card 1 - Media file name,Secondary card 1 - Destination URL,Secondary card 1 - Display URL,Secondary card 2 - Media file name,Secondary card 2 - Destination URL,Secondary card 2 - Display URL,Secondary card 3 - Media file name,Secondary card 3 - Destination URL,Secondary card 3 - Display URL,Secondary card 4 - Media file name,Secondary card 4 - Destination URL,Secondary card 4 - Display URL,Secondary card 5 - Media file name,Secondary card 5 - Destination URL,Secondary card 5 - Display URL

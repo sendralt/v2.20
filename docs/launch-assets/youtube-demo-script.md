@@ -138,7 +138,22 @@
 
 ---
 
-### SEGMENT 6: 12-Hour Activity Forecast (5:05 – 5:40)
+### SEGMENT 5b: Shareable Forecast Card (5:05 – 5:25)
+
+**Purpose:** Show the viral Share Forecast feature — every forecast becomes a beautiful shareable image. This is a key differentiator no competitor has.
+
+| Time | Visual | Audio |
+|------|--------|-------|
+| 5:05–5:10 | **Screen recording:** Scroll back to the top of the forecast. Highlight the **"Share Forecast"** button positioned below the bite score banner. **Zoom in** on the button. Text overlay: **"New: Share your forecast as an image"** | **SFX:** Soft highlight chime. **V.O.:** "But here's something no other fishing app does. See this button? Share Forecast." |
+| 5:10–5:15 | **Screen recording:** Click the **Share Forecast** button. Show a brief generating animation (1-2 seconds). Text overlay: **"Generating 1080×1350 image..."** | **SFX:** Processing/generating sound. **V.O.:** "Tap it, and FishSmart Pro generates a beautiful ten-eighty by thirteen-fifty portrait image — perfect for Instagram." |
+| 5:15–5:22 | **Screen recording / mockup:** Show the generated forecast card image. **Zoom out** to reveal the full card: color-coded bite score ring (82/100) with glow effect, species name (Largemouth Bass), location, date, top 3 factors from the scientific engine, top lure pick with match rank (Spinnerbait — 91%), and a conditions strip showing water temp, air temp, wind, barometric pressure with trend arrow, and moon phase. Footer reads: **"Get your free fishing forecast → fishsmart-pro.com"**. Text overlay highlights each element with annotation arrows: **"Bite score ring"**, **"Top 3 factors"**, **"Lure pick + match"**, **"Conditions strip"**, **"Footer CTA"**. | **Music:** Brief upbeat swell. **V.O.:** "Look at this. The bite score ring with a glow effect. Your species, location, and date. The top three factors explaining why the score is what it is. Your top lure pick with match rank. A full conditions strip — water temp, air temp, wind, pressure with trend arrow, moon phase. And a call-to-action footer that links back to the app." |
+| 5:22–5:25 | **Screen recording:** On mobile — show the native Web Share API sheet sliding up with options: Messages, Instagram, Reddit, Copy Link, Save Image. On desktop — show the PNG auto-downloading. Text overlay: **"Mobile: native share sheet. Desktop: auto-download PNG."** | **SFX:** Share sheet slide-up sound. **V.O.:** "On mobile, it uses the native share sheet — send it to Messages, Instagram, Reddit, wherever. On desktop, it auto-downloads the PNG. Every forecast you generate becomes shareable content." |
+
+**Director's Note:** If recording on desktop, simulate the mobile share sheet with a mockup overlay. The key visual is the generated card image itself — it should look impressive enough that viewers want to share their own.
+
+---
+
+### SEGMENT 6: 12-Hour Activity Forecast (5:25 – 6:00)
 
 **Purpose:** Show the hourly breakdown so anglers know exactly WHEN to fish.
 
@@ -186,7 +201,7 @@
 | 6:40–6:48 | **Screen recording / motion graphic:** Competitor pricing screenshots appear side by side. Fishbrain: **"$59.99/year"** circled in red. Navionics: **"$49.99/year"** circled in red. Text overlay: **"$60/year for a bite score?"** | **SFX:** Cash register sound (negative tone). **V.O.:** "Let's talk price. Fishbrain charges sixty dollars a year. Navionics? Forty-nine ninety-nine." |
 | 6:48–6:58 | **Motion graphic:** Bar chart animates in showing three prices: Fishbrain ($59.99), Navionics ($49.99), FishSmart Pro ($29.99). FishSmart Pro bar glows green with a **"50% OFF"** badge. Text overlay: **"FishSmart Pro: $29.99/year — less than $2.50/month"** | **Music:** Beat drops. **V.O.:** "FishSmart Pro is twenty-nine ninety-nine a year. That's less than two dollars and fifty cents a month. Half what Fishbrain charges." |
 | 6:58–7:08 | **Screen recording:** Show the pricing/upgrade page in the app. Monthly option: **"$4.99/month"**. Yearly option: **"$29.99/year (~$2.50/month)"** highlighted with **"50% savings"** badge. Text overlay: **"$4.99/mo OR $29.99/yr. Cancel anytime."** | **V.O.:** "Four ninety-nine a month, or twenty-nine ninety-nine a year. Cancel anytime. No hidden fees." |
-| 7:08–7:15 | **Screen recording:** Show the free tier info. Text overlay: **"FREE: 3 full AI forecasts per session"** with a list: ✅ Bite score, ✅ Factor breakdown, ✅ AI summary, ✅ Lure recommendations, ✅ Activity forecast — ALL features unlocked. Text overlay: **"Not a crippled demo. Everything works."** | **V.O.:** "And the free tier? Three full forecasts per session. Not a crippled demo — every feature works. Bite score, factor breakdown, AI summary, lure recommendations, activity forecast. All of it. No credit card needed." |
+| 7:08–7:15 | **Screen recording:** Show the free tier info. Text overlay: **"FREE: 3 full AI forecasts to try"** with a list: ✅ Bite score, ✅ Factor breakdown, ✅ AI summary, ✅ Lure recommendations, ✅ Activity forecast — ALL features unlocked. Text overlay: **"Not a crippled demo. Everything works."** | **V.O.:** "And the free tier? Three full forecasts, free to try. Not a crippled demo — every feature works. Bite score, factor breakdown, AI summary, lure recommendations, activity forecast. All of it. No credit card needed." |
 | 7:15–7:20 | **Screen recording:** Quick recap of the clean interface — no ads, no social feed. Text overlay: **"Zero social features. Zero spot burning. Zero data selling."** | **V.O.:** "Zero social features. Zero spot burning. Zero data selling. Your fishing spots stay yours." |
 
 ---
@@ -197,7 +212,7 @@
 
 | Time | Visual | Audio |
 |------|--------|-------|
-| 7:20–7:30 | **Motion graphic:** Summary card animates in with key stats: **"25 Species"**, **"10+ Factors"**, **"Live USGS Data"**, **"Gemini 3 Flash AI"**, **"$29.99/yr or FREE (3/session)"**, **"Zero Social Features"**. Each stat pops in sequentially with a sound. | **SFX:** Each stat lands with a soft impact. **V.O.:** "Twenty-five species. Ten-plus factors. Live USGS data. Gemini 3 Flash AI enhancement. Twenty-nine ninety-nine a year — or free with three forecasts per session. And zero social features." |
+| 7:20–7:30 | **Motion graphic:** Summary card animates in with key stats: **"25 Species"**, **"10+ Factors"**, **"Live USGS Data"**, **"Gemini 3 Flash AI"**, **"$29.99/yr or FREE (3 forecasts)"**, **"Zero Social Features"**. Each stat pops in sequentially with a sound. | **SFX:** Each stat lands with a soft impact. **V.O.:** "Twenty-five species. Ten-plus factors. Live USGS data. Gemini 3 Flash AI enhancement. Twenty-nine ninety-nine a year — or try it free with three forecasts. And zero social features." |
 | 7:30–7:38 | **Screen recording:** Show the app URL on screen prominently. Then show the Google Play Store listing. Text overlay: **"Available on Web (PWA) + Google Play (Android)"** | **V.O.:** "FishSmart Pro is available on the web as a PWA and on Google Play for Android. Links in the description." |
 | 7:38–7:45 | **End card:** FishSmart Pro logo centered. Text below: **"Science, not guessing."** Then: **"3 FREE forecasts — link in description."** Logo pulses gently. | **Music:** Swells to a clean resolution. **V.O.:** "FishSmart Pro. Science, not guessing. Try it free — three forecasts, no credit card. Link in the description." |
 | 7:45–7:50 | **Final frame:** Logo + subscribe prompt. Text: **"Subscribe for weekly fishing science content."** Small text: links to web app and Google Play. | **V.O.:** "If this was helpful, subscribe. I'll be posting fishing science content every week. Tight lines." **SFX:** Final chime. **Music:** Fade out. |
@@ -218,7 +233,7 @@ The AI doesn't guess the forecast. The engine calculates it. The AI explains it.
 
 25 freshwater species. 10+ environmental and biological factors. Live USGS sensor data. Source-tagged lure recommendations. 12-hour activity forecast. Forecast history with JSON/CSV export.
 
-3 free forecasts per session. $4.99/mo or $29.99/yr for unlimited. Zero social features. Your spots stay yours.
+3 free forecasts to try. $4.99/mo or $29.99/yr for unlimited. Zero social features. Your spots stay yours.
 
 SUBSCRIBE for weekly fishing science, forecasts, and tips!
 

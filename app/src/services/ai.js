@@ -556,7 +556,55 @@ function createAIService(deps) {
         }
     }
 
-    return { generateFishingStrategy };
+    /**
+     * Tease forecast — runs weather + scientific engine ONLY (no Gemini AI call).
+     * Used for the tease-wall paywall: shows real bite score + conditions,
+     * but withholds AI strategy, lure picks, and activity details.
+     * Does NOT count against free tier usage.
+     */
+    async function generateTeaseForecast(params) {
+        const { location, species, clarity, currentTime, manualWaterTemp } = params;
+        const weather = await weatherService.getWeatherData(location);
+        const currentHour = parseHour(currentTime);
+        const scientificData = await biteEngine.calculateScientificStrategy(
+            {
+                speciesName: species,
+                waterColor: clarity,
+                location,
+                lat: weather?.lat,
+                lon: weather?.lon,
+                manualWaterTemp: manualWaterTemp != null ? Number(manualWaterTemp) : null
+            },
+            weather,
+            { useLureCatalog: false, hour: currentHour }
+        );
+        const moonData = getMoonPhase(new Date());
+        return {
+            tease_mode: true,
+            weather,
+            bite_probability: scientificData?.biteProbability || 0,
+            bite_probability_confidence: scientificData?.biteProbabilityConfidence || null,
+            bite_rank: scientificData?.biteRank || 'Unavailable',
+            bite_reasoning: scientificData?.biteReasoning || '',
+            pressure_forecast: weather?.pressureForecast || [],
+            water_temp: scientificData?.waterTemp || null,
+            water_temp_source: scientificData?.waterTempSource || 'offline',
+            water_temp_station: scientificData?.waterTempStation || null,
+            water_temp_station_distance: scientificData?.waterTempStationDistance || null,
+            solunar: {
+                moon_phase: moonData.label,
+                moon_illumination: Math.round(moonData.illumination * 100),
+                assessment: moonData.feedingMultiplier > 1.0 ? 'Solunar peak — enhanced feeding activity expected.' : 'No solunar peak currently.'
+            },
+            // Withheld (Pro-only) — not computed
+            strategy: null,
+            intel: null,
+            recommended_lures: [],
+            activity: []
+        };
+    }
+
+    return { generateFishingStrategy, generateTeaseForecast };
 }
 
 module.exports = { createAIService, getTokenUsageReport, recordTokenUsage, mergeLures };

@@ -80,8 +80,9 @@ Unlike Fishbrain and other social fishing apps, FishSmart Pro has:
 • 20+ freshwater species with individual biological profiles
 • Forecast history (up to 50 saved) with JSON/CSV export
 • Barometric pressure trend analysis — the #1 feeding trigger
+• <b>Shareable Forecast Cards</b> — turn any forecast into a beautiful image (bite score ring, top factors, lure pick, conditions strip) and share it with friends on Instagram, Messages, Reddit, and more. Native share sheet on mobile, auto-download PNG on desktop
 
-<b>Free Tier:</b> 3 full AI forecasts per session — complete features, not neutered
+<b>Free Tier:</b> 3 full AI forecasts free to try — complete features, not neutered
 <b>Pro Monthly:</b> $4.99/mo — unlimited forecasts, history & data export
 <b>Pro Yearly:</b> $29.99/yr (~$2.50/mo, 50% savings)
 

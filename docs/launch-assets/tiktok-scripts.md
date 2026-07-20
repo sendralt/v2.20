@@ -66,7 +66,7 @@
 | 0:05–0:09 | **Screen recording / motion graphic:** FishSmart Pro pricing card slides in. Text overlays pop in sequentially: **"$4.99/month"**, then **"OR $29.99/year"**, then **"(~$2.50/month)"** in green. Green arrow pointing down with **"50% OFF vs competitors"** | **V.O.:** "FishSmart Pro: four ninety-nine a month. Or twenty-nine ninety-nine a year. That's less than two-fifty a month." |
 | 0:09–0:13 | **Motion graphic:** Side-by-side bar chart animates in. Three bars: Fishbrain ($59.99), Navionics ($49.99), FishSmart Pro ($29.99). FishSmart Pro bar glows green. Text overlay: **"Same science. Half the price."** | **V.O.:** "That's half what Fishbrain charges. Less than Navionics. And it's built specifically for freshwater." |
 | 0:13–0:17 | **Screen recording:** Quick montage of FishSmart Pro features scrolling: bite score, factor breakdown, lure rec, activity chart, USGS badge. Text overlay: **"ALL features included. No paywalls."** | **V.O.:** "Every feature. Bite score breakdown, lure recommendations, twelve-hour forecast, live USGS data." |
-| 0:17–0:20 | **End card:** Logo + text: **"3 FREE forecasts per session. No credit card. Link in bio."** | **V.O.:** "Three forecasts free. No credit card. Link in bio." **SFX:** Pop. |
+| 0:17–0:20 | **End card:** Logo + text: **"3 FREE forecasts to try. No credit card. Link in bio."** | **V.O.:** "Three forecasts free. No credit card. Link in bio." **SFX:** Pop. |
 
 **Caption:** Why pay $60/year for a fishing app when FishSmart Pro does MORE for $29.99/year? 3 free forecasts — no credit card needed. Link in bio. #fishing #fishingapp #bassfishing #fishingdeals #fishingbudget
 
@@ -153,6 +153,26 @@
 | 0:12–0:15 | **End card:** Logo + text: **"3 FREE forecasts. Link in bio. NO credit card."** | **V.O.:** "Three free forecasts, no credit card. Link in bio. Go." **SFX:** Final pop. |
 
 **Caption:** Full fishing forecast in 15 seconds. Real science, real data, real lure recommendations. 3 FREE — link in bio. #fishing #fishingapp #bassfishing #fishingforecast #fishingdemo #quickdemo
+
+---
+
+## Script 7: Share Your Bite Score (Shareable Forecast Card)
+
+**Angle:** When the bite score is high, you need to prove it to your friends. Share your forecast as a beautiful image.
+**Length:** 20 seconds
+**Music:** Upbeat, brag-energy track — confident and fun
+
+### Shot List
+
+| Time | Visual | Audio |
+|------|--------|-------|
+| 0:00–0:03 | **Screen recording:** FishSmart Pro bite score reveal — **82/100** pops in with glow effect. Text overlay: **"When the bite score is 82 and you need to prove it to your friends"** | **SFX:** Score ding. **V.O.:** "When the bite score is eighty-two and you need to prove it to your friends..." |
+| 0:03–0:06 | **Screen recording:** Tap the **"Share Forecast"** button. Brief generating animation. Text overlay: **"Watch this 👀"** | **SFX:** Generating/processing sound. **V.O.:** "...you tap one button." |
+| 0:06–0:14 | **Screen recording / mockup:** The generated forecast card image fills the screen — 1080×1350 portrait. Camera slowly pans down revealing: bite score ring with glow, species and location, top 3 factors with reasoning, top lure pick with match rank, conditions strip with pressure trend arrow and moon phase. Text overlays pop on key elements: **"Bite score ring 🔥"**, **"Top factors explained"**, **"Lure pick + match %"**, **"Full conditions strip"**. | **Music:** Beat drops. **V.O.:** "A beautiful forecast card. Bite score ring, the science behind it, your lure pick, and every condition — all in one image." |
+| 0:14–0:17 | **Screen recording:** Native mobile share sheet slides up — Instagram, Messages, Reddit icons visible. Thumb taps Instagram. Text overlay: **"Share to IG, Reddit, Messages — anywhere"** | **SFX:** Share sheet sound. **V.O.:** "Share it straight to Instagram, Reddit, Messages — wherever your fishing buddies are." |
+| 0:17–0:20 | **End card:** Logo + text: **"3 FREE forecasts. Link in bio."** Small text: **"Every forecast is shareable."** | **V.O.:** "Three free forecasts. Link in bio. Go flex your bite score." **SFX:** Pop. |
+
+**Caption:** When the bite score is 82 and you need to prove it to your friends 🎣 FishSmart Pro generates a shareable forecast image with your bite score, the science behind it, lure picks, and conditions. 3 free forecasts — link in bio. #fishing #fishingapp #bassfishing #bitescore #fishingforecast #shareableforecast
 
 ---
 

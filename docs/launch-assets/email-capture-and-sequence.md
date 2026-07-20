@@ -55,7 +55,7 @@ Welcome aboard. You're now part of a small group of anglers who'd rather underst
 
 **Want to try the full app right now?**
 
-You get **3 free full-power forecasts** every session — every feature works, no crippled demo:
+You get **3 free full-power forecasts** to try — every feature works, no crippled demo:
 
 [Try FishSmart Pro Free] -> [link]
 
@@ -130,12 +130,13 @@ Pro is $4.99/month or $29.99/year (less than $2.50/month). You get:
 - 12-hour activity forecast with peak windows
 - Forecast history (save up to 50)
 - Data export
+- **Shareable Forecast Cards** — share your catches (well, your forecasts) with friends. Every forecast generates a beautiful image with bite score ring, top factors, lure pick, and conditions strip. Post it to Instagram, send it to your fishing group chat, share it on Reddit
 
 No hidden fees. Cancel anytime.
 
 [Upgrade to Pro] -> [link]
 
-Or keep using the free tier — 3 full forecasts per session, every session. No hard feelings.
+Or keep using the free tier — 3 full forecasts free to try. No hard feelings.
 
 Tight lines,
 [Your Name]

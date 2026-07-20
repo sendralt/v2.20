@@ -1,6 +1,6 @@
 # FishSmart Pro — $500 Launch Budget Strategy
 > **Goal:** Maximize paying subscriptions with a $500 budget
-> **Pricing:** $4.99/mo or $29.99/yr | **Free tier:** 3 full AI forecasts per session
+> **Pricing:** $4.99/mo or $29.99/yr | **Free tier:** 3 full AI forecasts per device
 > **Target:** US freshwater recreational anglers
 > **Created:** 2026-06-21
 
@@ -117,7 +117,9 @@ $500 is too small to buy meaningful traffic through paid ads alone. Instead, we 
 | Download / visit FishSmart Pro | 1 |
 | Run a free AI forecast (try the app) | 5 |
 | Share the giveaway post | 3 |
+| **Share a forecast card** (use the in-app Share button to post your forecast image to socials) | 5 |
 | Tag 2 fishing buddies in comments | 2 |
+| **Most shared forecast card** (the forecast card with the most engagement during the contest period wins a bonus prize) | 10 |
 | Subscribe to Pro (bonus entry) | 10 |
 
 ### Where to Run It
@@ -126,6 +128,10 @@ $500 is too small to buy meaningful traffic through paid ads alone. Instead, we 
 2. **Partner with 1-2 micro-influencers** — they promote it to their audience
 3. **Reddit** — post in r/FishingGear, r/bassfishing (check rules first)
 4. **TikTok/Instagram** — use giveaway as content hook
+
+**Free Viral Amplification — Shareable Forecast Cards:**
+
+The in-app **Share Forecast** button is a zero-cost viral channel. Every forecast generates a beautiful 1080×1350 portrait image (bite score ring with glow, top 3 factors, lure pick with match rank, conditions strip, footer CTA) that users can share directly to Instagram, Messages, Reddit, and more via the native Web Share API. On desktop, it auto-downloads the PNG. Each shared card includes the footer: "Get your free fishing forecast → fishsmart-pro.com" — every share is a free ad impression with zero spend. Track the "most shared forecast card" during the contest for a bonus prize entry.
 
 ### Projected Results
 
@@ -413,7 +419,7 @@ The entire strategy hinges on getting 3-5 micro-influencers to create content. *
 Every channel needs a unique tracking link. Without attribution data, you can't optimize. Use the promo code system (`scripts/generate-promo.js`) to track influencer conversions.
 
 ### 3. The Free Tier is Your Funnel
-3 full AI forecasts per session is a generous free tier. It's designed to demonstrate value before asking for payment. Make sure the upgrade prompt appears after the 3rd forecast - not before.
+3 full AI forecasts per device is a generous free tier. It's designed to demonstrate value before asking for payment. Make sure the upgrade prompt appears after the 3rd forecast - not before.
 
 ### 4. Don't Spread Too Thin
 Resist the temptation to be on every platform. **Focus on:**

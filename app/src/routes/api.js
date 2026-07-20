@@ -306,6 +306,31 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
         }
     });
 
+    // Tease endpoint — returns bite score + conditions only (no AI), for the tease-wall paywall.
+    // Does NOT require subscription or count against free tier usage.
+    app.post('/api/tease', generateLimiter, async (req, res) => {
+        const { location, species, clarity, currentTime, manualWaterTemp } = req.body;
+        if (!location || typeof location !== 'string' || location.length > MAX_INPUT)
+            return res.status(400).json({ success: false, error: 'Invalid location' });
+        const parsedManualTemp = manualWaterTemp != null && manualWaterTemp !== '' ? Number(manualWaterTemp) : null;
+        if (parsedManualTemp != null && (isNaN(parsedManualTemp) || parsedManualTemp < 32 || parsedManualTemp > 120))
+            return res.status(400).json({ success: false, error: 'Water temperature must be between 32 and 120°F' });
+        const sanitizedLocation = sanitizeInput(location, MAX_INPUT);
+        try {
+            const result = await aiService.generateTeaseForecast({
+                location: sanitizedLocation, species, clarity, currentTime, manualWaterTemp: parsedManualTemp
+            });
+            const response = { success: true, data: result };
+            if (req.newSession) {
+                response.sessionId = req.newSession.sessionId;
+                response.sessionExpiresAt = req.newSession.expiresAt;
+            }
+            res.json(response);
+        } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
+        }
+    });
+
     app.post('/api/generate', generateLimiter, checkSubscription, async (req, res) => {
         const { location, species, clarity, engine, isBoat, currentTime, manualWaterTemp } = req.body;
         if (!location || typeof location !== 'string' || location.length > MAX_INPUT) return res.status(400).json({ success: false, error: 'Invalid location' });

@@ -111,6 +111,46 @@ If it's worth it — $29.99/year. If not, you got 3 free forecasts. No risk.
 
 ---
 
+## Ad Set 5: Shareable Forecast Card Angle (Viral)
+
+**Primary Text (Variant A):**
+Every forecast you generate becomes a shareable image. 📸
+
+Bite score ring. Top factors explaining WHY the score is what it is. Your top lure pick with match rank. Full conditions strip — water temp, wind, pressure trend, moon phase.
+
+Share it to Instagram, Reddit, your group chat — wherever your fishing buddies are. Native share sheet on mobile, auto-download PNG on desktop.
+
+Every shared card says: "Get your free fishing forecast → fishsmart-pro.com"
+
+3 free forecasts to make your own. No credit card.
+
+👉 [App Store Link]
+
+**Headline:** Share Your Bite Score Like a Trophy 🎣
+**Description:** Every forecast becomes a shareable image
+**Call to Action:** Install Now
+
+---
+
+**Primary Text (Variant B):**
+The only fishing app that makes your forecast shareable. 🔥
+
+Generate a forecast → tap Share → get a beautiful 1080×1350 image with your bite score, the science behind it, lure recommendations, and live conditions.
+
+No other fishing app does this. Every forecast is content you can post.
+
+Science-first. Privacy-first. Zero social features.
+
+3 free forecasts — try it and share your first card today.
+
+👉 [App Store Link]
+
+**Headline:** The Only Fishing App With Shareable Forecast Cards
+**Description:** Bite score + factors + lures in one beautiful image
+**Call to Action:** Learn More
+
+---
+
 ## Targeting Configuration
 
 **Detailed Targeting:**
@@ -142,3 +182,5 @@ If it's worth it — $29.99/year. If not, you got 3 free forecasts. No risk.
 | Privacy Hook | Single image | Clean forecast UI screenshot with "No social feed" overlay |
 | Science Hook | Carousel (7 cards) | One card per scoring factor with icon + explanation |
 | Free First | Short video/GIF | 10-sec demo of running a forecast end-to-end |
+| Shareable Card (Variant A) | Single image (1080×1350) | Actual generated forecast card image showing bite score ring, factors, lure pick, conditions strip |
+| Shareable Card (Variant B) | Short video (15s) | Screen recording: generate forecast → tap Share → forecast card image appears → native share sheet slides up |

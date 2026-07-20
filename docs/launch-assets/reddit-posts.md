@@ -29,7 +29,7 @@
 > **The AI doesn't guess the forecast. The science engine calculates it first, then AI explains it.**
 >
 > Here's what makes it different:
-> - **3 free full-power forecasts per session** — not a crippled demo. Every feature works.
+> - **3 free full-power forecasts to try** — not a crippled demo. Every feature works.
 > - **Zero social features.** No catch sharing, no feed, no spot burning. Your spots stay yours.
 > - **25 freshwater species** — each with its own biological profile
 > - **$4.99/mo or $29.99/yr** for unlimited (less than half what Navionics charges)
@@ -63,7 +63,7 @@
 >
 > [Attach screenshot of a bass forecast showing the factor breakdown and lure recommendation]
 >
-> It's free to try — 3 full forecasts per session, no crippled features.
+> It's free to try — 3 full forecasts, no crippled features.
 >
 > - Web: [link]
 > - Google Play: [link]
@@ -90,7 +90,7 @@
 > So I built **FishSmart Pro**:
 >
 > - **Zero social features.** No catch sharing. No feed. No community spots map. Your fishing spots are YOURS.
-> - **$29.99/year** for unlimited everything (or 3 free forecasts per session)
+> - **$29.99/year** for unlimited everything (or 3 free forecasts to try)
 > - **12-hour activity forecast** so I know the best 2-hour window to launch the kayak before work
 > - **Live USGS water temp** so I know if the bass are active before I drive 30 minutes to the lake
 >
@@ -133,7 +133,7 @@
 > - PostgreSQL with 6 migrations (billing, free-tier tracking, promo codes, forecast history, cookie device tracking)
 > - 826 tests passing, 106/106 scientific benchmark invariants
 >
-> **Business model:** Freemium — 3 free full forecasts per session, $4.99/mo or $29.99/yr Pro
+> **Business model:** Freemium — 3 free full forecasts per device, $4.99/mo or $29.99/yr Pro
 >
 > It's live now:
 > - Web: [link]
@@ -164,7 +164,7 @@
 >
 > You learn while you fish. That was the whole point.
 >
-> - 3 free forecasts per session
+> - 3 free forecasts per device
 > - 25 freshwater species with individual biological profiles
 > - Zero social stuff — just you, the data, and the science
 >
