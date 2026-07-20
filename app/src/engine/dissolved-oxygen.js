@@ -40,16 +40,43 @@ const DEFAULT_DO_TOLERANCE = 4.0;
 const OPTIMAL_DO_MARGIN = 2.0;
 
 /**
- * Estimate O2 saturation concentration from water temperature.
- * Linear approximation of Weiss (1970) solubility equation.
- * At 32°F → ~14.6 mg/L, at 86°F → ~7.6 mg/L.
- * [Source: Weiss 1970 — deep-sea research oxygen solubility tables]
+ * Estimate O2 saturation concentration from water temperature using the
+ * Benson & Krause (1984) polynomial, ratified by USGS and APHA Standard
+ * Methods for freshwater at 1 atm pressure and 0 salinity.
+ *
+ *   ln(C*) = A1 + A2/T + A3/T² + A4/T³ + A5/T⁴
+ *
+ * where T is absolute temperature in Kelvin and C* is the saturation
+ * concentration in mg/L.
+ *
+ * [Source: Benson & Krause 1984 — "The concentration of oxygen dissolved
+ *  in freshwater at various temperatures and pressures";
+ *  USGS TWRI Book 9, Chapter A6.2 — Dissolved Oxygen]
+ *
+ * NOTE: Does not yet correct for altitude/barometric pressure. At
+ * elevations above ~1,000 ft, apply the multiplicative correction
+ * factor (P_local / P_standard) from the same source. Planned enhancement.
  *
  * @param {number} tempF - Water temperature in °F
  * @returns {number} Dissolved oxygen saturation in mg/L
  */
 function estimateDOSaturation(tempF) {
-    return 14.6 - 0.08 * (tempF - 32);
+    const tempC = (tempF - 32) * 5 / 9;
+    const T = tempC + 273.15; // Kelvin
+
+    const A1 = -139.34411;
+    const A2 =  1.575701e5;
+    const A3 = -6.642308e7;
+    const A4 =  1.243800e10;
+    const A5 = -8.621949e11;
+
+    const lnC = A1
+        + A2 / T
+        + A3 / Math.pow(T, 2)
+        + A4 / Math.pow(T, 3)
+        + A5 / Math.pow(T, 4);
+
+    return Math.exp(lnC);
 }
 
 /**
@@ -62,10 +89,10 @@ function estimateDOSaturation(tempF) {
  * @returns {number} O2 deficit in mg/L
  */
 function getStagnationDeficit(windMph) {
-    if (windMph == null) return 2.0; // Unknown wind — moderate assumption
-    if (windMph < 3) return 4.0;     // Dead calm — severe deficit
-    if (windMph <= 8) return 2.0;   // Light breeze — moderate deficit
-    if (windMph <= 15) return 0.5;  // Moderate wind — minimal deficit
+    if (windMph == null) return 1.0; // Unknown wind — slight assumption
+    if (windMph < 3) return 2.5;     // Dead calm — significant deficit
+    if (windMph <= 8) return 1.0;   // Light breeze — moderate deficit
+    if (windMph <= 15) return 0.3;  // Moderate wind — minimal deficit
     return 0.0;                      // Strong wind — full re-aeration
 }
 
@@ -80,12 +107,12 @@ function getStagnationDeficit(windMph) {
  */
 function getSeasonalBOD(month) {
     const BOD_BY_MONTH = {
-        1: 0.5,  2: 0.5,  3: 1.0,   // Winter
-        4: 1.5,  5: 2.0,  6: 2.5,   // Spring → Summer
-        7: 3.0,  8: 3.0,  9: 2.5,   // Peak summer → Fall
-        10: 1.5, 11: 1.0, 12: 0.5   // Fall → Winter
+        1: 0.2,  2: 0.2,  3: 0.4,   // Winter
+        4: 0.6,  5: 0.8,  6: 1.2,   // Spring → Summer
+        7: 1.5,  8: 1.5,  9: 1.0,   // Peak summer → Fall
+        10: 0.6, 11: 0.4, 12: 0.2   // Fall → Winter
     };
-    return BOD_BY_MONTH[month] || 1.5;
+    return BOD_BY_MONTH[month] || 0.6;
 }
 
 /**
