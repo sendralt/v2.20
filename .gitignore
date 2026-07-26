@@ -29,3 +29,10 @@ app/public/css/tailwind.debug.css.map
 # === Stripe Sample Code ===
 stripe-sample-code/
 stripe-sample-code.zip
+
+# === Growth Engine Content (auto-generated) ===
+docs/growth/research/
+docs/growth/review/
+docs/growth/pipeline/
+docs/growth/published/
+bundle-release.log
