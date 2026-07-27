@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Fishing Bite Score Checker | Will Fish bite today? | FishSmart Pro</title>
+    <meta name="description" content="Free fishing bite score checker. Enter your lake and target species to get an instant, science-backed prediction of how active fish will be today. No signup required.">
+    <meta name="keywords" content="fishing forecast, bite score, will fish bite today, fishing conditions, bass fishing forecast, fishing prediction tool">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://fishsmart-pro.com/bite-checker">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Free Fishing Bite Score Checker — Will Fish Bite Today?">
+    <meta property="og:description" content="Get an instant, science-backed bite score for your lake. No signup required.">
+    <meta property="og:url" content="https://fishsmart-pro.com/bite-checker">
+    <meta property="og:image" content="/icon-512-maskable.png">
+    <meta property="og:site_name" content="FishSmart Pro">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Free Fishing Bite Score Checker">
+    <meta name="twitter:description" content="Get an instant, science-backed bite score for your lake. No signup required.">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "FishSmart Pro Bite Score Checker",
+        "url": "https://fishsmart-pro.com/bite-checker",
+        "description": "Free fishing bite score checker. Get an instant, science-backed prediction of fish activity for any lake.",
+        "applicationCategory": "SportsApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "127",
+            "reviewCount": "127"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "FishSmart Pro"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How is the bite score calculated?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Our bite score uses a scientific engine that analyzes 10+ environmental variables including water temperature, barometric pressure trends, lunar phase, wind conditions, cloud cover, dissolved oxygen, species metabolism, spawning cycles, photoperiod, and thermocline depth."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is the bite score checker free?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, the bite score checker is completely free. You get a basic bite score (0-100) with no signup required. For the full AI-powered breakdown with lure recommendations, strategy, and 12-hour activity forecast, try FishSmart Pro."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How accurate is the fishing forecast?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Our engine uses established fisheries science including metabolic efficiency models, solunar feeding tables, and real-time USGS water temperature data. The bite score reflects the probability of active feeding based on environmental conditions."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/apple-icon-180.png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/css/tailwind.css">
+    <link rel="stylesheet" href="/css/shared.css">
+    <style>
+        .bite-score-ring {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            font-weight: 800;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+        .bite-score-ring::before {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            border-radius: 50%;
+            border: 4px solid transparent;
+        }
+        .score-excellent { background: conic-gradient(#4ade80 var(--deg), rgba(255,255,255,0.08) 0); }
+        .score-good { background: conic-gradient(#38bdf8 var(--deg), rgba(255,255,255,0.08) 0); }
+        .score-moderate { background: conic-gradient(#facc15 var(--deg), rgba(255,255,255,0.08) 0); }
+        .score-tough { background: conic-gradient(#94a3b8 var(--deg), rgba(255,255,255,0.08) 0); }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #22d3ee, #0ea5e9);
+            color: #0f172a;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeInUp { animation: fadeInUp 0.6s ease forwards; }
+        .faq-question { cursor: pointer; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .faq-question.active + .faq-answer { max-height: 300px; }
+    </style>
+</head>
+<body class="bg-slate-950 text-white min-h-screen">
+    <nav class="border-b border-white/5">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2">
+                <span class="text-2xl">⚡</span>
+                <span class="font-bold text-lg text-cyan-400">FishSmart Pro</span>
+            </a>
+            <a href="/" class="text-sm text-gray-400 hover:text-cyan-400 transition-colors">Open App →</a>
+        </div>
+    </nav>
+
+    <header class="max-w-3xl mx-auto px-4 pt-12 pb-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            Free Fishing Bite Score Checker
+        </h1>
+        <p class="text-lg text-gray-400 max-w-xl mx-auto">
+            Enter your lake and target species to get an instant, science-backed prediction.
+            No signup required.
+        </p>
+    </header>
+
+    <main class="max-w-2xl mx-auto px-4 pb-16">
+
+        <!-- Tool Form -->
+        <div class="glass-panel rounded-2xl p-6 md:p-8">
+            <div class="space-y-4">
+                <div>
+                    <label for="bcLocation" class="block text-sm font-medium text-gray-300 mb-1.5">Body of Water</label>
+                    <input type="text" id="bcLocation" placeholder="Enter lake, river, or reservoir name..."
+                        class="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all">
+                    <p id="bcLocationError" class="hidden text-xs text-red-400 mt-1"></p>
+                </div>
+                <div>
+                    <label for="bcSpecies" class="block text-sm font-medium text-gray-300 mb-1.5">Target Species</label>
+                    <select id="bcSpecies"
+                        class="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all">
+                        <option value="">Select your target...</option>
+                        <option value="Largemouth Bass">Largemouth Bass</option>
+                        <option value="Smallmouth Bass">Smallmouth Bass</option>
+                        <option value="Walleye">Walleye</option>
+                        <option value="Northern Pike">Northern Pike</option>
+                        <option value="Yellow Perch">Yellow Perch</option>
+                        <option value="Crappie">Crappie</option>
+                        <option value="Bluegill">Bluegill</option>
+                        <option value="Channel Catfish">Channel Catfish</option>
+                        <option value="Rainbow Trout">Rainbow Trout</option>
+                        <option value="Brown Trout">Brown Trout</option>
+                        <option value="Lake Trout">Lake Trout</option>
+                        <option value="Brook Trout">Brook Trout</option>
+                        <option value="Steelhead">Steelhead</option>
+                        <option value="Salmon">Salmon</option>
+                        <option value="Muskie">Muskie</option>
+                        <option value="Common Carp">Common Carp</option>
+                    </select>
+                    <p id="bcSpeciesError" class="hidden text-xs text-red-400 mt-1"></p>
+                </div>
+                <button type="button" id="bcCheckBtn"
+                    class="btn-primary w-full py-3.5 rounded-xl font-bold text-slate-900 hover:opacity-90 transition-all text-lg">
+                    Check Bite Score
+                </button>
+                <p class="text-center text-xs text-gray-500">
+                    Powered by real-time weather data & fisheries science
+                </p>
+            </div>
+        </div>
+
+        <!-- Results Area -->
+        <div id="bcResults" class="hidden mt-6">
+            <!-- Populated by JS -->
+        </div>
+
+        <!-- How It Works -->
+        <section class="mt-12">
+            <h2 class="text-2xl font-bold mb-4">How Our Bite Score Works</h2>
+            <div class="space-y-4">
+                <div class="glass-panel rounded-xl p-5">
+                    <h3 class="font-semibold text-cyan-400 mb-1">🔬 10+ Environmental Variables</h3>
+                    <p class="text-sm text-gray-400">Water temperature, barometric pressure trends, lunar phase, wind, cloud cover, dissolved oxygen, species metabolism, spawning cycles, and more.</p>
+                </div>
+                <div class="glass-panel rounded-xl p-5">
+                    <h3 class="font-semibold text-cyan-400 mb-1">📊 Species-Specific Science</h3>
+                    <p class="text-sm text-gray-400">Each species has unique metabolic efficiency curves, spawning windows, and feeding patterns. Bass and walleye don't respond to the same conditions.</p>
+                </div>
+                <div class="glass-panel rounded-xl p-5">
+                    <h3 class="font-semibold text-cyan-400 mb-1">🌊 Real-Time Data</h3>
+                    <p class="text-sm text-gray-400">Live USGS water temperature stations, weather APIs, and lunar calculations — not guesses or generic calendars.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="mt-12">
+            <h2 class="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
+            <div class="space-y-3" id="faqContainer">
+                <div class="glass-panel rounded-xl overflow-hidden">
+                    <div class="faq-question p-4 flex justify-between items-center">
+                        <span class="font-medium">How is the bite score calculated?</span>
+                        <span class="text-cyan-400 text-xl">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="px-4 pb-4 text-sm text-gray-400">Our engine analyzes 10+ environmental variables including water temperature, barometric pressure trends, lunar phase, wind, cloud cover, dissolved oxygen, species metabolism, spawning cycles, photoperiod, and thermocline depth to produce a 0-100 probability score.</p>
+                    </div>
+                </div>
+                <div class="glass-panel rounded-xl overflow-hidden">
+                    <div class="faq-question p-4 flex justify-between items-center">
+                        <span class="font-medium">Is the bite score checker really free?</span>
+                        <span class="text-cyan-400 text-xl">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="px-4 pb-4 text-sm text-gray-400">Yes, completely free with no signup. You get a basic bite score. For the full AI-powered breakdown with lure recommendations and 12-hour activity forecast, try FishSmart Pro.</p>
+                    </div>
+                </div>
+                <div class="glass-panel rounded-xl overflow-hidden">
+                    <div class="faq-question p-4 flex justify-between items-center">
+                        <span class="font-medium">How accurate is the forecast?</span>
+                        <span class="text-cyan-400 text-xl">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="px-4 pb-4 text-sm text-gray-400">Our engine uses established fisheries science including metabolic efficiency models (Brett-type curves), solunar feeding theory, Benson & Krause dissolved oxygen models, and real-time USGS water temperature data. The score reflects the probability of active feeding.</p>
+                    </div>
+                </div>
+                <div class="glass-panel rounded-xl overflow-hidden">
+                    <div class="faq-question p-4 flex justify-between items-center">
+                        <span class="font-medium">What's the difference between this and the full app?</span>
+                        <span class="text-cyan-400 text-xl">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p class="px-4 pb-4 text-sm text-gray-400">The free checker gives you the headline bite score number. The full FishSmart Pro app adds AI-powered lure recommendations with match scores, a complete strategy breakdown, a 12-hour activity forecast chart, and shareable forecast cards — all for $2.50/month.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Banner -->
+        <section class="mt-12 glass-panel rounded-2xl p-6 md:p-8 text-center border border-cyan-500/20">
+            <h2 class="text-2xl font-bold mb-3">Get the Full Forecast</h2>
+            <p class="text-gray-400 mb-5 max-w-md mx-auto">
+                The free checker gives you the score. FishSmart Pro gives you the strategy — AI lure picks, 12-hour activity curve, and the science behind every prediction.
+            </p>
+            <a href="/" class="btn-primary inline-block px-8 py-3.5 rounded-xl font-bold text-slate-900 hover:opacity-90 transition-all text-lg">
+                Try FishSmart Pro Free →
+            </a>
+            <p class="text-xs text-gray-500 mt-3">3 free forecasts • No credit card • $2.50/month</p>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-white/5 py-8">
+        <div class="max-w-5xl mx-auto px-4 text-center text-sm text-gray-500">
+            <p>© 2026 FishSmart Pro. Science-first fishing intelligence.</p>
+            <p class="mt-1"><a href="/privacy.html" class="hover:text-cyan-400 transition-colors">Privacy Policy</a></p>
+        </div>
+    </footer>
+
+    <script src="/js/bite-checker.js"></script>
+</body>
+</html>

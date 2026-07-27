@@ -1,6 +1,6 @@
 {
   "name": "fishsmart-pro-monorepo",
-  "version": "2.31",
+  "version": "2.32",
   "private": true,
   "workspaces": ["app"],
   "scripts": {

@@ -460,6 +460,51 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
         }
     });
 
+    // Bite Checker — public SEO tool, no auth, rate-limited, scientific engine only
+    const biteCheckerLimiter = rateLimit({
+        windowMs: 60 * 1000,
+        max: 5,
+        message: { success: false, error: 'Too many requests. Try again in a minute.' }
+    });
+
+    router.post('/api/bite-checker', biteCheckerLimiter, async (req, res) => {
+        try {
+            const { generateTeaseForecast } = require('../services/ai');
+            const { location, species } = req.body || {};
+
+            if (!location || !species) {
+                return res.status(400).json({ success: false, error: 'Location and species are required' });
+            }
+            if (!ALLOWED_SPECIES.includes(species)) {
+                return res.status(400).json({ success: false, error: 'Invalid species' });
+            }
+            if (location.length > MAX_INPUT) {
+                return res.status(400).json({ success: false, error: 'Location name too long' });
+            }
+
+            const result = await generateTeaseForecast({ location, species });
+
+            // Return lite version — score + one factor only
+            const topFactor = (result.bite_reasoning && result.bite_reasoning[0]) || null;
+
+            res.json({
+                success: true,
+                data: {
+                    bite_score: result.bite_score,
+                    species: species,
+                    location: location,
+                    top_factor: topFactor,
+                    water_temp: result.water_temp,
+                    temp: result.temp,
+                    is_lite: true
+                }
+            });
+        } catch (error) {
+            console.error('Bite checker error:', error);
+            res.status(500).json({ success: false, error: 'Unable to generate bite score' });
+        }
+    });
+
     app.use((req, res) => res.status(404).json({ success: false, error: 'Not found' }));
     app.use((err, req, res, next) => {
         console.error('Unhandled error:', err);

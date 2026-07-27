@@ -34,6 +34,8 @@ const ALLOWLIST = new Set([
     'public/js/app.js',
     'public/js/auth-utils.js',
     'public/js/forecast-card.js',
+    'public/js/bite-checker.js',
+    'public/bite-checker.html',
     'public/js/subscription.js',
     'public/sw.js',
     'public/chart.umd.min.js',

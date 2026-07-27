@@ -76,6 +76,11 @@ app.use(validateUris());
 // --- CSP Violation Reporting Endpoint ---
 app.post('/api/csp-report', express.json({ type: 'application/csp-report' }), cspReportHandler());
 
+// --- Bite Checker clean URL ---
+app.get('/bite-checker', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'bite-checker.html'));
+});
+
 // --- Static Files ---
 app.use(express.static(path.join(__dirname, 'public'), { dotfiles: 'allow' }));
 
