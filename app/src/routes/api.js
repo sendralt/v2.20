@@ -467,7 +467,7 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
         message: { success: false, error: 'Too many requests. Try again in a minute.' }
     });
 
-    router.post('/api/bite-checker', biteCheckerLimiter, async (req, res) => {
+    app.post('/api/bite-checker', biteCheckerLimiter, async (req, res) => {
         try {
             const { generateTeaseForecast } = require('../services/ai');
             const { location, species } = req.body || {};
