@@ -255,6 +255,8 @@ describe('Engine Integration — Phase 2 Science Modules', () => {
             assert.ok(typeof result.waterTemp === 'number');
             assert.ok(typeof result.metabolicEfficiency === 'number');
             assert.ok(typeof result.pressureTrend === 'string');
+            assert.ok(typeof result.pressureTrendClassification === 'string');
+            assert.ok(result.thermoclineDepth === null || typeof result.thermoclineDepth === 'number');
         });
     });
 });

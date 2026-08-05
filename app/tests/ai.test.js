@@ -60,6 +60,9 @@ describe('AI service offline fallback', () => {
         assert.equal(result.water_temp_source, 'usgs-live');
         assert.equal(result.water_temp_station, 'CHICAGO S & S CANAL AT WESTERN AVE AT CHICAGO, IL');
         assert.equal(result.water_temp_station_distance, 8.4);
+        assert.equal(result.pressure_trend, 'Unknown');
+        assert.equal(result.pressure_trend_classification, 'Unknown');
+        assert.equal(result.thermocline_depth, null);
     });
 
     it('returns deterministic moon phase in offline mode (not Unknown)', async () => {

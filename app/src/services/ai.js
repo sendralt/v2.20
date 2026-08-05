@@ -400,7 +400,10 @@ function createAIService(deps) {
             water_temp_source: scientificData?.waterTempSource || 'offline',
             water_temp_note: buildWaterTempNote(scientificData?.waterTempSource || 'offline'),
             water_temp_station: scientificData?.waterTempStation || null,
-            water_temp_station_distance: scientificData?.waterTempStationDistance || null
+            water_temp_station_distance: scientificData?.waterTempStationDistance || null,
+            pressure_trend: scientificData?.pressureTrend || 'Unknown',
+            pressure_trend_classification: scientificData?.pressureTrendClassification || 'Unknown',
+            thermocline_depth: scientificData?.thermoclineDepth ?? null
         };
     }
 
@@ -548,7 +551,10 @@ function createAIService(deps) {
                 water_temp_source: scientificData?.waterTempSource || 'offline',
                 water_temp_note: buildWaterTempNote(scientificData?.waterTempSource || 'offline'),
                 water_temp_station: scientificData?.waterTempStation || null,
-                water_temp_station_distance: scientificData?.waterTempStationDistance || null
+                water_temp_station_distance: scientificData?.waterTempStationDistance || null,
+                pressure_trend: scientificData?.pressureTrend || 'Unknown',
+                pressure_trend_classification: scientificData?.pressureTrendClassification || 'Unknown',
+                thermocline_depth: scientificData?.thermoclineDepth ?? null
             };
         } catch (error) {
             console.warn('Online generation unavailable, using offline fallback:', error.message);
@@ -591,6 +597,9 @@ function createAIService(deps) {
             water_temp_source: scientificData?.waterTempSource || 'offline',
             water_temp_station: scientificData?.waterTempStation || null,
             water_temp_station_distance: scientificData?.waterTempStationDistance || null,
+            pressure_trend: scientificData?.pressureTrend || 'Unknown',
+            pressure_trend_classification: scientificData?.pressureTrendClassification || 'Unknown',
+            thermocline_depth: scientificData?.thermoclineDepth ?? null,
             solunar: {
                 moon_phase: moonData.label,
                 moon_illumination: Math.round(moonData.illumination * 100),

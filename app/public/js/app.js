@@ -411,6 +411,16 @@ async function displayResults(data, formData) {
         document.getElementById('wxWind').textContent = (data.weather.wind && data.weather.wind.speed) ? data.weather.wind.speed + ' mph' : '--';
         document.getElementById('wxPressure').textContent = pressureInHg;
         document.getElementById('wxHumidity').textContent = data.weather.humidity + '%';
+        var pressureTrendEl = document.getElementById('wxPressureTrend');
+        var thermoclineEl = document.getElementById('wxThermocline');
+        if (pressureTrendEl) {
+            pressureTrendEl.textContent = data.pressure_trend || data.scientific_data?.pressureTrend || 'Unknown';
+            pressureTrendEl.title = data.pressure_trend_classification || data.scientific_data?.pressureTrendClassification || '';
+        }
+        if (thermoclineEl) {
+            var thermoclineDepth = data.thermocline_depth ?? data.scientific_data?.thermoclineDepth;
+            thermoclineEl.textContent = thermoclineDepth != null ? Math.round(thermoclineDepth) + ' ft' : '--';
+        }
         document.getElementById('wxDesc').textContent = data.weather.desc || '';
         var waterSourceEl = document.getElementById('wxWaterSource');
         var waterStationEl = document.getElementById('wxWaterStation');
@@ -448,6 +458,10 @@ async function displayResults(data, formData) {
             waterStationFallback.textContent = '';
             waterStationFallback.classList.add('hidden');
         }
+        var pressureTrendFallback = document.getElementById('wxPressureTrend');
+        var thermoclineFallback = document.getElementById('wxThermocline');
+        if (pressureTrendFallback) pressureTrendFallback.textContent = '--';
+        if (thermoclineFallback) thermoclineFallback.textContent = '--';
     }
 
     // Strategy / Intel / Safety

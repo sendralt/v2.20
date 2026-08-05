@@ -461,6 +461,8 @@ function createBiteScoreEngine(fishingData, lureScorer, deps = {}) {
                 metabolicEfficiency: Math.round(metabolicEfficiency * 100),
                 speciesMetrics: metrics,
                 pressureTrend: pressureTrendData.label,
+                pressureTrendClassification: pressureTrendData.classification,
+                thermoclineDepth,
                 strategyType,
                 recommendedLures: useLureCatalog
                     ? lureScorer.scoreLures({ speciesName, waterColor, strategyType, biteProb, isIceFishing: waterTemp <= 32 })
