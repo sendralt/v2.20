@@ -2,11 +2,13 @@
 
 > AI-powered fishing intelligence platform with real-time environmental analysis and science-backed bite predictions.
 
+**Current release:** `2.32` · **Landing page:** [`landing-page/index.html`](landing-page/index.html) · **Blog:** [`landing-page/blog/index.html`](landing-page/blog/index.html) · **Free Bite Score Checker:** `/bite-checker`
+
 FishSmart Pro is a privacy-first Progressive Web App (PWA) that combines live weather data, USGS water temperatures, and a multi-factor scientific engine with Gemini AI to produce detailed fishing forecasts — explaining *why* fish will bite, not just *if*.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org)
-[![Version](https://img.shields.io/badge/version-2.19-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.32-blue)](CHANGELOG.md)
 
 ---
 
@@ -14,11 +16,12 @@ FishSmart Pro is a privacy-first Progressive Web App (PWA) that combines live we
 
 | Feature | Description |
 |---------|-------------|
-| **AI Bite Score™** | Scientific multi-factor scoring (pressure trend, metabolic efficiency, water temp, wind, clarity, time-of-day) with transparent reasoning |
+| **AI Bite Score™** | Deterministic 10+ factor scoring (pressure trend, metabolic efficiency, water temp, dissolved oxygen, spawning, thermocline, wind, clarity, and time-of-day) with transparent reasoning |
 | **12-Hour Activity Forecast** | Hourly bite activity derived from engine factors — not guessed by an LLM |
 | **Live Water Temperature** | Real-time data from USGS monitoring stations |
-| **Smart Lure Picks** | Species-specific lure recommendations with match scoring |
-| **20+ Freshwater Species** | Bass, walleye, trout, pike, crappie, catfish and more |
+| **Pressure & Thermocline Display** | Live Weather shows pressure-trend direction and modeled thermocline depth when available |
+| **Smart Lure Picks** | Species-specific engine and AI lure recommendations with match scoring and source badges |
+| **25 Freshwater Species** | Bass, walleye, trout, pike, crappie, catfish and more |
 | **Forecast History** | Up to 50 past forecasts per device with JSON/CSV export |
 | **Offline Mode** | Service Worker caching with Stale-While-Revalidate for history endpoints |
 | **Privacy-First** | No social features. No spot burning. Your fishing spots stay yours. |
@@ -117,7 +120,7 @@ npm start
 
 | Tier | Price | Features |
 |------|-------|----------|
-| **Free** | $0 | 3 AI forecast uses per session |
+| **Free** | $0 | 3 full AI forecasts per device (lifetime free allowance) |
 | **Pro Monthly** | $4.99/mo | Unlimited forecasts, history, data export |
 | **Pro Yearly** | $29.99/yr (~$2.50/mo) | Everything in Pro, 50% savings |
 

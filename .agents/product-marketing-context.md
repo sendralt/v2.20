@@ -1,6 +1,6 @@
 # Product Marketing Context
 
-*Last updated: 2026-07-04*
+*Last updated: 2026-08-06*
 
 ---
 
@@ -20,7 +20,7 @@ Progressive Web App (PWA) + Android TWA (Google Play). Server-side rendered with
 
 **Business model:**
 Freemium subscription
-- **Free:** 3 full AI forecasts per session (complete features, not crippled)
+- **Free:** 3 full AI forecasts per device (lifetime allowance; complete features, not crippled)
 - **Pro Monthly:** $4.99/mo — unlimited forecasts, history, data export
 - **Pro Yearly:** $29.99/yr (~$2.50/mo, 50% savings)
 - Dual billing: Stripe (web) + Google Play Billing (Android)
@@ -77,7 +77,7 @@ Before a fishing trip, an angler enters their location, target species, water bo
 | **The Science Angler** | Understanding the 'why' behind fish behavior | Most apps give a magic number with no explanation — feels like guessing | Transparent, factor-by-factor breakdown of every score. Learn while you fish. |
 | **The Time-Starved Angler** | Maximizing limited fishing time | Doesn't know the best window to go; wastes prime hours | 12-hour activity forecast pinpoints peak windows. Best Time to Fish card. |
 | **The Solo Angler** | Privacy and spot protection | Social fishing apps expose your spots to the community | Zero social features. Zero spot burning. No location sharing. Your spots stay yours. |
-| **The Value Angler** | Fair price for real features | Competitors charge $60-100+/yr for less transparency | $29.99/yr with 3 free full forecasts to try. No crippled free tier. |
+| **The Value Angler** | Fair price for real features | Competitors charge $60-100+/yr for less transparency | $29.99/yr with 3 free full forecasts per device (lifetime allowance). No crippled free tier. |
 
 ---
 
@@ -133,7 +133,7 @@ Anglers don't know *why* fish are or aren't biting. Existing apps either give a 
 - **Live USGS water temperature:** Real monitoring station data — not estimates, not guesses. Actual water temperature with station name and distance shown for full transparency.
 - **Species-specific intelligence:** 25 freshwater species, each with its own biological profile. The engine models how each species responds to water temperature, pressure, and conditions differently.
 - **Zero social, zero spot burning:** No crowdsourced data, no catch sharing, no social feed. Your fishing spots stay yours. Privacy is a feature, not a setting.
-- **Honest free tier:** 3 full-power AI forecasts per session — not a crippled demo. Every feature works. No paywall on the science.
+- **Honest free tier:** 3 full-power AI forecasts per device (lifetime allowance) — not a crippled demo. Every feature works. No paywall on the science.
 - **Data portability:** JSON/CSV export for forecast history — the only fishing app offering full data export. Your data stays yours.
 - **Best price-to-value:** $29.99/yr is less than half of Fishbrain ($59.99) and significantly cheaper than Navionics ($49.99) with more freshwater-specific intelligence.
 
@@ -213,7 +213,7 @@ FishSmart Pro pulls **live data from USGS monitoring stations** — the same sen
 | Objection | Response |
 |-----------|----------|
 | "AI fishing forecasts are unreliable" | Our AI doesn't generate the forecast — a deterministic scientific engine does. The AI only translates the engine's output into plain language. The science is real and reproducible. |
-| "$29.99/year is still a subscription" | 3 free full-power forecasts per session, every session. And $29.99/yr is less than half of Fishbrain ($59.99/yr) and significantly cheaper than Navionics ($49.99/yr) with more freshwater-specific intelligence. Your price is locked for 12 months. |
+| "$29.99/year is still a subscription" | 3 free full-power forecasts per device (lifetime allowance). And $29.99/yr is less than half of Fishbrain ($59.99/yr) and significantly cheaper than Navionics ($49.99/yr) with more freshwater-specific intelligence. Your price is locked for 12 months. |
 | "I don't trust app bite forecasts" | Every score comes with transparent factor-by-factor reasoning. You can see exactly which conditions are driving the score. No black box. If you disagree with a factor, you can see why and adjust. |
 | "I already have a fishing app" | Does it explain *why* the bite score is what it is? Does it use live USGS water temp? Does it have zero social features? Does it cost less than $30/year? Does it let you export your data? |
 | "I prefer my own experience" | FishSmart Pro doesn't replace your experience — it enhances it with real-time data and biological models you can't see with your eyes. Use it alongside your instincts. |
@@ -223,7 +223,7 @@ FishSmart Pro pulls **live data from USGS monitoring stations** — the same sen
 - **Social anglers** who want to share catches, build a following, or see what others are catching. We have zero social features by design.
 - **Saltwater/marine anglers** — we're freshwater-focused with 25 freshwater species. No marine charts or tide data.
 - **Tournament anglers** seeking crowdsourced real-time catch data and community intel — that's a different product.
-- **Anglers who want a free app forever** with no limits — we offer 3 free forecasts per session, but unlimited requires a fair-priced subscription.
+- **Anglers who want a free app forever** with no limits — we offer 3 free forecasts per device (lifetime allowance), but unlimited requires a fair-priced subscription.
 - **Anglers who need lake maps/navigation** — we deliberately don't include mapping. Navionics is the right choice for that.
 
 ---
@@ -374,7 +374,7 @@ Confident, knowledgeable, straight-talking. We're the fishing buddy who actually
 | **Science-backed** | Multi-factor engine runs before AI. Transparent reasoning on every forecast. Species-specific metabolic models. EMA-smoothed for stability. |
 | **Real data** | Live USGS water temperature with station names and distances shown. No estimates. |
 | **Privacy-first** | Zero social features by design. No location sharing. No crowdsourced data. Per-device history, exportable, deletable. |
-| **Honest value** | 3 free full forecasts per session. $29.99/yr — less than half of Fishbrain ($59.99), cheaper than Navionics ($49.99). Price locked for 12 months. |
+| **Honest value** | 3 free full forecasts per device (lifetime allowance). $29.99/yr — less than half of Fishbrain ($59.99), cheaper than Navionics ($49.99). Price locked for 12 months. |
 | **Freshwater expertise** | 25 species: bass, walleye, trout, pike, crappie, catfish and more. Built specifically for freshwater anglers. |
 | **Data portability** | JSON/CSV export for forecast history. Only fishing app offering full data export. |
 | **Transparent AI** | Lure recommendations tagged by source — engine vs AI. Anglers know what they're trusting. |

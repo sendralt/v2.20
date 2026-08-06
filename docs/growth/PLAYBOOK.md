@@ -214,7 +214,7 @@ docs/growth/
 - **Core positioning:** Science-first, privacy-first, value-priced
 - **Key differentiators:** 10+ factor transparent engine, live USGS data, AI lure recs, zero spot burning, $29.99/yr
 - **Competitor framing:** Never bash competitors — acknowledge their strengths, highlight our differences
-- **Free tier emphasis:** 3 free full-power forecasts — always mention as low-risk entry
+- **Free tier emphasis:** 3 free full-power forecasts per device (lifetime allowance) — always mention as low-risk entry
 
 ### SEO Standards (for blog content)
 - Target one primary keyword per post (from keyword research)

@@ -35,7 +35,8 @@ An autonomous growth system that runs on a weekly cadence:
 3. Approve by moving to `docs/growth/pipeline/` (ready to publish)
 4. Publish on your platforms (Reddit, Facebook, email tool, blog)
 5. After publishing, move to `docs/growth/published/` and add the URL
-6. The Growth Dashboard tracks everything
+6. For blog posts, the GitHub Actions `Blog Build` workflow converts approved Markdown in `docs/growth/pipeline/blog/` into HTML under `landing-page/blog/` when changes are pushed to `prod` or `main`
+7. The Growth Dashboard tracks everything
 
 ---
 

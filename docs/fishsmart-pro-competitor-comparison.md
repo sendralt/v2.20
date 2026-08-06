@@ -19,12 +19,12 @@ At **$29.99/year**, FishSmart Pro is also the **most affordable premium option**
 | Feature | FishSmart Pro | Fishbrain | Navionics | FishAngler | Anglr | TroutRoutes |
 |---|---|---|---|---|---|---|
 | **Annual Price** | **$29.99** | $59.99 | $49.99 | Lower premium | $35-$60 | $29.99-$39.99 |
-| **Free Tier** | ✅ 3 forecasts/session | Limited | Trial only | ✅ Full core | Limited | Limited |
-| **Science-Based Forecasting** | ✅ **7-factor engine** | ⚠️ Black-box AI | ❌ No | ⚠️ Basic | ❌ No | ❌ No |
+| **Free Tier** | ✅ 3 forecasts/device (lifetime allowance) | Limited | Trial only | ✅ Full core | Limited | Limited |
+| **Science-Based Forecasting** | ✅ **10+ factor engine** | ⚠️ Black-box AI | ❌ No | ⚠️ Basic | ❌ No | ❌ No |
 | **AI Bite Score (0-100)** | ✅ **Yes** | ❌ No | ❌ No | ❌ No | ❌ No | ❌ No |
 | **AI Lure Recommendations** | ✅ **Gemini-powered** | ❌ No | ❌ No | ❌ No | ❌ No | ❌ No |
 | **Live Water Temp (USGS)** | ✅ **Real data** | ⚠️ Estimated | ❌ No | ⚠️ Community | ❌ No | ❌ No |
-| **Species Biology Profiles** | ✅ **20+ species** | ⚠️ Basic | ❌ No | ❌ No | ❌ No | ⚠️ Trout only |
+| **Species Biology Profiles** | ✅ **25 species** | ⚠️ Basic | ❌ No | ❌ No | ❌ No | ⚠️ Trout only |
 | **Privacy (No Spot Burning)** | ✅ **100% private** | ❌ Public spots | ✅ Private | ⚠️ Public | ✅ Private | ✅ Private |
 | **Zero Crowdsourced Data** | ✅ **Yes** | ❌ Core model | ✅ N/A | ❌ Core model | ✅ Yes | ✅ Yes |
 | **No Social Features** | ✅ **Deliberate** | ❌ Social-heavy | ✅ No social | ⚠️ Social | ⚠️ Basic | ✅ No social |
@@ -97,7 +97,7 @@ At **$29.99/year**, FishSmart Pro is also the **most affordable premium option**
 | **AI Lure Picks** | ✅ **Match scores + reasoning** | ❌ No | ❌ No | ❌ No | ❌ No | ❌ No |
 | **AI Forecast Translation** | ✅ **Plain-language tips** | ❌ No | ❌ No | ❌ No | ❌ No | ❌ No |
 | **Approach** | **Engine First, AI Second** | AI first, science unclear | Chart-focused | Community-focused | Hardware-focused | Access-focused |
-| **Species Models** | 20+ biological profiles | Basic species tags | N/A | Species tags | ❌ No | Trout only |
+| **Species Models** | 25 biological profiles | Basic species tags | N/A | Species tags | ❌ No | Trout only |
 
 > **Verdict:** FishSmart Pro leads in **AI-powered fishing intelligence**. The unique "Engine First, AI Second" approach means the science does the heavy lifting, and AI (Google Gemini) translates it into actionable, plain-language advice with lure recommendations.
 
@@ -115,7 +115,7 @@ At **$29.99/year**, FishSmart Pro is also the **most affordable premium option**
 | **Live USGS water temperature** | Uses real sensor data, not estimates like competitors |
 | **Forecast history with export** | JSON/CSV export — no competitor offers data portability |
 | **Transparent scoring** | Anglers know WHY a score is what it is — builds trust |
-| **20+ species profiles** | Deep biological modeling vs. competitors' basic tags |
+| **25 species profiles** | Deep biological modeling vs. competitors' basic tags |
 
 ### ⚠️ Weaknesses
 | Weakness | Impact |

@@ -469,7 +469,6 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
 
     app.post('/api/bite-checker', biteCheckerLimiter, async (req, res) => {
         try {
-            const { generateTeaseForecast } = require('../services/ai');
             const { location, species } = req.body || {};
 
             if (!location || !species) {
@@ -482,7 +481,7 @@ function registerRoutes(app, aiService, config, fishingData, subscriptionService
                 return res.status(400).json({ success: false, error: 'Location name too long' });
             }
 
-            const result = await generateTeaseForecast({ location, species });
+            const result = await aiService.generateTeaseForecast({ location, species });
 
             // Return lite version — score + one factor only
             const topFactor = (result.bite_reasoning && result.bite_reasoning[0]) || null;

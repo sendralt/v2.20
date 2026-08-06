@@ -51,7 +51,7 @@ Don't just know <i>when</i> to fish — know <i>what</i> to throw. Get species-s
 <b>📊 12-Hour Activity Forecast</b>
 See the best time to fish today with an hour-by-hour activity chart, plus a "Best Time to Fish" card highlighting your peak window. Perfect for anglers with limited time — know exactly when to go.
 
-<b>🐟 20+ Freshwater Species</b>
+<b>🐟 25 Freshwater Species</b>
 Bass, walleye, trout, pike, crappie, catfish, and more — each with its own biological profile. The engine models how every species responds differently to water temperature, pressure, and conditions.
 
 <b>🔒 Zero Social. Zero Spot Burning. Zero Fake Data.</b>
@@ -66,7 +66,7 @@ Unlike Fishbrain and other social fishing apps, FishSmart Pro has:
 • <b>Engine first, AI second</b> — a deterministic engine calculates the science before Google Gemini AI translates it into plain English. The AI explains the science — it doesn't generate it
 • <b>Real data, not estimates</b> — live USGS water temperature from federal monitoring stations
 • <b>Data export</b> — download your forecast history as JSON or CSV. The only fishing app offering full data portability
-• <b>3 free full forecasts</b> — every feature works, no crippled demo, no credit card needed
+• <b>3 free full forecasts per device</b> (lifetime allowance) — every feature works, no crippled demo, no credit card needed
 • <b>Best price-to-value</b> — $29.99/year is less than half of Fishbrain ($59.99) and cheaper than Navionics ($49.99)
 
 <b>⭐ What's Included</b>
@@ -77,7 +77,7 @@ Unlike Fishbrain and other social fishing apps, FishSmart Pro has:
 • 12-hour activity forecast chart
 • Best fishing window indicator
 • Conditions summary (pressure trend, wind, cloud cover, clarity, water temp)
-• 20+ freshwater species with individual biological profiles
+• 25 freshwater species with individual biological profiles
 • Forecast history (up to 50 saved) with JSON/CSV export
 • Barometric pressure trend analysis — the #1 feeding trigger
 • <b>Shareable Forecast Cards</b> — turn any forecast into a beautiful image (bite score ring, top factors, lure pick, conditions strip) and share it with friends on Instagram, Messages, Reddit, and more. Native share sheet on mobile, auto-download PNG on desktop
@@ -104,7 +104,7 @@ Character count: **~3,650/4,000** ✓
 
 Get science-backed bite scores with transparent reasoning, AI lure recommendations with source tags, live USGS water temperature, and a 12-hour activity forecast — all in one tap.
 
-3 free full forecasts to try it out. No credit card needed.
+3 free full forecasts per device (lifetime allowance) to try it out. No credit card needed.
 ```
 
 ---
