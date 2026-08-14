@@ -1,6 +1,6 @@
 # FishSmart Pro - Growth Dashboard
 
-> Last updated: 2026-08-06 — Week 3 influencer pipeline: 5 new outreach + 5 follow-ups drafted. Week 1 contacts marked Ghosted.
+> Last updated: 2026-08-14 — Task 5 weekly email newsletter (wind-driven feeding) draft added to review queue
 > Status: Active - Autonomous Engine Running
 
 ---
@@ -16,7 +16,7 @@
 | Email list size | -- | -- | -- | -- |
 | Blog posts published | 0 | -- | 2/month | -- |
 | Social posts published | 0 | -- | 3/week | -- |
-| Influencers contacted | 15 | 10 | 5/week | +5 this week |
+| Influencers contacted | 20 | 15 | 5/week | +5 this week |
 | Directory submissions | 0 | -- | 10 total | -- |
 | Reddit/Facebook posts | 0 | -- | 2/week | -- |
 
@@ -31,6 +31,7 @@
 | How Barometric Pressure Affects Fishing (Complete Science Guide) | 📝 Draft Ready | 2026-07-25 | barometric pressure fishing, best barometric pressure for fishing, falling barometric pressure fishing, does barometric pressure affect fishing |
 | FishAngler Just Paywalled Bite Times — Here's the Best Free Alternative | 📝 Draft Ready | 2026-07-28 | fishangler alternative, free fishing app like fishangler, fishing app with free bite times, fishangler paywall |
 | Fall Bass Fishing: The Complete Guide to Patterns, Baits, and Timing | 📝 Draft Ready | 2026-08-04 | fall bass fishing, fall bass fishing tips, fall bass transition, when do bass move shallow in fall |
+| onX Fish vs FishSmart Pro: Mapping vs Forecasting | 📝 Draft Ready | 2026-08-11 | onx fish, onx fish review, onx fish alternative, onx fish pricing |
 
 ### Social Media Schedule
 | Week Of | Platform | Content Type | Status |
@@ -48,6 +49,9 @@
 | 2026-08-04 | FB/IG/X | Educational — The 9-16 foot zone (late summer bass depth) | 📝 Draft Ready |
 | 2026-08-04 | FB/IG/X | Comparison — BassForecast 11,000 factors vs 10 transparent | 📝 Draft Ready |
 | 2026-08-04 | FB/IG/X | Engagement — August dog days walleye discussion | 📝 Draft Ready |
+| 2026-08-11 | FB/IG/X | Educational — Lake Erie walleye (60-80 ft bite) | 📝 Draft Ready |
+| 2026-08-11 | FB/IG/X | Comparison — Compound paywall (FishAngler + Fishbrain) | 📝 Draft Ready |
+| 2026-08-11 | FB/IG/X | Engagement — Tale of two seasons (north vs south) | 📝 Draft Ready |
 
 ### Reddit Posts
 | Subreddit | Topic | Status | Date Created |
@@ -60,6 +64,8 @@
 ---|---|---|---
 | Weekly: Thermocline fishing intel | ✅ Approved (Pipeline) | 2026-07-24 (Fri) | — |
 | Weekly: Dawn/dusk photoperiod feeding science | 📝 Draft Ready | 2026-07-31 (Fri) | — |
+| Weekly: Summer-to-fall bass transition | 📝 Draft Ready | 2026-08-07 (Fri) | — |
+| Weekly: Wind-driven feeding science | 📝 Draft Ready | 2026-08-14 (Fri) | — |
 
 ---
 
@@ -72,16 +78,21 @@
 | Jackson Kayak (Jameson Redding & Brooks Beatty) | YouTube | ~14.9K | 👻 Ghosted | 2026-07-23 | No response after follow-up | — |
 | Catch Fishing Channel | YouTube | ~42.5K | 👻 Ghosted | 2026-07-23 | No response after follow-up | — |
 | Let's Crappie Fish | YouTube | TBD | 👻 Ghosted | 2026-07-23 | No response after follow-up | — |
-| Catfish Weekly (Lyle Stokes et al.) | YouTube | ~6.08K | 📨 Follow-up Drafted | 2026-07-30 | — | — |
-| Target Walleye | YouTube | ~52.9K | 📨 Follow-up Drafted | 2026-07-30 | — | — |
-| Lily Thao Fishing | TikTok | ~37.2K | 📨 Follow-up Drafted | 2026-07-30 | — | — |
-| Tyler Sickles | TikTok | ~50K | 📨 Follow-up Drafted | 2026-07-30 | — | — |
-| Get Reel Bass Fishing (Paulie & Erica) | YouTube | ~34.3K | 📨 Follow-up Drafted | 2026-07-30 | — | — |
-| Musky Mastery | YouTube | ~9.63K | Draft Ready | 2026-08-06 | — | — |
-| Pete Maina | YouTube | ~9.69K | Draft Ready | 2026-08-06 | — | — |
-| Outside with Tom | YouTube | ~15.4K | Draft Ready | 2026-08-06 | — | — |
-| JMAX Fishing | TikTok | ~20K | Draft Ready | 2026-08-06 | — | — |
-| Realistic Fishing | YouTube | TBD (verify) | Draft Ready | 2026-08-06 | — | — |
+| Catfish Weekly (Lyle Stokes et al.) | YouTube | ~6.08K | 👻 Ghosted | 2026-07-30 | No response after follow-up | — |
+| Target Walleye | YouTube | ~52.9K | 👻 Ghosted | 2026-07-30 | No response after follow-up | — |
+| Lily Thao Fishing | TikTok | ~37.2K | 👻 Ghosted | 2026-07-30 | No response after follow-up | — |
+| Tyler Sickles | TikTok | ~50K | 👻 Ghosted | 2026-07-30 | No response after follow-up | — |
+| Get Reel Bass Fishing (Paulie & Erica) | YouTube | ~34.3K | 👻 Ghosted | 2026-07-30 | No response after follow-up | — |
+| Musky Mastery | YouTube | ~9.63K | 📨 Follow-up Drafted | 2026-08-06 | — | — |
+| Pete Maina | YouTube | ~9.69K | 📨 Follow-up Drafted | 2026-08-06 | — | — |
+| Outside with Tom | YouTube | ~15.4K | 📨 Follow-up Drafted | 2026-08-06 | — | — |
+| JMAX Fishing | TikTok | ~20K | 📨 Follow-up Drafted | 2026-08-06 | — | — |
+| Realistic Fishing | YouTube | TBD (verify) | 📨 Follow-up Drafted | 2026-08-06 | — | — |
+| Troutbitten | YouTube | TBD (verify) | Draft Ready | 2026-08-13 | — | — |
+| Fishyaker (John Oast) | YouTube | ~20.7K | Draft Ready | 2026-08-13 | — | — |
+| Everything Carp Fishing | YouTube | TBD (verify) | Draft Ready | 2026-08-13 | — | — |
+| Wade Fishez | TikTok | TBD (verify) | Draft Ready | 2026-08-13 | — | — |
+| Iowa Fishing Guide | YouTube | TBD (verify) | Draft Ready | 2026-08-13 | — | — |
 
 ---
 
@@ -109,6 +120,9 @@
 | [Competitor Watch](research/competitor-watch/2026-08-03-competitor-watch.md) | 2026-08-03 | 🚨 **FishAngler paywall backlash ongoing (week 2)** — users recommending Deep Dive app as alternative. **Fish AI FAILING** (broken cancellations, declining rank). **onX Fish still at 5 states** — expansion slowed. **Navionics price increase Oct 25**. Bass Angler Magazine validates: "pick one AI forecasting app + one mapping app." |
 | [Trend Report & Community Pulse](research/trend-reports/2026-08-03-trend-report.md) | 2026-08-03 | **Fall bass fishing content at PEAK search volume** — multiple major outlets published fall guides. Water temps cooling (AR 68-72°F, MN 60s-70s). Bass stacking at 9-16 ft around transition zones. Tournament: Bassmaster HS Champ Caige Bragg (38-4), MLF Toyota Series Spellicy (23-6). |
 | [Keyword Research](research/keyword-research/2026-08-03-keyword-research.md) | 2026-08-03 | **Fall bass fishing cluster is #1 priority** (4,400/mo, peaking NOW). New clusters: late summer depth ("9-16 foot zone"), Deep Dive brand, BassForecast transparency angle ("11,000 factors" rebuttal). Content calendar: 14 posts (~3.5 months). **Publish fall transition post THIS WEEK.** |
+| [Competitor Watch](research/competitor-watch/2026-08-10-competitor-watch.md) | 2026-08-10 | 🚨 **onX Fish MASSIVE expansion** — 12 states (up from 5) + **$34.99/yr paid tier**. Now a DIRECT price competitor. **Fishbrain paywalling MORE features** — free tier eroding further. **FishAngler backlash week 3** — no reversal. **BassForecast web app launched**. **onWater "Angler Intelligence" AI** — new competitor. Fish AI FAILING. |
+| [Trend Report & Community Pulse](research/trend-reports/2026-08-10-trend-report.md) | 2026-08-10 | **Fall transition content at absolute peak.** Lake Erie walleye "exceptionally strong" at 60-80 ft. Southern lakes (GA) still mid-upper 80s — not yet cooling. BPT Stage 7 Lake Erie, Bassmaster Elite Champlain Aug 13-16. Two major apps paywalling simultaneously = compound acquisition window. |
+| [Keyword Research](research/keyword-research/2026-08-10-keyword-research.md) | 2026-08-10 | **onX Fish brand keywords are #1 priority** (2,600/mo est., urgent due to 12-state expansion). New clusters: BassForecast web app, onWater AI, Lake Erie walleye (4,400/mo), compound paywall keywords ("free fishing app no paywall" 1,100/mo). Content calendar: 16 posts (~4 months). |
 
 ---
 
@@ -118,6 +132,7 @@
 
 | Item | Type | Path | Date Created | Priority |
 |---|---|---|---|---|
+| Weekly Email Newsletter (Summer-to-Fall Transition) | Email | review/email/2026-08-07-weekly-email.md | 2026-08-07 | Normal |
 | Weekly Email Newsletter (Dawn/Dusk Photoperiod) | Email | review/email/2026-07-31-weekly-email.md | 2026-07-31 | Normal |
 | How Barometric Pressure Affects Fishing (Complete Science Guide) | Blog Post | review/blog/2026-07-25-barometric-pressure-fishing-complete-guide.md | 2026-07-25 | High |
 | Social 1: Summer-to-Fall Bass Transition | Social Post | review/social/2026-07-25-social-1.md | 2026-07-25 | Normal |
@@ -147,6 +162,24 @@
 | Reddit — r/bassfishing: One App + One Map Setup | Reddit | review/reddit/2026-08-05-reddit-bassfishing-one-app-one-map.md | 2026-08-05 | Normal |
 | Reddit — r/SideProject: Deterministic Engine vs Pure LLM | Reddit | review/reddit/2026-08-05-reddit-sideproject-deterministic-engine-vs-llm.md | 2026-08-05 | Normal |
 | Facebook — August Dog Days Walleye Science | Facebook | review/social/2026-08-05-facebook-post.md | 2026-08-05 | Normal |
+| onX Fish vs FishSmart Pro: Mapping vs Forecasting | Blog Post | review/blog/2026-08-11-onx-fish-vs-fishsmart-pro-comparison.md | 2026-08-11 | 🔴 High (Urgent — Direct Competitor) |
+| Social 1: Lake Erie Walleye (60-80 ft Bite) | Social Post | review/social/2026-08-11-social-1.md | 2026-08-11 | Normal |
+| Social 2: Compound Paywall (FishAngler + Fishbrain) | Social Post | review/social/2026-08-11-social-2.md | 2026-08-11 | 🔴 High (Time-Sensitive) |
+| Social 3: Tale of Two Seasons (North vs South) | Social Post | review/social/2026-08-11-social-3.md | 2026-08-11 | Normal |
+| Reddit — r/Fishing: Lake Erie Walleye Deep Water Science | Reddit | review/reddit/2026-08-12-reddit-fishing-lake-erie-walleye-deep-water.md | 2026-08-12 | Normal |
+| Reddit — r/FishingForBeginners: Water Temperature Guide | Reddit | review/reddit/2026-08-12-reddit-fishingforbeginners-water-temp-guide.md | 2026-08-12 | Normal |
+| Facebook — Compound Paywall / What Makes a Good Free App | Facebook | review/social/2026-08-12-facebook-post.md | 2026-08-12 | Normal |
+| Troutbitten outreach | Influencer | review/influencer/2026-08-13-troutbitten.md | 2026-08-13 | High |
+| Fishyaker outreach | Influencer | review/influencer/2026-08-13-fishyaker.md | 2026-08-13 | Normal |
+| Everything Carp Fishing outreach | Influencer | review/influencer/2026-08-13-everything-carp-fishing.md | 2026-08-13 | Normal |
+| Wade Fishez outreach | Influencer | review/influencer/2026-08-13-wadefishez.md | 2026-08-13 | Normal |
+| Iowa Fishing Guide outreach | Influencer | review/influencer/2026-08-13-iowa-fishing-guide.md | 2026-08-13 | Normal |
+| Follow-up: Musky Mastery | Influencer | review/influencer/2026-08-13-followup-musky-mastery.md | 2026-08-13 | Normal |
+| Follow-up: Pete Maina | Influencer | review/influencer/2026-08-13-followup-pete-maina.md | 2026-08-13 | Normal |
+| Follow-up: Outside with Tom | Influencer | review/influencer/2026-08-13-followup-outside-with-tom.md | 2026-08-13 | Normal |
+| Follow-up: JMAX Fishing | Influencer | review/influencer/2026-08-13-followup-jmaxfishing.md | 2026-08-13 | Normal |
+| Follow-up: Realistic Fishing | Influencer | review/influencer/2026-08-13-followup-realistic-fishing.md | 2026-08-13 | Normal |
+| Weekly Email Newsletter (Wind-Driven Feeding) | Email | review/email/2026-08-14-weekly-email.md | 2026-08-14 | Normal |
 
 ---
 
@@ -173,7 +206,14 @@
 18. [ ] **DECISION: Approve video production** — 9 scripts + motion graphics ready for YouTube/TikTok
 19. [ ] Read full monthly strategy review: research/2026-07-monthly-strategy-review.md
 20. [ ] Review & approve 2 Reddit drafts + 1 Facebook post (2026-08-05 batch) — r/SideProject is first use of that subreddit; r/bassfishing uses new "one app + one map" angle (Bass Angler Magazine validation). Stagger Reddit posts over 2-3 days.
-12. [ ] If no response after follow-ups: update Week 1 contacts to 'Ghosted' status next week
+21. [ ] Review & approve weekly email draft (summer-to-fall transition) in review/email/2026-08-07-weekly-email.md
+22. [ ] Review & approve 2 Reddit drafts + 1 Facebook post (2026-08-12 batch) — r/Fishing covers Lake Erie walleye (timely with BPT Stage 7), r/FishingForBeginners is a beginner water temp guide, FB covers compound paywall story. Stagger Reddit posts over 2-3 days.
+12. [ ] Week 2 contacts marked Ghosted — 0 responses across 15 contacts total. STRATEGIC REVIEW NEEDED.
+23. [ ] Review & approve 5 NEW Week 4 influencer outreach drafts (2026-08-13: Troutbitten, Fishyaker, Everything Carp, Wade Fishez, Iowa Fishing Guide)
+24. [ ] Send Week 3 follow-ups (5 drafts) — 7 days elapsed with no response from any Week 3 contact
+25. [ ] Verify subscriber counts for Troutbitten, Everything Carp, Wade Fishez, Iowa Fishing Guide before sending
+26. [ ] ⚠️ **STRATEGIC REVIEW: 0% response rate across 15 influencer contacts over 4 weeks.** Consider: (a) shifting to email-only outreach, (b) comment-first engagement on ALL creators before DMing, (c) revisiting the outreach message format/hook
+27. [ ] Review & approve weekly email draft (wind-driven feeding) in review/email/2026-08-14-weekly-email.md
 
 ---
 

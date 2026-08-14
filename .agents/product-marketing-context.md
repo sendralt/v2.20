@@ -1,6 +1,6 @@
 # Product Marketing Context
 
-*Last updated: 2026-08-06*
+*Last updated: 2026-08-08*
 
 ---
 
@@ -10,13 +10,18 @@
 AI-powered fishing intelligence platform that tells you *why* fish will bite — not just *if*.
 
 **What it does:**
-FishSmart Pro combines live environmental data (weather, USGS water temperatures, barometric pressure trends) with a proprietary 10+ factor scientific engine to produce detailed, species-specific fishing forecasts. The engine calculates a transparent bite score from real biological and environmental factors before Google Gemini 3 Flash AI enhances the output with plain-language explanations, lure recommendations, and strategy tips. It's not an LLM guessing — it's real science, explained.
+FishSmart Pro combines live environmental data (weather, USGS water temperatures, barometric pressure trends) with a proprietary 10+ factor scientific engine to produce detailed, species-specific fishing forecasts. The engine calculates a transparent bite score from real biological and environmental factors before Google Gemini 2.5 Flash AI enhances the output with plain-language explanations, lure recommendations, and strategy tips. It's not an LLM guessing — it's real science, explained.
 
 **Product category:**
 Fishing forecast / outdoor intelligence app (Freshwater)
 
 **Product type:**
 Progressive Web App (PWA) + Android TWA (Google Play). Server-side rendered with Express.js. Installable on any device.
+
+**Growth surface:**
+- Free Bite Score Checker tool at `/bite-checker` — a no-signup SEO landing page that generates a basic bite score for any lake and species, funneling curious anglers toward the full app. Indexed by Google with structured data (JSON-LD WebApplication + FAQ schema).
+- Programmatic SEO blog (`/blog`) covering fishing science and competitor-alternative content to capture top-of-funnel organic search traffic.
+- Shareable forecast cards (canvas PNG + Web Share API) for organic social distribution.
 
 **Business model:**
 Freemium subscription
@@ -25,6 +30,7 @@ Freemium subscription
 - **Pro Yearly:** $29.99/yr (~$2.50/mo, 50% savings)
 - Dual billing: Stripe (web) + Google Play Billing (Android)
 - Prices defined in Stripe Dashboard and Google Play Console; server reads from env vars, never hardcoded
+- **Conversion funnel:** Free Bite Score Checker → 3-forecast free tier → tease-wall blurred preview → Pro subscription
 
 ---
 
@@ -67,6 +73,9 @@ Before a fishing trip, an angler enters their location, target species, water bo
 - Trying a new species and learning what lures, depths, and presentations work in current conditions
 - Reviewing past forecasts (up to 50 saved) to identify patterns in what worked
 - Exporting forecast history as JSON/CSV for personal logs or analysis
+- Checking the free Bite Score Checker before committing to a trip — no signup needed
+- Entering a manual water temperature from a boat depth finder when USGS stations are too far away
+- Sharing a branded forecast card to fishing group chats or social media via the Web Share API
 
 ---
 
@@ -128,17 +137,18 @@ Anglers don't know *why* fish are or aren't biting. Existing apps either give a 
 
 **Key differentiators:**
 - **Science-first engine, not LLM guessing:** A deterministic 10+ factor scoring engine calculates the bite score from real environmental and biological data *before* AI enhances the output. The AI explains the science — it doesn't generate the forecast.
-- **Transparent reasoning:** Every score comes with a factor-by-factor breakdown. Anglers see exactly which conditions are helping or hurting the bite. No black boxes.
+- **Transparent reasoning with confidence band:** Every score comes with a factor-by-factor breakdown and a confidence range bar showing the statistical spread of the engine's multipliers. Anglers see exactly which conditions are helping or hurting the bite — and how confident the engine is. No black boxes.
 - **AI-augmented lure recommendations with source transparency:** Engine-matched lures and AI-suggested lures are merged into a single score-ranked list (cap 5). Each lure is tagged with its source — 'engine' or 'ai' — so anglers know exactly what they're trusting. No competitor offers this.
-- **Live USGS water temperature:** Real monitoring station data — not estimates, not guesses. Actual water temperature with station name and distance shown for full transparency.
+- **Live USGS water temperature with manual override:** Real monitoring station data — not estimates, not guesses. Actual water temperature with station name and distance shown for full transparency. Anglers can also enter their own temperature reading (e.g., from a boat depth finder) to override the sensor — useful when the nearest station is far or unreliable.
 - **Species-specific intelligence:** 25 freshwater species, each with its own biological profile. The engine models how each species responds to water temperature, pressure, and conditions differently.
 - **Zero social, zero spot burning:** No crowdsourced data, no catch sharing, no social feed. Your fishing spots stay yours. Privacy is a feature, not a setting.
-- **Honest free tier:** 3 full-power AI forecasts per device (lifetime allowance) — not a crippled demo. Every feature works. No paywall on the science.
+- **Honest free tier with frictionless entry:** 3 full-power AI forecasts per device (lifetime allowance) — not a crippled demo. Plus a free Bite Score Checker tool (no signup) that lets anyone test the science before committing.
 - **Data portability:** JSON/CSV export for forecast history — the only fishing app offering full data export. Your data stays yours.
+- **Shareable forecast cards:** Generate a branded PNG forecast card and share it via the Web Share API — organic word-of-mouth distribution built into the product.
 - **Best price-to-value:** $29.99/yr is less than half of Fishbrain ($59.99) and significantly cheaper than Navionics ($49.99) with more freshwater-specific intelligence.
 
 **How we do it differently:**
-We built a scientific engine from ichthyological research — modeling fish metabolism as a biological function of water temperature, cross-referencing it with live barometric pressure trends (with species-specific sensitivity scaling), wind (with cold-water chill penalties), cloud cover, clarity, and solar position (using exact civil twilight calculations). The engine also models dissolved oxygen availability from temperature and wind-driven mixing, spawning cycle phases from water temperature thresholds, thermocline depth in stratified lakes, and lunar phase — giving it 10+ biological and environmental factors. The engine runs deterministically with EMA-smoothed scoring (bounded LRU cache, 500 locations, 24h TTL, 3h stale entry replacement) for stability. Then — and only then — does Google Gemini 3 Flash AI translate the engine's output into a clear, plain-language forecast with lure picks and strategy. For lure recommendations specifically, the engine's scientifically-matched picks are merged with Gemini's complementary suggestions, deduplicated by name, ranked by score, and capped at 5 — each tagged by source for full transparency.
+We built a scientific engine from ichthyological research — modeling fish metabolism as a biological function of water temperature, cross-referencing it with live barometric pressure trends (with species-specific sensitivity scaling), wind (with cold-water chill penalties), cloud cover, clarity, and solar position (using exact civil twilight calculations). The engine also models dissolved oxygen availability from temperature and wind-driven mixing, spawning cycle phases from water temperature thresholds, thermocline depth in stratified lakes, and lunar phase — giving it 10+ biological and environmental factors. The engine runs deterministically with EMA-smoothed scoring (bounded LRU cache, 500 locations, 24h TTL, 3h stale entry replacement) for stability. Then — and only then — does Google Gemini 2.5 Flash AI translate the engine's output into a clear, plain-language forecast with lure picks and strategy. For lure recommendations specifically, the engine's scientifically-matched picks are merged with Gemini's complementary suggestions, deduplicated by name, ranked by score, and capped at 5 — each tagged by source for full transparency.
 
 **Why that's better:**
 An LLM can hallucinate. An LLM can guess. But a deterministic engine built on biological research produces consistent, explainable, reproducible results. When the bite score says 78, you can trace it back to: falling barometric pressure (feeding trigger), water temp near the species' metabolic optimum, moderate wind creating surface chop, and overcast skies extending the feeding window. That's not a guess — that's science. And when you see a lure recommendation, you know whether it came from the engine's biological models or Gemini's broader knowledge — and can judge accordingly.
@@ -168,7 +178,7 @@ The FishSmart Pro Bite Score is calculated by a 10+ factor scientific engine tha
 | **Barometric Pressure Trend** | Whether pressure is rising, falling, or stable (and how fast) — with species-specific sensitivity scaling | Falling pressure triggers feeding instincts in fish — it signals an approaching front. Rising pressure signals a slowdown. The trend matters more than the absolute number. Different species have different sensitivity to pressure changes (e.g., walleye are more sensitive than catfish). |
 | **Water Temperature** | Live USGS monitoring station data (not estimates), adjusted for thermocline depth | Fish are cold-blooded. Their metabolism — and therefore their willingness to feed — is directly driven by water temperature. Each species has an optimal temperature range. During summer stratification, the engine estimates thermocline depth and calculates effective temperature for deep-dwelling species. |
 | **Metabolic Efficiency** | How close the current water temp is to the species' biological optimum | Modeled from ichthyological research on fish metabolism. Too cold = sluggish. Too hot = stressed. The sweet spot = active feeding. |
-| **Dissolved Oxygen** | Estimated oxygen availability from water temp and wind-driven mixing | Fish need oxygen to feed actively. Warm water holds less oxygen, and calm conditions allow stagnation. The engine models DO solubility from temperature and wind-driven re-aeration. When metabolic demand is high but oxygen is low, feeding activity drops — a compounding thermal-oxygen stress effect. |
+| **Dissolved Oxygen** | Estimated oxygen availability from water temp and wind-driven mixing | Fish need oxygen to feed actively. Warm water holds less oxygen, and calm conditions allow stagnation. The engine models DO solubility using the Benson & Krause 1984 polynomial (the EPA standard) and wind-driven re-aeration. When metabolic demand is high but oxygen is low, feeding activity drops — a compounding thermal-oxygen stress effect. |
 | **Spawning Cycle** | Pre-spawn, active spawn, or post-spawn phase based on water temp and species | Fish behavior changes dramatically across spawning phases. Pre-spawn = aggressive feeding (1.2x). Active spawn = nest guarding, minimal feeding (0.4x). Post-spawn = recovery period. The engine detects which phase each species is in based on water temperature thresholds. |
 | **Thermocline Depth** | Estimated depth of the temperature transition layer in stratified lakes | During summer, lakes stratify into warm surface water and cold bottom water separated by a thermocline. Deep-dwelling species (walleye, trout, striped bass) hold near the thermocline. The engine adjusts effective water temperature based on estimated thermocline depth. |
 | **Lunar Phase** | Moon phase angle (new moon to full moon) | Moon phase affects fish behavior through light availability (night feeding) and gravitational effects. The engine calculates exact lunar phase and applies species-appropriate weighting. |
@@ -184,13 +194,19 @@ Most fishing apps either:
 1. Ask an AI to generate a forecast from scratch (unreliable, hallucination-prone, inconsistent)
 2. Show a magic number with no explanation (trust us, bro)
 
-FishSmart Pro does neither. The scientific engine calculates a deterministic bite score from real data and biological models. Then Google Gemini 3 Flash AI takes that structured, scientifically-grounded output and translates it into:
+FishSmart Pro does neither. The scientific engine calculates a deterministic bite score from real data and biological models. Then Google Gemini 2.5 Flash AI takes that structured, scientifically-grounded output and translates it into:
 - A plain-language forecast summary ("Strong morning bite expected...")
 - Species-specific lure recommendations — both engine-matched and AI-suggested, merged and ranked by score with source badges
 - Strategy and technique tips tailored to conditions
 - A 12-hour activity forecast (also engine-derived, not AI-generated)
 
 The AI enhances the science. It doesn't replace it.
+
+### Confidence Band — How Honest Is This Score?
+
+Every bite score includes a **confidence range bar** that visualizes the statistical spread of the engine's multipliers. When the engine's factors are tightly aligned (e.g., all pointing to strong feeding), the confidence band is narrow. When factors disagree (e.g., great water temp but terrible pressure trend), the band is wider — signaling that conditions are mixed and the score is less certain.
+
+This is another transparency feature no competitor offers: not just *what* the score is, but *how confident* the engine is in that score.
 
 ### AI-Augmented Lure Recommendations
 
@@ -238,10 +254,13 @@ FishSmart Pro pulls **live data from USGS monitoring stations** — the same sen
 
 **Pull (toward FishSmart Pro):**
 - Science-backed transparency — see the reasoning behind every forecast
-- Live USGS water temperature — real data, not estimates
+- Confidence range bar — see how certain the engine is, not just the score
+- Live USGS water temperature (with manual override) — real data, not estimates
 - 12-hour activity forecast — know the best window, not just a score
 - AI-augmented lure recommendations with source transparency — more variety, clear sourcing
 - Zero social, zero spot burning — your spots stay yours
+- Free Bite Score Checker — test the science with zero commitment
+- Shareable forecast cards — show your crew the bite score before the trip
 - $29.99/year — fair price for real intelligence, half of Fishbrain
 - JSON/CSV data export — your data is yours to keep
 
@@ -282,6 +301,10 @@ FishSmart Pro pulls **live data from USGS monitoring stations** — the same sen
 - Freshwater
 - Honest, fair price
 - Engine-matched, AI-suggested, source-tagged
+- Confidence band, confidence range
+- Shareable forecast card
+- Free bite score checker
+- Manual water temperature override
 - Data export, portable
 
 **Words to avoid:**
@@ -305,6 +328,10 @@ FishSmart Pro pulls **live data from USGS monitoring stations** — the same sen
 | **Engine Lure** | A lure recommendation from the deterministic scientific engine — scored by clarity fit, strategy match, and bite probability. |
 | **AI Lure** | A complementary lure suggestion from Gemini AI — fills gaps the offline catalog can't cover. |
 | **Source Badge** | Visual indicator on lure cards showing whether a recommendation came from the engine (gear icon) or AI (robot icon). |
+| **Confidence Range Bar** | A visual bar showing the statistical spread of the engine's multipliers — how tightly aligned the scoring factors are. Narrow band = high confidence; wide band = mixed/uncertain conditions. |
+| **Bite Score Checker** | A free, no-signup SEO tool at `/bite-checker` that generates a basic bite score for any lake and species. Funnel entry point for the full app. |
+| **Shareable Forecast Card** | A branded PNG image of the forecast generated via canvas renderer and shareable via the Web Share API. |
+| **Manual Water Temp Override** | An optional input (32–120°F) that lets anglers enter their own water temperature reading, bypassing USGS for that forecast. |
 | **Dissolved Oxygen (DO)** | Estimated oxygen availability in the water, modeled from temperature-driven solubility and wind-driven re-aeration. Low DO suppresses feeding — a compounding thermal-oxygen stress effect. |
 | **Spawning Cycle** | The reproductive phase a species is in (pre-spawn, active spawn, post-spawn), detected from water temperature. Pre-spawn fish feed aggressively; actively spawning fish rarely feed. |
 | **Thermocline Depth** | The estimated depth of the temperature transition layer in stratified lakes. Used to calculate effective water temperature for deep-dwelling species like walleye and trout. |
@@ -356,16 +383,21 @@ Confident, knowledgeable, straight-talking. We're the fishing buddy who actually
 - EMA-smoothed scoring with bounded LRU cache (500 locations, 24h TTL, 3h stale entry replacement)
 - Dual billing: Stripe (web) + Google Play Billing (Android)
 - Scientific accuracy benchmarks: 106/106 invariants passing across both engine benchmarks
+- Dissolved oxygen model upgraded to Benson & Krause 1984 polynomial (EPA standard)
+- Bite score confidence range bar (statistical spread visualization)
+- Manual water temperature input override (32–120°F, server-validated)
+- Free Bite Score Checker SEO tool at `/bite-checker` (no signup, JSON-LD structured data)
+- Shareable forecast cards (canvas PNG + Web Share API)
 - Cookie-based device tracking (HttpOnly) for free-tier enforcement
 
 **Technical credibility:**
-- Scientific engine is deterministic and reproducible (not LLM-guessed) — 826 tests passing
-- Full test suite: bite score, metabolic curves, pressure trends, activity forecast, lure scoring, AI service, session auth, Stripe billing, webhook processing, entitlement logic, billing middleware, dissolved oxygen, spawning, thermocline, lunar, photoperiod, fish data enhancer (27 test files)
+- Scientific engine is deterministic and reproducible (not LLM-guessed) — 848+ tests passing across 32 test files
+- Full test suite: bite score, metabolic curves, pressure trends, activity forecast, lure scoring, AI service, session auth, Stripe billing, webhook processing, entitlement logic, billing middleware, dissolved oxygen (Benson & Krause), spawning, thermocline, lunar, photoperiod, manual water temp, formula parity, fish data enhancer
 - Defense-in-depth security: strict CSP (overrides Helmet), HSTS, X-Frame-Options: DENY, X-Content-Type-Options, input sanitization, URI validation, DOMPurify XSS prevention, HttpOnly cookies, rate limiting (10 req/15 min for AI; 5 req/min for promo), 100kb body size limits, Stripe webhook signature verification, x-powered-by header disabled, CVE-001 through CVE-008 security fixes (session hijacking prevention, billing auth validation)
 - Accessibility: WCAG-compliant — focus trapping, aria-live regions, per-field validation, reduced-motion support, keyboard navigation
-- PWA + Android TWA — installable everywhere, published on Google Play (v2.22)
+- PWA + Android TWA — installable everywhere, published on Google Play (v2.32)
 - 6 PostgreSQL database migrations (Stripe billing, unique customers, free-tier tracking, promo codes, forecast history, cookie device tracking)
-- Node.js >= 18.0.0, Express.js, Google Gemini 3 Flash, PostgreSQL, Tailwind CSS
+- Node.js >= 18.0.0, Express.js, Google Gemini 2.5 Flash, PostgreSQL, Tailwind CSS
 
 **Value themes:**
 
@@ -378,16 +410,20 @@ Confident, knowledgeable, straight-talking. We're the fishing buddy who actually
 | **Freshwater expertise** | 25 species: bass, walleye, trout, pike, crappie, catfish and more. Built specifically for freshwater anglers. |
 | **Data portability** | JSON/CSV export for forecast history. Only fishing app offering full data export. |
 | **Transparent AI** | Lure recommendations tagged by source — engine vs AI. Anglers know what they're trusting. |
+| **Frictionless entry** | Free Bite Score Checker (no signup) + 3 full forecasts per device. Lowest-friction way to test the science. |
+| **Organic distribution** | Shareable forecast cards via Web Share API. Users become distribution channels. |
 
 ---
 
 ## Launch & Marketing Readiness
 
 **App status:**
-- Deployed on Render (PWA accessible via web)
+- Deployed on Render (PWA accessible via web, v2.32)
 - Published on Google Play as Trusted Web Activity
 - Dual billing operational: Stripe (web) + Google Play Billing (Android)
-- Full test suite passing
+- Free Bite Score Checker live at `/bite-checker` (SEO-indexed)
+- Programmatic SEO blog live at `/blog` (thermocline, pressure, fall bass, competitor alternatives)
+- Full test suite passing (848+ tests, 32 files)
 
 **Marketing assets ready:**
 - Email capture widget and onboarding sequence (`docs/launch-assets/email-capture-and-sequence.md`)
@@ -395,6 +431,16 @@ Confident, knowledgeable, straight-talking. We're the fishing buddy who actually
 - TikTok video scripts (`docs/launch-assets/tiktok-scripts.md`)
 - YouTube demo script (`docs/launch-assets/youtube-demo-script.md`)
 - Reddit community posts (`docs/launch-assets/reddit-posts.md`)
+- Reddit ads strategy and bulk import CSV (`docs/launch-assets/reddit-ads.md`, `reddit-ads-bulk-import.csv`)
+- Meta (Facebook/Instagram) ads strategy (`docs/launch-assets/meta-ads.md`)
+- Launch budget strategy and breakdown (`docs/launch-assets/launch-budget-strategy.md`, `launch-budget-breakdown.csv`)
+- Shareable forecast card promotions integrated across all launch assets
+
+**Growth engine:**
+- Autonomous growth engine framework (`docs/growth/PLAYBOOK.md`, `SYSTEM-GUIDE.md`, `AUTONOMOUS-PUBLISHING-PLAN.md`)
+- Growth dashboard for pipeline tracking (`docs/growth/growth-dashboard.md`)
+- Keyword research, trend reports, and competitor watch monitoring
+- Fish behavior pattern research for content marketing (5 species)
 
 **Competitive intelligence:**
 - Head-to-head comparison report vs. top 5 competitors (`docs/fishsmart-pro-competitor-comparison.md`)
@@ -408,8 +454,10 @@ Confident, knowledgeable, straight-talking. We're the fishing buddy who actually
 Become the go-to freshwater fishing forecast app for science-minded, privacy-conscious anglers — displacing Fishbrain and Navionics in the freshwater segment through transparency, fair pricing, and superior AI-enhanced intelligence.
 
 **Conversion action:**
-- Free tier usage to Pro subscription (monthly or yearly)
+- Free Bite Score Checker → 3-forecast free tier → Pro subscription
+- Tease-wall: blurred preview of full AI forecast after free tier is exhausted
 - Primary CTA: "Get unlimited forecasts" via Stripe Checkout or Google Play Billing
+- Secondary CTA: "Try the free Bite Score Checker" (top-of-funnel)
 
 **Current metrics:**
 - App published on Google Play as Trusted Web Activity
@@ -426,26 +474,28 @@ Become the go-to freshwater fishing forecast app for science-minded, privacy-con
 ### Data Flow
 
 ```
-User Input (location, species, water body, clarity)
+User Input (location, species, water body, clarity, optional manual water temp)
          |
 Scientific Engine (deterministic, 10+ factor)
   - Live weather data (OpenWeather)
-  - Live USGS water temperature
+  - Live USGS water temperature OR manual override (32-120F, skip USGS call)
   - Barometric pressure trend analysis (species-specific sensitivity scaling)
   - Species-specific metabolic model
-  - Dissolved oxygen estimation (temp + wind-driven mixing)
+  - Dissolved oxygen estimation (Benson & Krause 1984 polynomial + wind-driven mixing)
   - Spawning cycle detection (pre-spawn / active / post-spawn)
   - Thermocline depth estimation (stratified lake model)
   - Lunar phase calculation
   - Civil dawn/dusk photoperiod (astronomical, latitude-aware)
   - Wind (cold-water chill penalty) / cloud / time / clarity multipliers
+  - Confidence band (statistical spread of multipliers)
+  - Bite score capped at 85% (prevents overconfidence)
   - EMA-smoothed scoring (bounded LRU cache: 500 locations, 24h TTL, 3h stale replacement)
          |
-  BITE SCORE (0-100) + Strategy Classification
+  BITE SCORE (0-100) + Strategy Classification + Confidence Range
          |
 12-Hour Activity Forecast (engine-derived)
          |
-Google Gemini 3 Flash AI Layer (enhancement only)
+Google Gemini 2.5 Flash AI Layer (enhancement only)
   - Plain-language forecast summary
   - Lure recommendations: engine picks passed as context
   - AI lures: Gemini generates complementary suggestions (scored 0.0-1.0)
@@ -455,6 +505,9 @@ Google Gemini 3 Flash AI Layer (enhancement only)
          |
 Forecast Delivered to Angler
   - Source badges on lure cards (gear = engine, robot = AI)
+  - Confidence range bar on bite score
+  - Shareable forecast card (canvas PNG + Web Share API)
+  - Tease-wall: blurred preview when free tier exhausted
   - Offline mode: engine lures only
 ```
 
