@@ -1,6 +1,6 @@
 {
   "name": "fishsmart-pro-monorepo",
-  "version": "2.36.0",
+  "version": "2.37.0",
   "private": true,
   "workspaces": [
     "app"
@@ -12,6 +12,9 @@
     "test": "npm run test -w app",
     "sync-versions": "node tools/sync-versions.js",
     "sync-versions:write": "node tools/sync-versions.js --write",
+    "bump": "node tools/sync-versions.js --bump",
+    "bump:patch": "node tools/sync-versions.js --bump-patch",
+    "version:check": "node tools/sync-versions.js --check",
     "prepare": "node tools/setup-hooks.js",
     "predev": "npm run build:css"
   },
