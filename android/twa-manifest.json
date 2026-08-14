@@ -19,8 +19,8 @@
         "path": "./android.keystore",
         "alias": "android"
     },
-    "appVersionName": "2.32",
-    "appVersionCode": 32,
+    "appVersionName": "2.35",
+    "appVersionCode": 35,
     "shortcuts": [],
     "generatorApp": "bubblewrap-cli",
     "webManifestUrl": "https://fishsmart-pro-1.onrender.com/manifest.json",
@@ -39,7 +39,7 @@
     "enableSiteSettingsShortcut": true,
     "isChromeOSOnly": false,
     "isMetaQuest": false,
-    "minSdkVersion": 21,
+    "minSdkVersion": 23,
     "orientation": "any",
     "fingerprints": [
         {
@@ -50,5 +50,5 @@
     "additionalTrustedOrigins": [],
     "retainedBundles": [],
     "displayOverride": [],
-    "appVersion": "2.32"
+    "appVersion": "2.35"
 }

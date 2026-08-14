@@ -1,8 +1,10 @@
 {
   "name": "fishsmart-pro-monorepo",
-  "version": "2.32",
+  "version": "2.35.0",
   "private": true,
-  "workspaces": ["app"],
+  "workspaces": [
+    "app"
+  ],
   "scripts": {
     "dev": "npm run dev -w app",
     "start": "npm run start -w app",

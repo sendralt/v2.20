@@ -688,11 +688,12 @@ async function updateManageBillingButton() {
 }
 
 async function restorePurchases() {
+    if (!isGooglePlayAvailable || !digitalGoodsService) {
+        notifyToast('Restore is available in the Android app only. Web subscriptions are linked to your account automatically.', 'info');
+        return;
+    }
     notifyToast('Checking for active subscriptions...', 'info');
     try {
-        if (!isGooglePlayAvailable || !digitalGoodsService) {
-            throw new Error('Google Play Billing not available');
-        }
 
         const purchases = await digitalGoodsService.listPurchases();
         for (const purchase of purchases) {
@@ -804,6 +805,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('restoreEmailBtn')?.addEventListener('click', restoreSubscriptionByEmail);
     document.getElementById('promoApplyBtn')?.addEventListener('click', applyPromoCode);
     document.getElementById('manageBillingBtn')?.addEventListener('click', openStripePortal);
+
+    // Hide Google Play restore button outside Android TWA (after initSubscription detects environment)
+    setTimeout(() => {
+        const restoreBtn = document.getElementById('restorePurchasesBtn');
+        if (restoreBtn && !window.subscription?.isGooglePlayAvailable?.()) {
+            restoreBtn.classList.add('hidden');
+        }
+    }, 2000);
 });
 
 async function restoreSubscriptionByEmail() {

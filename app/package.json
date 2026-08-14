@@ -1,6 +1,6 @@
 {
   "name": "fishsmart-pro",
-  "version": "2.32",
+  "version": "2.35",
   "description": "Advanced AI-powered fishing intelligence platform with deep ocean tech aesthetic",
   "main": "server.js",
   "scripts": {

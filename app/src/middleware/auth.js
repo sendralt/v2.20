@@ -377,7 +377,28 @@ function createAuthMiddleware(sessionAuth, subscriptionService = null, options =
         if (!sessionToken) return res.status(400).json({ success: false, error: 'Session token required' });
 
         const validation = await sessionAuth.validateSession(sessionToken, null, req);
-        if (!validation.valid) return res.status(401).json(validation);
+
+        // Session invalid — try Stripe entitlement recovery before returning hard 401.
+        // On Render free-tier, server restarts wipe in-memory sessions. Subscribed users
+        // should be transparently restored rather than seeing auth errors in console.
+        if (!validation.valid) {
+            const stripeEntitlement = await resolveStripeEntitlement(sessionToken);
+            if (stripeEntitlement && stripeEntitlement.isPremium) {
+                // Recreate a session for the Stripe subscriber
+                const result = await sessionAuth.createFreeSession(null, req);
+                if (result.success) {
+                    setDeviceCookie(res, result.cookieId);
+                    return res.json({
+                        success: true,
+                        session: { type: 'subscribed' },
+                        sessionId: result.sessionId,
+                        sessionExpiresAt: result.expiresAt,
+                        stripeRecovered: true
+                    });
+                }
+            }
+            return res.status(401).json(validation);
+        }
 
         res.json({ success: true, session: validation.session });
     }
