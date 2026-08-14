@@ -414,8 +414,32 @@ async function displayResults(data, formData) {
         var pressureTrendEl = document.getElementById('wxPressureTrend');
         var thermoclineEl = document.getElementById('wxThermocline');
         if (pressureTrendEl) {
+            var trendRaw = (data.pressure_trend || data.scientific_data?.pressureTrend || 'Unknown').toString().toLowerCase();
             pressureTrendEl.textContent = data.pressure_trend || data.scientific_data?.pressureTrend || 'Unknown';
             pressureTrendEl.title = data.pressure_trend_classification || data.scientific_data?.pressureTrendClassification || '';
+            // Dynamic color based on trend direction
+            pressureTrendEl.classList.remove('text-green-400', 'text-red-400', 'text-slate-400', 'text-cyan-300');
+            var trendIconName = 'minus';
+            if (trendRaw.includes('fall') || trendRaw.includes('drop') || trendRaw.includes('decrease')) {
+                pressureTrendEl.classList.add('text-green-400'); // falling pressure = good fishing
+                trendIconName = 'trending-down';
+            } else if (trendRaw.includes('rise') || trendRaw.includes('increas')) {
+                pressureTrendEl.classList.add('text-red-400');
+                trendIconName = 'trending-up';
+            } else if (trendRaw.includes('stabl') || trendRaw.includes('steady')) {
+                pressureTrendEl.classList.add('text-slate-400');
+                trendIconName = 'minus';
+            } else {
+                pressureTrendEl.classList.add('text-cyan-300');
+            }
+            // Swap heading icon dynamically
+            var signalTile = pressureTrendEl.closest('.wx-signal');
+            if (signalTile) {
+                var headingIcon = signalTile.querySelector('.wx-signal-heading [data-lucide]');
+                if (headingIcon) {
+                    headingIcon.setAttribute('data-lucide', trendIconName);
+                }
+            }
         }
         if (thermoclineEl) {
             var thermoclineDepth = data.thermocline_depth ?? data.scientific_data?.thermoclineDepth;
