@@ -21,7 +21,7 @@
     <!-- Critical CSS — prevents FOUC for above-the-fold content -->
     <style>
     body{background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#0c4a6e 100%);min-height:100vh;overflow-x:hidden;margin:0;font-family:'Inter','Noto Sans',system-ui,sans-serif;color:#f3f4f6;-webkit-font-smoothing:antialiased}
-    .glass-panel{background:rgba(15,23,42,.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.1)}
+    .glass-panel{background:linear-gradient(145deg,rgba(15,35,61,.92),rgba(8,20,39,.82));backdrop-filter:blur(20px);border:1px solid rgba(34,211,238,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 18px 45px rgba(0,0,0,.16)}
     .gradient-text{background:linear-gradient(90deg,#00f3ff,#00ffd9,#39ff14);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;color:transparent}
     .hidden{display:none}
     .fixed{position:fixed}.sticky{position:sticky}.relative{position:relative}
@@ -51,7 +51,7 @@
     .bg-gradient-to-br{background-image:linear-gradient(to bottom right,var(--tw-gradient-stops))}.from-cyan-400{--tw-gradient-from:#22d3ee}.to-blue-600{--tw-gradient-to:#2563eb}
     .water-bg{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.15}
     .btn-primary{background:linear-gradient(135deg,#00f3ff 0%,#00ffd9 100%);box-shadow:0 4px 15px rgba(0,243,255,.4)}
-    .input-field{background:rgba(15,23,42,.6);border:1px solid rgba(255,255,255,.1);transition:all .3s ease}
+    .input-field{background:linear-gradient(145deg,rgba(15,35,61,.85),rgba(8,20,39,.78));border:1px solid rgba(34,211,238,.18);transition:all .3s ease}
     .custom-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300f3ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:20px}
     .placeholder-gray-500::placeholder{color:#6b7280}
     .cursor-pointer{cursor:pointer}
@@ -98,6 +98,15 @@
     #loadingOverlay{transition:opacity .3s ease}#loadingOverlay.fade-out{opacity:0;pointer-events:none}
     .section-nav-pill.active{color:#22d3ee;background-color:rgba(30,41,59,.8)}
     html{scroll-padding-top:80px}
+    /* Unified Live-Weather design tokens */
+    .wx-tile{border:1px solid rgba(34,211,238,.14);background:linear-gradient(145deg,rgba(34,211,238,.07),rgba(15,23,42,.5));box-shadow:inset 0 1px 0 rgba(255,255,255,.03);transition:border-color .2s ease,background .2s ease,box-shadow .2s ease}
+    .wx-tile:hover{border-color:rgba(34,211,238,.34);background:linear-gradient(145deg,rgba(34,211,238,.13),rgba(15,23,42,.62))}
+    .wx-card-hover:hover{border-color:rgba(34,211,238,.4);box-shadow:0 0 24px rgba(34,211,238,.08),0 18px 45px rgba(0,0,0,.16)}
+    .wx-chip{background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.18);color:#94a3b8}
+    .clarity-btn{border:1px solid rgba(34,211,238,.14);background:linear-gradient(145deg,rgba(34,211,238,.07),rgba(15,23,42,.5));box-shadow:inset 0 1px 0 rgba(255,255,255,.03);transition:border-color .2s ease,background .2s ease,box-shadow .2s ease}
+    .clarity-btn:hover{border-color:rgba(34,211,238,.34);background:linear-gradient(145deg,rgba(34,211,238,.12),rgba(15,23,42,.6));color:#cbd5e1}
+    .clarity-btn[aria-pressed="true"]{border-color:rgba(34,211,238,.55);background:linear-gradient(145deg,rgba(34,211,238,.17),rgba(15,23,42,.6));color:#67e8f9;box-shadow:0 0 18px rgba(34,211,238,.12),inset 0 1px 0 rgba(255,255,255,.05)}
+    select option{background-color:#0c1f38;color:#e2e8f0}
     /* Tease-wall paywall styles */
     .tease-blurred{filter:blur(8px) saturate(0.5);opacity:0.4;pointer-events:none;user-select:none;transition:filter 0.3s ease,opacity 0.3s ease}
     .tease-wall-cta{position:relative;margin:20px auto;max-width:32rem;padding:0;border-radius:1rem;overflow:hidden;animation:teaseSlideIn 0.4s ease-out}
@@ -264,28 +273,28 @@
                                 Water Clarity
                             </label>
                             <div class="grid grid-cols-2 gap-2">
-                                <button aria-label="Muddy water clarity" aria-pressed="false" class="clarity-btn px-4 py-3 rounded-xl border border-cyan-500/20 bg-slate-800/50 text-sm text-gray-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-all flex flex-col items-center justify-center gap-1" data-clarity="Muddy" title="Visibility under 1 foot, typical after heavy rain or wind">
+                                <button aria-label="Muddy water clarity" aria-pressed="false" class="clarity-btn px-4 py-3 rounded-xl text-sm text-gray-400 transition-all flex flex-col items-center justify-center gap-1" data-clarity="Muddy" title="Visibility under 1 foot, typical after heavy rain or wind">
                                     <span class="flex items-center gap-2">
                                         <i data-lucide="cloud-fog" class="w-4 h-4"></i>
                                         Muddy
                                     </span>
                                     <span class="text-[10px] text-gray-500 font-normal">under 1 ft</span>
                                 </button>
-                                <button aria-label="Stained water clarity" aria-pressed="false" class="clarity-btn px-4 py-3 rounded-xl border border-cyan-500/20 bg-slate-800/50 text-sm text-gray-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-all flex flex-col items-center justify-center gap-1" data-clarity="Stained" title="Visibility 1-3 feet, moderate turbidity">
+                                <button aria-label="Stained water clarity" aria-pressed="false" class="clarity-btn px-4 py-3 rounded-xl text-sm text-gray-400 transition-all flex flex-col items-center justify-center gap-1" data-clarity="Stained" title="Visibility 1-3 feet, moderate turbidity">
                                     <span class="flex items-center gap-2">
                                         <i data-lucide="cloud" class="w-4 h-4"></i>
                                         Stained
                                     </span>
                                     <span class="text-[10px] text-gray-500 font-normal">1–3 ft</span>
                                 </button>
-                                <button aria-label="Clear water clarity" aria-pressed="false" class="clarity-btn px-4 py-3 rounded-xl border border-cyan-500/20 bg-slate-800/50 text-sm text-gray-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-all flex flex-col items-center justify-center gap-1" data-clarity="Clear" title="Visibility 3-8 feet, normal conditions">
+                                <button aria-label="Clear water clarity" aria-pressed="false" class="clarity-btn px-4 py-3 rounded-xl text-sm text-gray-400 transition-all flex flex-col items-center justify-center gap-1" data-clarity="Clear" title="Visibility 3-8 feet, normal conditions">
                                     <span class="flex items-center gap-2">
                                         <i data-lucide="droplets" class="w-4 h-4"></i>
                                         Clear
                                     </span>
                                     <span class="text-[10px] text-gray-500 font-normal">3–8 ft</span>
                                 </button>
-                                <button aria-label="Gin Clear water clarity" aria-pressed="false" class="clarity-btn px-4 py-3 rounded-xl border border-cyan-500/20 bg-slate-800/50 text-sm text-gray-400 hover:border-cyan-500/50 hover:text-cyan-400 transition-all flex flex-col items-center justify-center gap-1" data-clarity="Gin Clear" title="Crystal clear water, 10+ foot visibility">
+                                <button aria-label="Gin Clear water clarity" aria-pressed="false" class="clarity-btn px-4 py-3 rounded-xl text-sm text-gray-400 transition-all flex flex-col items-center justify-center gap-1" data-clarity="Gin Clear" title="Crystal clear water, 10+ foot visibility">
                                     <span class="flex items-center gap-2">
                                         <i data-lucide="sparkles" class="w-4 h-4"></i>
                                         Gin Clear
@@ -296,7 +305,7 @@
                         </div>
 
                         <!-- Boat Checkbox -->
-                        <label for="boatMode" class="flex items-center justify-between p-4 rounded-xl border border-cyan-500/10 bg-slate-800/30 cursor-pointer transition-all hover:border-cyan-500/50">
+                        <label for="boatMode" class="flex items-center justify-between p-4 rounded-xl cursor-pointer wx-tile">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center">
                                     <i data-lucide="sailboat" class="w-5 h-5 text-cyan-400"></i>
@@ -310,7 +319,7 @@
                         </label>
 
                         <!-- Manual Water Temperature Toggle + Input -->
-                        <div class="p-4 rounded-xl border border-cyan-500/10 bg-slate-800/30">
+                        <div class="wx-tile p-4 rounded-xl">
                             <label for="manualWaterTempToggle" class="flex items-center justify-between cursor-pointer">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center">
@@ -325,7 +334,7 @@
                             </label>
                             <div id="manualWaterTempWrapper" class="hidden mt-3 flex items-center gap-2">
                                 <input id="manualWaterTempInput" type="number" min="32" max="120" step="1" placeholder="Enter °F"
-                                    class="input-field flex-1 px-4 py-3 rounded-xl text-sm text-white bg-slate-900/50 border border-slate-700 focus:border-cyan-500 focus:outline-none"
+                                    class="input-field flex-1 px-4 py-3 rounded-xl text-sm text-white"
                                     disabled>
                                 <span class="text-sm text-gray-400 font-medium">°F</span>
                             </div>
@@ -525,9 +534,9 @@
                     </button>
                 </div>
                 <div class="flex items-center gap-2 px-4 py-3 border-b border-slate-700/50">
-                    <button id="exportJsonBtn" aria-label="Export history as JSON" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-gray-300 hover:border-cyan-500 hover:text-cyan-400 transition-colors">Export JSON</button>
-                    <button id="exportCsvBtn" aria-label="Export history as CSV" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-gray-300 hover:border-cyan-500 hover:text-cyan-400 transition-colors">Export CSV</button>
-                    <button id="clearHistoryBtn" aria-label="Clear all forecast history" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 border border-red-500/30 text-red-400 hover:border-red-500 hover:text-red-300 transition-colors ml-auto">Clear All</button>
+                    <button id="exportJsonBtn" aria-label="Export history as JSON" class="wx-tile text-xs px-3 py-1.5 rounded-lg text-gray-300 hover:text-cyan-400 transition-colors">Export JSON</button>
+                    <button id="exportCsvBtn" aria-label="Export history as CSV" class="wx-tile text-xs px-3 py-1.5 rounded-lg text-gray-300 hover:text-cyan-400 transition-colors">Export CSV</button>
+                    <button id="clearHistoryBtn" aria-label="Clear all forecast history" class="wx-tile text-xs px-3 py-1.5 rounded-lg border-red-500/30 text-red-400 hover:border-red-500 hover:text-red-300 transition-colors ml-auto">Clear All</button>
                 </div>
                 <div id="historyList" class="flex-1 overflow-y-auto p-4 space-y-3 pb-24">
                     <p class="text-sm text-gray-500 text-center py-8">Loading history...</p>
@@ -565,7 +574,7 @@
             <div class="mt-8 w-64 h-2 bg-slate-800 rounded-full overflow-hidden">
                 <div class="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full animate-[loading_2s_ease-in-out_infinite]" style="width: 0%"></div>
             </div>
-            <button id="cancelGenerateBtn" type="button" class="mt-6 px-6 py-2 border border-slate-600 text-slate-400 rounded-lg text-sm hover:border-slate-500 hover:text-slate-300 transition-colors cursor-pointer" style="min-height:auto;min-width:auto">Cancel</button>
+            <button id="cancelGenerateBtn" type="button" class="mt-6 px-6 py-2 wx-tile text-slate-400 rounded-lg text-sm hover:text-slate-300 transition-colors cursor-pointer" style="min-height:auto;min-width:auto">Cancel</button>
         </div>
 
         <!-- Paywall Modal -->
@@ -594,7 +603,7 @@
                 
                 <!-- Subscription options -->
                 <div class="space-y-3 mb-6">
-                    <button id="payMonthlyBtn" class="w-full p-4 rounded-xl border border-cyan-500/30 bg-slate-800/50 hover:border-cyan-500 hover:bg-slate-800 transition-all flex items-center justify-between group">
+                    <button id="payMonthlyBtn" class="w-full p-4 rounded-xl wx-tile transition-all flex items-center justify-between group">
                         <div class="text-left">
                             <div class="font-bold text-white">Monthly</div>
                             <div class="text-sm text-gray-400">Full access, cancel anytime</div>
@@ -604,7 +613,7 @@
                         </div>
                     </button>
                     
-                    <button id="payYearlyBtn" class="w-full p-4 rounded-xl border-2 border-cyan-500/50 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 hover:border-cyan-400 transition-all flex items-center justify-between relative overflow-hidden">
+                    <button id="payYearlyBtn" class="w-full p-4 rounded-xl border-2 border-cyan-500/50 wx-tile hover:border-cyan-400 transition-all flex items-center justify-between relative overflow-hidden">
                         <div class="absolute top-0 right-0 bg-gradient-to-l from-cyan-500 to-blue-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">SAVE 50%</div>
                         <div class="text-left">
                             <div class="font-bold text-white">Yearly</div>
@@ -626,8 +635,8 @@
                 <div class="border-t border-slate-700 pt-4 mb-4">
                     <p class="text-xs text-gray-400 mb-2">Have a promo code?</p>
                     <div class="flex gap-2">
-                        <input type="text" id="promoCodeInput" placeholder="Enter code" class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none">
-                        <button id="promoApplyBtn" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm font-medium transition-colors">Apply</button>
+                        <input type="text" id="promoCodeInput" placeholder="Enter code" class="flex-1 input-field rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500">
+                        <button id="promoApplyBtn" class="wx-tile px-4 py-2 rounded-lg text-sm font-medium text-gray-200 transition-colors">Apply</button>
                     </div>
                     <p id="promoCodeMessage" class="text-xs mt-2 hidden" role="alert"></p>
                 </div>
@@ -636,8 +645,8 @@
                 <div class="border-t border-slate-700 pt-4 mb-4">
                     <p class="text-xs text-gray-400 mb-2">Already subscribed on another device?</p>
                     <div class="flex gap-2">
-                        <input type="email" id="restoreEmailInput" placeholder="Your subscription email" class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none">
-                        <button id="restoreEmailBtn" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm font-medium transition-colors">Restore</button>
+                        <input type="email" id="restoreEmailInput" placeholder="Your subscription email" class="flex-1 input-field rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500">
+                        <button id="restoreEmailBtn" class="wx-tile px-4 py-2 rounded-lg text-sm font-medium text-gray-200 transition-colors">Restore</button>
                     </div>
                     <p id="restoreEmailMessage" class="text-xs mt-2 hidden" role="alert"></p>
                 </div>

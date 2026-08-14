@@ -115,12 +115,8 @@ window.showToast = showToast;
 document.querySelectorAll('.clarity-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
         document.querySelectorAll('.clarity-btn').forEach(function(b) {
-            b.classList.remove('border-cyan-500', 'bg-cyan-500/20', 'text-cyan-400');
-            b.classList.add('border-cyan-500/20', 'bg-slate-800/50', 'text-gray-400');
             b.setAttribute('aria-pressed', 'false');
         });
-        this.classList.remove('border-cyan-500/20', 'bg-slate-800/50', 'text-gray-400');
-        this.classList.add('border-cyan-500', 'bg-cyan-500/20', 'text-cyan-400');
         this.setAttribute('aria-pressed', 'true');
     });
 });
@@ -503,7 +499,7 @@ async function displayResults(data, formData) {
             var cardsHtml = lures.map(function(lure) {
                 var rankColor = lure.rank === 'Excellent' ? 'text-neon-green' :
                                 lure.rank === 'Very Good' ? 'text-teal-400' : 'text-gray-400';
-                return '<div class="bg-slate-800/50 rounded-xl p-3 border border-slate-700/50">' +
+                return '<div class="wx-tile rounded-xl p-3">' +
                     '<div class="flex items-center justify-between mb-2">' +
                         '<div class="flex items-center gap-2">' +
                             '<span class="font-bold text-white text-sm">' + DOMPurify.sanitize(lure.name) + '</span>' +
@@ -977,7 +973,7 @@ function initHistoryPanel() {
                 var itemHtml = '<div class="flex items-center justify-between mb-2">' +
                         '<div class="flex items-center gap-2">' +
                             '<span class="text-lg font-bold ' + rankColor + '">' + (f.bite_probability ?? '--') + '%</span>' +
-                            '<span class="text-xs px-2 py-0.5 rounded bg-slate-800 text-gray-400">' + (f.bite_rank || '--') + '</span>' +
+                            '<span class="text-xs px-2 py-0.5 rounded wx-chip">' + (f.bite_rank || '--') + '</span>' +
                         '</div>' +
                         '<button class="delete-forecast-btn text-gray-600 hover:text-red-400 transition-colors p-1" data-id="' + f.id + '">' +
                             '<i data-lucide="trash-2" class="w-4 h-4"></i>' +
@@ -990,7 +986,7 @@ function initHistoryPanel() {
                         '<span>' + timeStr + '</span>' +
                     '</div>';
                 var card = document.createElement('div');
-                card.className = 'glass-panel rounded-xl p-4 border border-slate-700/50 cursor-pointer hover:border-cyan-500/30 transition-colors';
+                card.className = 'glass-panel wx-card-hover rounded-xl p-4 cursor-pointer transition-colors';
                 card.setAttribute('data-id', f.id);
                 card.innerHTML = DOMPurify.sanitize(itemHtml);
                 list.appendChild(card);
@@ -1423,14 +1419,7 @@ function restoreFormState() {
         if (spec && saved.species) spec.value = saved.species;
         if (saved.clarity) {
             document.querySelectorAll('.clarity-btn').forEach(function(b) {
-                b.setAttribute('aria-pressed', 'false');
-                b.classList.remove('border-cyan-500', 'bg-cyan-500/20', 'text-cyan-400');
-                b.classList.add('border-cyan-500/20', 'bg-slate-800/50', 'text-gray-400');
-                if (b.dataset.clarity === saved.clarity) {
-                    b.classList.remove('border-cyan-500/20', 'bg-slate-800/50', 'text-gray-400');
-                    b.classList.add('border-cyan-500', 'bg-cyan-500/20', 'text-cyan-400');
-                    b.setAttribute('aria-pressed', 'true');
-                }
+                b.setAttribute('aria-pressed', b.dataset.clarity === saved.clarity ? 'true' : 'false');
             });
         }
         var boat = document.getElementById('boatMode');
