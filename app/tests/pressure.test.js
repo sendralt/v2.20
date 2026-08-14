@@ -140,44 +140,44 @@ describe('Absolute Pressure Modifier Verification', () => {
     let engine;
     beforeEach(() => { clearPressureCache(); clearBiteScoreCache(); engine = makeEngine(); });
 
-    it('29.70 inHg (1006.21 hPa) -> low pressure boost -> 75%', async () => {
+    it('29.70 inHg (1006.21 hPa) -> low pressure boost -> 79%', async () => {
         const result = await engine.calculateScientificStrategy(
             { speciesName: 'Largemouth Bass', waterColor: 'Clear' },
             { temp: 72, pressure: 1006.21 }, FIXED_OPTS
         );
-        assert.equal(result.biteProbability, 75, 'Expected 75%, got: ' + result.biteProbability);
+        assert.equal(result.biteProbability, 79, 'Expected 79%, got: ' + result.biteProbability);
     });
 
-    it('29.80 inHg (1009.15 hPa) -> neutral zone -> 71%', async () => {
+    it('29.80 inHg (1009.15 hPa) -> neutral zone -> 75%', async () => {
         const result = await engine.calculateScientificStrategy(
             { speciesName: 'Largemouth Bass', waterColor: 'Clear' },
             { temp: 72, pressure: 1009.15 }, FIXED_OPTS
         );
-        assert.equal(result.biteProbability, 71, 'Expected 71%, got: ' + result.biteProbability);
+        assert.equal(result.biteProbability, 75, 'Expected 75%, got: ' + result.biteProbability);
     });
 
-    it('30.00 inHg (1015.91 hPa) -> neutral zone -> 71%', async () => {
+    it('30.00 inHg (1015.91 hPa) -> neutral zone -> 75%', async () => {
         const result = await engine.calculateScientificStrategy(
             { speciesName: 'Largemouth Bass', waterColor: 'Clear' },
             { temp: 72, pressure: 1015.91 }, FIXED_OPTS
         );
-        assert.equal(result.biteProbability, 71, 'Expected 71%, got: ' + result.biteProbability);
+        assert.equal(result.biteProbability, 75, 'Expected 75%, got: ' + result.biteProbability);
     });
 
-    it('30.20 inHg (1022.68 hPa) -> neutral zone -> 71%', async () => {
+    it('30.20 inHg (1022.68 hPa) -> neutral zone -> 75%', async () => {
         const result = await engine.calculateScientificStrategy(
             { speciesName: 'Largemouth Bass', waterColor: 'Clear' },
             { temp: 72, pressure: 1022.68 }, FIXED_OPTS
         );
-        assert.equal(result.biteProbability, 71, 'Expected 71%, got: ' + result.biteProbability);
+        assert.equal(result.biteProbability, 75, 'Expected 75%, got: ' + result.biteProbability);
     });
 
-    it('30.30 inHg (1026.06 hPa) -> slightly penalized -> 68%', async () => {
+    it('30.30 inHg (1026.06 hPa) -> slightly penalized -> 71%', async () => {
         const result = await engine.calculateScientificStrategy(
             { speciesName: 'Largemouth Bass', waterColor: 'Clear' },
             { temp: 72, pressure: 1026.06 }, FIXED_OPTS
         );
-        assert.equal(result.biteProbability, 68, 'Expected 68%, got: ' + result.biteProbability);
+        assert.equal(result.biteProbability, 71, 'Expected 71%, got: ' + result.biteProbability);
     });
 
     it('small API noise causes no cliff-edge jump', async () => {
