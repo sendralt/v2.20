@@ -8,13 +8,14 @@
  * - Pre-spawn: Aggressive feeding to build energy reserves for reproduction.
  *   Fish are actively foraging and more vulnerable to angling. (1.2x multiplier)
  *
- * - Active spawn: Fish are on nests guarding eggs — minimal feeding.
- *   Largemouth bass, bluegill, and crappie guard nests aggressively but
- *   rarely feed during this period. (0.4x multiplier)
+ * - Active spawn: Fish are on nests guarding eggs. While they rarely feed,
+ *   they are HIGHLY catchable via nest-defense aggression — bass, bluegill,
+ *   and crappie aggressively strike lures to protect nests. Tournament catch
+ *   data confirms peak catch rates during spawn. (1.1x multiplier)
  *
  * - Post-spawn: Recovery period. Fish are exhausted from spawning and guard
- *   fry (bass/sunfish) or recover (walleye/pike). Reduced but resuming feeding.
- *   (0.7x multiplier)
+ *   fry (bass/sunfish) or recover (walleye/pike). Slightly reduced catchability
+ *   from exhaustion but still actively foraging. (0.85x multiplier)
  *
  * - Outside spawn season: Normal feeding behavior. (1.0x multiplier)
  *
