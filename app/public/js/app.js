@@ -575,7 +575,7 @@ function initGenerateButton() {
 
         const locationInput = document.getElementById('waterBody');
         const speciesInput = document.getElementById('speciesSelect');
-        const clarityBtn = document.querySelector('.clarity-btn.border-cyan-500');
+        const clarityBtn = document.querySelector('.clarity-btn[aria-pressed="true"]');
         const boatCheckbox = document.getElementById('boatMode');
         
         const location = locationInput ? locationInput.value.trim() : '';
