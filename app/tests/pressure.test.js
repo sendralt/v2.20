@@ -26,7 +26,10 @@ function makeEngine() {
     );
 }
 
-const FIXED_OPTS = { month: 4, hour: 10 };
+// Pin the date too: bite-score derives the lunar feeding multiplier from
+// options.date || new Date(), so an unpinned date made these expectations
+// drift with the real calendar (green one week, red the next).
+const FIXED_OPTS = { month: 4, hour: 10, date: new Date('2026-04-15T14:00:00Z') };
 
 describe('Pressure Trend-Based Logic', () => {
     let engine;
