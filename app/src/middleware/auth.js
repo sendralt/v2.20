@@ -35,10 +35,12 @@ function createAuthMiddleware(sessionAuth, subscriptionService = null, options =
         stripeEntitlementResolver = typeof resolver === 'function' ? resolver : null;
     }
 
-    async function resolveStripeEntitlement(sessionToken) {
+    async function resolveStripeEntitlement(sessionToken, req = null) {
         if (!stripeEntitlementResolver || !sessionToken) return null;
         try {
-            return await stripeEntitlementResolver(sessionToken);
+            // Pass the request so the resolver can fall back to the stable
+            // fishsmart_did device cookie when the token has rotated.
+            return await stripeEntitlementResolver(sessionToken, req);
         } catch (error) {
             console.warn('Stripe entitlement check failed:', error.message);
             return null;
@@ -137,7 +139,7 @@ function createAuthMiddleware(sessionAuth, subscriptionService = null, options =
             req.session = validation.session;
             req.sessionId = sessionInfo.token;
 
-            const stripeEntitlement = await resolveStripeEntitlement(sessionInfo.token);
+            const stripeEntitlement = await resolveStripeEntitlement(sessionInfo.token, req);
             if (stripeEntitlement && stripeEntitlement.isPremium) {
                 req.session = { ...validation.session, type: 'subscribed' };
                 req.stripeEntitlement = stripeEntitlement;
@@ -227,7 +229,7 @@ function createAuthMiddleware(sessionAuth, subscriptionService = null, options =
         // Check if old session token has a Stripe entitlement (survives server restart)
         const oldToken = req.headers['x-session-token'];
         if (oldToken) {
-            const stripeEntitlement = await resolveStripeEntitlement(oldToken);
+            const stripeEntitlement = await resolveStripeEntitlement(oldToken, req);
             if (stripeEntitlement && stripeEntitlement.isPremium) {
                 // Restore subscribed status with a new session
                 const result = await sessionAuth.createFreeSession(integrityToken, req);
@@ -243,6 +245,9 @@ function createAuthMiddleware(sessionAuth, subscriptionService = null, options =
                         isSubscribed: true
                     };
                     req.newSession = result;
+                    // Persist the (possibly new) stable device cookie so the billing
+                    // device link stays reachable across future token rotations.
+                    setDeviceCookie(res, result.cookieId);
                     return next();
                 }
             }
@@ -260,7 +265,9 @@ function createAuthMiddleware(sessionAuth, subscriptionService = null, options =
             });
         }
 
-        // Set HttpOnly device tracking cookie
+        // Set HttpOnly device tracking cookie (stable billing/free-tier identity)
+        setDeviceCookie(res, result.cookieId);
+
         // Initialize usage info for new session
         const isUsageCheck = req.path === '/api/usage' || req.path === '/api/auth/validate' || req.path.startsWith('/api/history');
         let usage;
@@ -382,7 +389,7 @@ function createAuthMiddleware(sessionAuth, subscriptionService = null, options =
         // On Render free-tier, server restarts wipe in-memory sessions. Subscribed users
         // should be transparently restored rather than seeing auth errors in console.
         if (!validation.valid) {
-            const stripeEntitlement = await resolveStripeEntitlement(sessionToken);
+            const stripeEntitlement = await resolveStripeEntitlement(sessionToken, req);
             if (stripeEntitlement && stripeEntitlement.isPremium) {
                 // Recreate a session for the Stripe subscriber
                 const result = await sessionAuth.createFreeSession(null, req);

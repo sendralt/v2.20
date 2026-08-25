@@ -2,7 +2,7 @@
 
 const crypto = require('crypto');
 
-function createBillingAuthMiddleware({ db, sessionAuth = null }) {
+function createBillingAuthMiddleware({ db, sessionAuth = null, billingLinks = null }) {
     return async function billingAuth(req, res, next) {
         const sessionToken = req.headers['x-session-token'];
         if (!sessionToken) {
@@ -25,23 +25,34 @@ function createBillingAuthMiddleware({ db, sessionAuth = null }) {
             }
 
             const hash = crypto.createHash('sha256').update(sessionToken).digest('hex');
-            let { rows } = await db.query(
-                'SELECT account_id FROM billing_sessions WHERE session_token_hash = $1',
-                [hash]
-            );
+            const cookieId = req.cookies && req.cookies['fishsmart_did']
+                ? req.cookies['fishsmart_did']
+                : null;
 
-        if (rows.length === 0) {
-            // Lazy account creation — bridge in-memory sessions to billing DB
-            const accountId = crypto.randomUUID();
-            await db.query('INSERT INTO accounts (id) VALUES ($1) ON CONFLICT DO NOTHING', [accountId]);
-            await db.query(
-                'INSERT INTO billing_sessions (session_token_hash, account_id) VALUES ($1, $2)',
-                [hash, accountId]
-            );
-            req.user = { accountId };
-        } else {
-            req.user = { accountId: rows[0].account_id };
-        }
+            if (billingLinks) {
+                // FIX: reuse the device-linked account after token rotation instead of
+                // minting an empty orphan account that orphans the subscriber's billing data.
+                const accountId = await billingLinks.getOrCreateAccountForSession(hash, cookieId);
+                req.user = { accountId };
+            } else {
+                let { rows } = await db.query(
+                    'SELECT account_id FROM billing_sessions WHERE session_token_hash = $1',
+                    [hash]
+                );
+
+                if (rows.length === 0) {
+                    // Lazy account creation — bridge in-memory sessions to billing DB
+                    const accountId = crypto.randomUUID();
+                    await db.query('INSERT INTO accounts (id) VALUES ($1) ON CONFLICT DO NOTHING', [accountId]);
+                    await db.query(
+                        'INSERT INTO billing_sessions (session_token_hash, account_id) VALUES ($1, $2)',
+                        [hash, accountId]
+                    );
+                    req.user = { accountId };
+                } else {
+                    req.user = { accountId: rows[0].account_id };
+                }
+            }
 
             next();
         } catch (error) {

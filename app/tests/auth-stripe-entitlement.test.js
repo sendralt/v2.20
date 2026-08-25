@@ -56,4 +56,29 @@ describe('Auth middleware Stripe entitlement integration', () => {
         assert.equal(res.statusCode, 403);
         assert.equal(res.body.code, 'SUBSCRIPTION_REQUIRED');
     });
+
+    it('REGRESSION: passes the request to the resolver so device-cookie fallback survives token rotation', async () => {
+        // Bug: resolver only received the token; after rotation the cookie fallback
+        // could never be consulted and subscribers were demoted to the free tier.
+        let receivedReq = null;
+        const sessionAuth = {
+            validateSession: async () => ({ valid: true, session: { type: 'free', usageCount: 0 } }),
+            incrementUsage: async () => ({ allowed: true, usageCount: 1, remaining: 2 })
+        };
+        const auth = createAuthMiddleware(sessionAuth);
+        auth.setStripeEntitlementResolver(async (token, req) => {
+            receivedReq = req;
+            return { isPremium: true, source: 'stripe', expiresAt: null };
+        });
+
+        const req = mockReq();
+        req.cookies = { fishsmart_did: 'stable-device-cookie' };
+        const res = mockRes();
+        let nextCalled = false;
+        await auth.requireAuth(req, res, () => { nextCalled = true; });
+
+        assert.equal(nextCalled, true);
+        assert.equal(receivedReq, req);
+        assert.equal(req.session.type, 'subscribed');
+    });
 });

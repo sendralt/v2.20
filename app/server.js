@@ -188,17 +188,21 @@ try {
     const webhookHandler = createWebhookHandler({ stripe: stripeService.stripe, db, computeAndSaveEntitlement: entitlementService.computeAndSaveEntitlement });
     const { createBillingRoutes } = require('./src/routes/billing');
     const { createBillingAuthMiddleware } = require('./src/middleware/billing-auth');
-    const billingAuth = createBillingAuthMiddleware({ db, sessionAuth });
-    authMiddleware.setStripeEntitlementResolver(async (sessionToken) => {
+    const { createBillingLinkService } = require('./src/services/billing-link-service');
+    const billingLinks = createBillingLinkService({ db });
+    const billingAuth = createBillingAuthMiddleware({ db, sessionAuth, billingLinks });
+    // FIX: entitlement resolution previously bound the billing account to ONE session
+    // token hash. Tokens rotate (24h expiry, Render restarts, 401 auto-recovery), which
+    // silently demoted subscribers to the free tier — paywall on every 3rd forecast.
+    // Now the stable fishsmart_did cookie provides a fallback + self-healing re-link.
+    authMiddleware.setStripeEntitlementResolver(async (sessionToken, req) => {
         const sessionTokenHash = crypto.createHash('sha256').update(sessionToken).digest('hex');
-        const { rows } = await db.query(
-            'SELECT account_id FROM billing_sessions WHERE session_token_hash = $1',
-            [sessionTokenHash]
-        );
-        if (rows.length === 0) return null;
-        return entitlementService.computeAndSaveEntitlement(rows[0].account_id);
+        const cookieId = req && req.cookies ? req.cookies['fishsmart_did'] : null;
+        const accountId = await billingLinks.resolveAccount(sessionTokenHash, cookieId);
+        if (!accountId) return null;
+        return entitlementService.computeAndSaveEntitlement(accountId);
     });
-    billingRoutes = createBillingRoutes({ stripeService, db, getOrCreateCustomer: stripeService.getOrCreateCustomer, computeAndSaveEntitlement: entitlementService.computeAndSaveEntitlement, billingAuth });
+    billingRoutes = createBillingRoutes({ stripeService, db, getOrCreateCustomer: stripeService.getOrCreateCustomer, computeAndSaveEntitlement: entitlementService.computeAndSaveEntitlement, billingAuth, billingLinks });
     const { createWebhookRoutes } = require('./src/routes/webhooks');
     webhookRoutes = createWebhookRoutes({ stripe: stripeService.stripe, db, processStripeEvent: webhookHandler.processStripeEvent });
     app.use('/api/webhooks', webhookRoutes);

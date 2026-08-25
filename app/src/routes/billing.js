@@ -4,7 +4,7 @@ const express = require('express');
 const rateLimit = require('express-rate-limit');
 const config = require('../config/env');
 
-function createBillingRoutes({ stripeService, db, getOrCreateCustomer, computeAndSaveEntitlement, billingAuth }) {
+function createBillingRoutes({ stripeService, db, getOrCreateCustomer, computeAndSaveEntitlement, billingAuth, billingLinks = null }) {
     const router = express.Router();
     const { stripe } = stripeService;
     const appUrl = config.appUrl;
@@ -249,6 +249,17 @@ function createBillingRoutes({ stripeService, db, getOrCreateCustomer, computeAn
                 'INSERT INTO billing_sessions (session_token_hash, account_id)\n                 VALUES ($1, $2)\n                 ON CONFLICT (session_token_hash) DO UPDATE SET account_id = $2',
                 [tokenHash, accountId]
             );
+
+            // FIX: also bind the stable device cookie so the link survives future
+            // session-token rotations (24h expiry, server restarts, 401 auto-recovery).
+            const deviceCookie = req.cookies && req.cookies['fishsmart_did'];
+            if (billingLinks && deviceCookie) {
+                try {
+                    await billingLinks.linkDevice(deviceCookie, accountId);
+                } catch (linkError) {
+                    console.warn('restore: device link failed:', linkError.message);
+                }
+            }
 
             // 5. Compute and return entitlement
             const entitlement = await computeAndSaveEntitlement(accountId);
