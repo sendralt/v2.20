@@ -19,8 +19,8 @@
         "path": "./android.keystore",
         "alias": "android"
     },
-    "appVersionName": "2.37",
-    "appVersionCode": 37,
+    "appVersionName": "2.38",
+    "appVersionCode": 38,
     "shortcuts": [],
     "generatorApp": "bubblewrap-cli",
     "webManifestUrl": "https://fishsmart-pro-1.onrender.com/manifest.json",
@@ -50,5 +50,5 @@
     "additionalTrustedOrigins": [],
     "retainedBundles": [],
     "displayOverride": [],
-    "appVersion": "2.37"
+    "appVersion": "2.38"
 }
