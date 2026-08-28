@@ -71,9 +71,9 @@ android {
     defaultConfig {
         applicationId "com.fishsmart.pro"
         minSdkVersion 23
-        targetSdkVersion 35
-        versionCode 38
-        versionName "2.38"
+        targetSdkVersion 36
+        versionCode 39
+        versionName "2.39"
 
         // The name for the application
         resValue "string", "appName", twaManifest.name
