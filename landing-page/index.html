@@ -17,6 +17,73 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://fishsmart-pro.com/#organization",
+        "name": "FishSmart Pro",
+        "url": "https://fishsmart-pro.com",
+        "logo": "https://fishsmart-pro.com/assets/store_icon.png"
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://fishsmart-pro.com/#webapp",
+        "name": "FishSmart Pro",
+        "url": "https://fishsmart-pro.com",
+        "applicationCategory": "SportsApplication",
+        "operatingSystem": "Web, Android",
+        "description": "Science-first freshwater fishing forecasts: transparent 10+ factor bite scores, live USGS water temperature, 12-hour activity windows, and AI lure recommendations. No social feed. No spot burning.",
+        "featureList": "Bite score with factor breakdown, 12-hour activity forecast, live USGS water temperature, AI lure recommendations with source tags, 25 freshwater species, JSON/CSV export",
+        "offers": [
+          { "@type": "Offer", "name": "Free", "price": "0.00", "priceCurrency": "USD", "description": "3 full AI forecasts per device" },
+          { "@type": "Offer", "name": "Pro Monthly", "price": "4.99", "priceCurrency": "USD", "description": "Unlimited forecasts, history, and export" },
+          { "@type": "Offer", "name": "Pro Yearly", "price": "29.99", "priceCurrency": "USD", "description": "Unlimited forecasts, history, and export, 50% savings vs monthly" }
+        ],
+        "publisher": { "@id": "https://fishsmart-pro.com/#organization" }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://fishsmart-pro.com/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is a bite score?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A bite score is a 0–100 rating of how favorable current conditions are for your target species. FishSmart Pro calculates it from a 10+ factor scientific engine — water temperature, barometric pressure trends, dissolved oxygen, spawning phase, and more — and shows you the full factor breakdown behind every score." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is FishSmart Pro really free to try?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every device gets 3 full AI forecasts free — complete forecasts, not a demo. After that, Pro is $4.99/month or $29.99/year (about $2.50/month, less than half the price of Fishbrain)." }
+          },
+          {
+            "@type": "Question",
+            "name": "How is this different from Fishbrain?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Fishbrain is a social fishing network built on crowdsourced catch reports. FishSmart Pro is a science-first forecast tool with zero social features. You get transparent, factor-by-factor reasoning instead of black-box scores, your spots stay private, and Pro costs $29.99/year instead of $59.99/year." }
+          },
+          {
+            "@type": "Question",
+            "name": "Where does the water temperature data come from?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Live readings from USGS monitoring stations — real station data with the station name and distance shown, not modeled estimates. If the nearest station is too far away, you can manually enter a reading from your own thermometer or depth finder." }
+          },
+          {
+            "@type": "Question",
+            "name": "Which species are supported?",
+            "acceptedAnswer": { "@type": "Answer", "text": "25 freshwater species, each with its own biological model covering temperature tolerance, pressure sensitivity, and spawning behavior — including bass, walleye, trout, crappie, catfish, and more." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does FishSmart Pro work on my phone?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. FishSmart Pro is a Progressive Web App that installs on any iOS, Android, or desktop device straight from the browser, with an Android app on Google Play. No app store required for the web version." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -308,6 +375,42 @@
     </div>
   </section>
 
+  <section class="section section-faq" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">FAQ</span>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <p class="section-desc">Straight answers about how FishSmart Pro works, what it costs, and how your data is handled.</p>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item glass-panel">
+          <summary>What is a bite score?</summary>
+          <p>A bite score is a 0–100 rating of how favorable current conditions are for your target species. FishSmart Pro calculates it from a 10+ factor scientific engine — water temperature, barometric pressure trends, dissolved oxygen, spawning phase, and more — and shows you the full factor breakdown behind every score.</p>
+        </details>
+        <details class="faq-item glass-panel">
+          <summary>Is FishSmart Pro really free to try?</summary>
+          <p>Yes. Every device gets 3 full AI forecasts free — complete forecasts, not a demo. After that, Pro is $4.99/month or $29.99/year (about $2.50/month, less than half the price of Fishbrain).</p>
+        </details>
+        <details class="faq-item glass-panel">
+          <summary>How is this different from Fishbrain?</summary>
+          <p>Fishbrain is a social fishing network built on crowdsourced catch reports. FishSmart Pro is a science-first forecast tool with zero social features. You get transparent, factor-by-factor reasoning instead of black-box scores, your spots stay private, and Pro costs $29.99/year instead of $59.99/year.</p>
+        </details>
+        <details class="faq-item glass-panel">
+          <summary>Where does the water temperature data come from?</summary>
+          <p>Live readings from USGS monitoring stations — real station data with the station name and distance shown, not modeled estimates. If the nearest station is too far away, you can manually enter a reading from your own thermometer or depth finder.</p>
+        </details>
+        <details class="faq-item glass-panel">
+          <summary>Which species are supported?</summary>
+          <p>25 freshwater species, each with its own biological model covering temperature tolerance, pressure sensitivity, and spawning behavior — including bass, walleye, trout, crappie, catfish, and more.</p>
+        </details>
+        <details class="faq-item glass-panel">
+          <summary>Does FishSmart Pro work on my phone?</summary>
+          <p>Yes. FishSmart Pro is a Progressive Web App that installs on any iOS, Android, or desktop device straight from the browser, with an Android app on Google Play. No app store required for the web version.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
   <section class="section section-cta">
     <div class="container">
       <div class="cta-box">
@@ -328,6 +431,7 @@
         <a href="#pricing">Pricing</a>
         <a href="blog/index.html">Blog</a>
         <a href="https://fishsmart-pro.onrender.com/privacy.html">Privacy Policy</a>
+        <a href="https://fishsmart-pro.onrender.com/terms.html">Terms</a>
         <a href="https://fishsmart-pro.onrender.com">Open App</a>
       </nav>
       <div class="footer-copy">© 2026 FishSmart Pro. Science-first fishing intelligence.<br>Built for anglers who want to know <em>why</em>.</div>
